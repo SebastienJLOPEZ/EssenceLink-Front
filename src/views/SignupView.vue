@@ -13,6 +13,14 @@
       <form @submit.prevent="signupRequest" id="signup-form">
         <div class="row text-left">
           <div class="col-sm-12 form-group">
+            <label for="name">Last Name</label>
+            <input type="nName" id="name" v-model="name" class="form-control form-control-lg">
+          </div>
+          <div class="col-sm-12 form-group">
+            <label for="lastName">Last Name</label>
+            <input type="lastName" id="lastName" v-model="lastName" class="form-control form-control-lg">
+          </div>
+          <div class="col-sm-12 form-group">
             <label for="email">Email Address</label>
             <input type="email" id="email" v-model="email" class="form-control form-control-lg">
           </div>
@@ -42,6 +50,7 @@
 </template>
 
 <script>
+import Axios from './_services/APICaller.service';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { getAuth, createUserWithEmailAndPassword, AuthErrorCodes } from 'firebase/auth';
@@ -50,6 +59,8 @@ export default {
   name: "SignupView",
   data() {
     return {
+      name : "",
+      lastName : "",
       email: "",
       password: "",
       xhrRequest: false,
@@ -64,12 +75,19 @@ export default {
       v.errorMessage = "";
       v.successMessage = "";
 
+      const userData = { //Need to check if necessery
+        name : v.name,
+        lastName : v.lastName,
+        email : v.email,
+      };
+
       const auth = getAuth(firebase);
 
       createUserWithEmailAndPassword(auth, v.email, v.password)
         .then(() => {
           v.successMessage = "Register Successfully.";
           v.xhrRequest = false;
+          return Axios.post('/v1/api/User' ,userData); //Will be put in a services later on
         })
         .catch(error => {
           console.error('Signup Error:', error.message);
