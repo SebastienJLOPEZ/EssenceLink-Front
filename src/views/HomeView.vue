@@ -1,4 +1,5 @@
 <template>
+  <div></div>
   <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
   <div class="home" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
     <div v-if="showPopup" class="popup">
@@ -122,7 +123,6 @@ export default {
 * {
   font-family: 'Kaisei Decol', sans-serif;
 }
-
 
 
 
