@@ -14,7 +14,7 @@
         <div class="row text-left">
           <div class="col-sm-12 form-group">
             <label for="name">Last Name</label>
-            <input type="nName" id="name" v-model="name" class="form-control form-control-lg">
+            <input type="name" id="name" v-model="name" class="form-control form-control-lg">
           </div>
           <div class="col-sm-12 form-group">
             <label for="lastName">Last Name</label>
@@ -50,7 +50,8 @@
 </template>
 
 <script>
-import Axios from './_services/APICaller.service';
+import Axios from 'axios';
+//import { baseURL } from '@/_services/APICaller.service.js'
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { getAuth, createUserWithEmailAndPassword, AuthErrorCodes } from 'firebase/auth';
@@ -76,10 +77,27 @@ export default {
       v.successMessage = "";
 
       const userData = { //Need to check if necessery
-        name : v.name,
-        lastName : v.lastName,
-        email : v.email,
+        FirstName : v.name,
+        LastName : v.lastName,
+        Email : v.email,
+        address: "",
+        Number: 0,
+        Role: "Client",
+        BDate: "",
+        SignInDate: ""
       };
+
+      Axios.post('https://localhost:7115/v1/api/User', userData, {
+  headers: {
+    'Content-Type': 'application/json',
+  },})
+          .then(response => {
+            console.log('In databank', response.data);
+          })
+          .catch(error => {
+            v.errorMessage = "NO"
+            console.error('Not in databank',error.message);
+          });
 
       const auth = getAuth(firebase);
 
@@ -87,7 +105,7 @@ export default {
         .then(() => {
           v.successMessage = "Register Successfully.";
           v.xhrRequest = false;
-          return Axios.post('/v1/api/User' ,userData); //Will be put in a services later on
+          
         })
         .catch(error => {
           console.error('Signup Error:', error.message);

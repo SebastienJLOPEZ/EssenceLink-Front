@@ -56,7 +56,7 @@
         signInWithEmailAndPassword(auth, v.email, v.password)
           .then(() => {
             // Redirect to the "homeView" page upon successful login
-            this.$router.push('/');
+            this.$router.push('/profile');
             v.xhrRequest = false;
           })
           .catch(error => {
