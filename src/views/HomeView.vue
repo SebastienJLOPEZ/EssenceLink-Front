@@ -46,8 +46,6 @@
       </div>
     </div>
   <br>
-
-
 </template>
 
 <script>
@@ -111,10 +109,8 @@ export default {
     },
     touchEnd() {
       if (this.touchStartX - this.touchEndX > 50) {
-        // Swipe left
         this.plusSlides(1);
       } else if (this.touchEndX - this.touchStartX > 50) {
-        // Swipe right
         this.plusSlides(-1);
       }
     },
@@ -126,6 +122,8 @@ export default {
 * {
   font-family: 'Kaisei Decol', sans-serif;
 }
+
+
 
 
 
