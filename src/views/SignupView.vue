@@ -1,35 +1,31 @@
 <template>
-  <div class="row">
-    <div class="col-12 text-center mb-4">
-      <h1>Sign Up</h1>
-    </div>
-    <div class="col-sm-5 m-auto">
-      <div v-if="errorMessage !== ''" class="alert alert-danger" role="alert">
-        {{ errorMessage }}
-      </div>
-      <div v-if="successMessage !== ''" class="alert alert-success" role="alert">
-        {{ successMessage }}
-      </div>
-      <form @submit.prevent="signupRequest" id="signup-form">
-        <div class="row text-left">
-          <div class="col-sm-12 form-group">
-            <label for="name">Last Name</label>
-            <input type="name" id="name" v-model="name" class="form-control form-control-lg">
+  <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
+  <div class="container">
+    <div class="card">
+      <h1 class="card_title">Create Account</h1>
+      <section class="signup">
+        <div v-if="errorMessage !== ''" class="alert alert-danger" role="alert">
+          {{ errorMessage }}
+        </div>
+        <div v-if="successMessage !== ''" class="alert alert-success" role="alert">
+          {{ successMessage }}
+        </div>
+        <form @submit.prevent="signupRequest" id="signup-form" class="form">
+          <div class="form-group">
+            <input type="text" id="name" v-model="name" placeholder="First name">
           </div>
-          <div class="col-sm-12 form-group">
-            <label for="lastName">Last Name</label>
-            <input type="lastName" id="lastName" v-model="lastName" class="form-control form-control-lg">
+          <div class="form-group">
+            <input type="text" id="name" v-model="lastName" placeholder="Last name">
           </div>
-          <div class="col-sm-12 form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" v-model="email" class="form-control form-control-lg">
+          <div class="form-group">
+            <input type="email" id="email" v-model="email" placeholder="Your email">
           </div>
-          <div class="col-sm-12 form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" v-model="password" class="form-control form-control-lg">
+          <div class="form-group">
+            <input type="password" id="password" v-model="password" placeholder="Your password">
           </div>
-          <div class="col-sm-12 text-center form-group">
-            <button v-bind:disabled="xhrRequest" v-bind:class="{disabled: xhrRequest}" class="btn btn-lg btn-primary px-4">
+         
+          <div class="form-group">
+            <button :disabled="xhrRequest" class="btn">
               <span v-if="!xhrRequest">Sign Up</span>
               <span v-if="xhrRequest">Please Wait...</span>
             </button>
@@ -37,24 +33,23 @@
               <span class="sr-only">Loading...</span>
             </div>
           </div>
-          <div class="col-sm-12 text-center form-group mt-5">
-            <p>
-              Already have an account? 
-              <router-link to="/login">Login</router-link>
-            </p>
-          </div>
+        </form>
+        <div class="checkbox">
+          <input type="checkbox" id="terms" name="terms">
+          <label for="terms">I have read and agree to the <a href="#">Terms of Service</a></label>
         </div>
-      </form>
+        
+      </section>
     </div>
   </div>
 </template>
 
 <script>
 import Axios from 'axios';
+import firebase from 'firebase';
 //import { baseURL } from '@/_services/APICaller.service.js'
-import firebase from 'firebase/app';
 import 'firebase/auth';
-import { getAuth, createUserWithEmailAndPassword, AuthErrorCodes } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 
 export default {
   name: "SignupView",
@@ -87,10 +82,23 @@ export default {
         SignInDate: ""
       };
 
-      Axios.post('https://localhost:7115/v1/api/User', userData, {
-  headers: {
-    'Content-Type': 'application/json',
-  },})
+      const auth = getAuth(firebase);
+
+      createUserWithEmailAndPassword(auth, v.email, v.password)
+        .then((userCredential) => {
+          // Set display name directly on the user object
+          return userCredential.user.updateProfile({
+            displayName: v.name,
+          });
+        })
+        .then(() => {
+          return sendEmailVerification(auth.currentUser);
+        })
+        .then(() => {
+          Axios.post('https://localhost:7115/v1/api/User', userData, {
+             headers: {
+              'Content-Type': 'application/json',
+            },})
           .then(response => {
             console.log('In databank', response.data);
           })
@@ -98,22 +106,16 @@ export default {
             v.errorMessage = "NO"
             console.error('Not in databank',error.message);
           });
-
-      const auth = getAuth(firebase);
-
-      createUserWithEmailAndPassword(auth, v.email, v.password)
-        .then(() => {
-          v.successMessage = "Register Successfully.";
-          v.xhrRequest = false;
-          
+          v.successMessage = "Signup successful. Confirmation code has been sent to your email.";
+          this.$router.push('/login');
         })
         .catch(error => {
-          console.error('Signup Error:', error.message);
+          console.error('Signup Error:', error);
 
-          if (error.code === AuthErrorCodes.EMAIL_EXISTS) {
+          if (error.code === 'auth/email-already-in-use') {
             v.errorMessage = "Email is already in use. Please use a different email.";
           } else {
-            v.errorMessage = "Failed to register. Please try again.";
+            v.errorMessage = `Failed to register. ${error.message || 'Please try again.'}`;
           }
 
           v.xhrRequest = false;
@@ -123,8 +125,102 @@ export default {
 };
 </script>
 
-
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Kaisei Decol', sans-serif;
+}
+
+.container {
+  height: 130vh; 
+  width: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  background-image: url('@/assets/POST.jpg'); 
+  background-size: cover;
+  
+}
+.card {
+  border-radius: 10px;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
+  width: 700px;
+  height: 520px; 
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 60px 30px;
+  margin-top: 40px;
+  margin-left: 30PX;
+}
+
+.card_title {
+  text-align: center;
+  padding: 5px;
+  margin-top: -20PX;
+}
+
+.card_title h1 {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.alert {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.alert-success {
+  background-color: #d4edda; 
+  color: #155724;
+}
+
+.alert-danger {
+  background-color: #f8d7da; 
+  color: #721c24;
+}
+
+.form input {
+  margin: 10px 0;
+  width: 100%;
+  background-color: #ffffff;
+  border: none;
+  outline: none;
+  padding: 12px 20px;
+  border-radius: 4px;
+}
+
+.form button {
+  background-color: #095328;
+  color: #ffffff;
+  font-size: 16px;
+  outline: none;
+  border-radius: 5px;
+  border: none;
+  padding: 8px 15px;
+  width: 100%;
+  margin-top: 45px;
+}
+.checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  margin-top: -85px;
+}
+
+.checkbox input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+.checkbox a {
+  color: #a12e2e;
+  text-decoration: none;
+}
+
 ._loader {
   position: relative;
   top: 6px;
