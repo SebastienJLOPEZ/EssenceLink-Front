@@ -4,6 +4,7 @@ import LoginView from '../views/LoginView.vue';
 import SignupView from '../views/SignupView.vue';
 import AboutView from '../views/AboutView.vue';
 import ProfileView from '../views/ProfileView.vue';
+import ShopView from '../views/ShopView.vue';
 
 
 
@@ -32,6 +33,11 @@ const routes = [
   path: "/profile",
   name: "ProfileView", 
   component: ProfileView,
+},
+{
+  path: "/shop",
+  name: "ShopView", 
+  component: ShopView,
 }
 ]
 

@@ -349,12 +349,16 @@ header .search {
 ul {
   list-style: none;
 }
+#app {
+  position: relative;
+  min-height: 80vh; /* Ensure #app takes at least the full height of the viewport */
+  padding-bottom: 100px; /* Adjusted to accommodate the footer */
+}
 
 .footer {
   background-color: #568203;
   padding: 70px 10px;
   width: 100%;
-  margin-top: 90PX;
   
 }
 
