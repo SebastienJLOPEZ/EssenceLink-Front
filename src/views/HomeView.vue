@@ -1,9 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-=======
   <div>
     <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
 
@@ -90,23 +85,10 @@
       <button class="add-button">Add</button>
     </section>
   </div>
->>>>>>> origin/essencel
   </div>
 </template>
 
 <script>
-<<<<<<< HEAD
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
-export default {
-  name: 'HomeView',
-  components: {
-    HelloWorld
-  }
-}
-</script>
-=======
 import productImage1 from '@/assets/bg1.jpg';
 import productImage2 from '@/assets/bg3.jpg';
 import productImage3 from '@/assets/bg6.jpg';
@@ -140,6 +122,10 @@ export default {
     };
   },
   mounted() {
+
+    const currentPagePath = this.$route.path;
+    localStorage.setItem('currentPage', currentPagePath);
+    
     setTimeout(() => {
       this.showPopup = true;
       this.showSlides(this.slideIndex);
@@ -594,4 +580,3 @@ export default {
   background-color: #426B1F; 
 }
 </style>
->>>>>>> origin/essencel

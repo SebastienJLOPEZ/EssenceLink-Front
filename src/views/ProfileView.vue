@@ -1,5 +1,5 @@
 
-<template>
+<!--template>
 <div v-if="errorMessage !== ''" class="alert alert-danger" role="alert">
         {{ errorMessage }}
       </div>
@@ -21,7 +21,7 @@
     <div>
         <h1>Wishlist :</h1>
     </div>
-</template>
+</template-->
 <template>
     <div class="profile">
       <div class="menu"> <!--TODO : Put Menu in called file-->
@@ -108,10 +108,11 @@
     import Axios from 'axios';
     import firebase from 'firebase/app';
     import 'firebase/auth';
-    import {getAuth, onAuthStateChanged} from 'firebase/auth';
+    import {getAuth, onAuthStateChanged, signOut} from 'firebase/auth';
 
     export default{
         name: "ProfileView",
+        currentTab: 'orders',
         data(){
             return {
                 name: "",
@@ -125,6 +126,13 @@
             }
         },
         methods: {
+            changeTab(tab) {
+                if (tab === 'logout') {
+                    this.logout();
+                } else {
+                    this.currentTab = tab;
+                }
+            },
             currentUser(){
                 let v = this;
                 const auth = getAuth(firebase);
@@ -140,7 +148,7 @@
                 let v = this;
                 v.errorMessage = "";
                 
-                    Axios.get(`https://localhost:7115/v1/api/User/${v.email}`)
+                Axios.get(`https://localhost:7115/v1/api/User/${v.email}`)
                 .then(response => {
                     v.errorMessage = "Connected";
                     v.name = response.data.FirstName;
@@ -154,16 +162,24 @@
                     v.errorMessage = "Not connected";
                     console.error('Failed to connect to databank', error);
                 });
+            },
+            logout() {
+                const auth = getAuth(firebase);
+                signOut(auth)
+                .then (() => {
+                    this.$nextTick(() => {
+                        this.$router.push('/');
+                    });
+                })
+                .catch(error =>{
+                    console.log('logout error: ', error.message);
+                })
             }
         },
         mounted() {
                 this.currentUser();
         },
-        logout() {
-        this.$nextTick(() => {
-        this.$router.push('/login');
-        });
-        }
+        
     } 
 </script>
 <!--,

@@ -30,6 +30,10 @@
   <script>
   export default {
     // Your component logic goes here
+    mounted(){
+      const currentPagePath = this.$route.path;
+      localStorage.setItem('currentPage', currentPagePath);
+    }
   };
   </script>
   

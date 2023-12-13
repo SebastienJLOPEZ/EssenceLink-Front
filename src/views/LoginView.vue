@@ -47,7 +47,8 @@
 <script>
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+
 
 export default {
   name: "LoginView",
@@ -69,7 +70,7 @@ export default {
 
       signInWithEmailAndPassword(auth, v.email, v.password)
         .then(() => {
-          this.$router.push('/profile');
+          this.$router.push(this.currentPage);
           v.xhrRequest = false;
         })
         .catch(error => {
@@ -79,6 +80,19 @@ export default {
         });
     },
   },
+  mounted(){
+    this.currentPage = localStorage.getItem('currentPage');
+
+    const auth = getAuth(firebase);
+
+    // Check if the user is already authenticated
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, redirect to the profile page
+        this.$router.push('/profile'); // Replace '/profile' with your actual profile page route
+      }
+    });
+  }
 };
 </script>
 
