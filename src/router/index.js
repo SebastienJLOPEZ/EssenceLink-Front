@@ -5,7 +5,7 @@ import SignupView from '../views/SignupView.vue';
 import AboutView from '../views/AboutView.vue';
 import ProfileView from '../views/ProfileView.vue';
 import ShopView from '../views/ShopView.vue';
-
+import ACProfileView from '../views/ACProfileView.vue';
 
 
 const routes = [
@@ -38,6 +38,11 @@ const routes = [
   path: "/shop",
   name: "ShopView", 
   component: ShopView,
+},
+{
+  path: "/AdminClientProfile",
+  name: "ACProfileView",
+  component: ACProfileView,
 }
 ]
 

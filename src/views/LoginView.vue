@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import Axios from 'axios';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
@@ -63,37 +64,71 @@ export default {
   methods: {
     loginRequest() {
       let v = this;
-      v.xhrRequest = true;
+      // v.xhrRequest = true;
       v.errorMessage = "";
 
       const auth = getAuth(firebase);
 
       signInWithEmailAndPassword(auth, v.email, v.password)
         .then(() => {
-          this.$router.push(this.currentPage);
-          v.xhrRequest = false;
+          this.checkUserType(v.email);
+          //this.$router.push(localStorage.getItem('currentPage'));
+          // v.xhrRequest = false;
         })
         .catch(error => {
           console.error('Login Error:', error.message);
-          v.errorMessage = "Invalid email or password. Please try again.";
+          v.errorMessage =error.message
+          // v.errorMessage = "Invalid email or password. Please try again.";
           v.xhrRequest = false;
         });
     },
-  },
-  mounted(){
-    this.currentPage = localStorage.getItem('currentPage');
+    async checkUserType(email) {
+  try {
+    const response = await Axios.get(`https://localhost:7115/v1/api/User/${email}`);
+    console.log(response);
 
+    switch (response.data.Role) {
+      case "AdminClient":
+        this.$router.push('/AdminClientProfile');
+        break;
+      case "AdminProduct":
+        this.$router.push('/AdminProductProfile');
+        break;
+      case "Client":
+        this.$router.push(localStorage.getItem('currentPage'));
+        break;
+      default:
+        // Gestion d'un rôle inconnu, si nécessaire.
+        break;
+    }
+  } catch (error) {
+    console.error('Failed to connect to databank', error);
+  }
+}
+,
+    async checkAuthentication() {
     const auth = getAuth(firebase);
 
-    // Check if the user is already authenticated
-    onAuthStateChanged(auth, (user) => {
+    try {
+      const user = await new Promise(resolve => onAuthStateChanged(auth, resolve));
+
       if (user) {
         // User is signed in, redirect to the profile page
-        this.$router.push('/profile'); // Replace '/profile' with your actual profile page route
+        this.$router.push('/profile');
       }
-    });
+    } catch (error) {
+      console.error('Error checking authentication status:', error);
+    }
   }
-};
+},
+beforeMount(){
+    this.checkAuthentication();
+}}
+
+//TODO:
+//Correct the account checker
+//Test if the axios.get is an async instead of a .then, does it correct the problem
+
 </script>
 
 <style scoped>

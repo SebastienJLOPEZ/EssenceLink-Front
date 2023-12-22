@@ -1,56 +1,37 @@
-
-<!--template>
-<div v-if="errorMessage !== ''" class="alert alert-danger" role="alert">
-        {{ errorMessage }}
-      </div>
-    <div>
-        <h1>User Information :</h1>
-    </div>
-    <div>
-        Name : {{ name }} {{ lastName }}
-    </div>
-    <div>
-        Address : {{ address }}
-    </div>
-    <div>
-        Number : {{ number }}
-    </div>
-    <div>
-        <h1>Recent Command :</h1>
-    </div>
-    <div>
-        <h1>Wishlist :</h1>
-    </div>
-</template-->
 <template>
+  <!--div class="test">
+    AHAH
+    {{ this.errorMessage }}
+    {{this.name}} {{this.lastName}}
+  </div-->
     <div class="profile">
-      <div class="menu"> <!--TODO : Put Menu in called file-->
-        <div @click="changeTab('orders')" :class="{ active: currentTab === 'orders' }">ORDERS</div>
-        <div @click="changeTab('addresses')" :class="{ active: currentTab === 'addresses' }">ADDRESSES</div>
-        <div @click="changeTab('wishlists')" :class="{ active: currentTab === 'wishlists' }">WISHLISTS</div>
-        <div @click="changeTab('accountSettings')" :class="{ active: currentTab === 'accountSettings' }">ACCOUNT SETTINGS</div>
-        <div @click="changeTab('logout')" class="logout-button" :class="{ active: currentTab === 'logout' }">LOGOUT</div>
-      </div>
+        <div class="menu"> <!--TODO : Put Menu in called file-->
+            <div @click="changeTab('orders')" :class="{ active: currentTab === 'orders' }">ORDERS</div>
+            <div @click="changeTab('addresses')" :class="{ active: currentTab === 'addresses' }">ADDRESSES</div>
+            <div @click="changeTab('wishlists')" :class="{ active: currentTab === 'wishlists' }">WISHLISTS</div>
+            <div @click="changeTab('accountSettings')" :class="{ active: currentTab === 'accountSettings' }">ACCOUNT SETTINGS</div>
+            <div @click="changeTab('logout')" class="logout-button" :class="{ active: currentTab === 'logout' }">LOGOUT</div>
+        </div>
   
-      <div class="content">
-        <div v-if="currentTab === 'orders'">
-          <h2 class="tab-title">Orders</h2>
-          <p>You haven't placed any orders yet.</p>
+        <div class="content">
+            <div v-if="currentTab === 'orders'">
+            <h2 class="tab-title">Orders</h2>
+            <p>You haven't placed any orders yet.</p>
         </div>
   
         <div v-if="currentTab === 'addresses'">
-          <h2 class="tab-title">Addresses</h2>
-          <!--div v-for="(address, index) in addresses" :key="index" class="address-card"></div-->
-            <h3>{{ name }} {{ lastName }}</h3>
-            <p>Email : {{ email.substring(0, 5) }}***{{ email.includes('@') ? '...' + email.split('@')[1] : '' }}</p>
-            <p>{{ address }}<!--, {{ address.city }}, {{ address.region }}, {{ address.province }}, {{ address.zipCode }}--></p>
-            <p>Phone: {{ number}}</p>
-            <p>Birthday : {{ bdate }}</p>
+            <h2 class="tab-title">Addresses</h2>
+            <!--div v-for="(address, index) in addresses" :key="index" class="address-card"></div-->
+                <h3>{{ name }} {{ lastName }}</h3>
+                <p>Email : {{ email.substring(0, 5) }}***{{ email.includes('@') ? '...' + email.split('@')[1] : '' }}</p>
+                <p>{{ address }}<!--, {{ address.city }}, {{ address.region }}, {{ address.province }}, {{ address.zipCode }}--></p>
+                <p>Phone: {{ number}}</p>
+                <p>Birthday : {{ bdate }}</p>
           
-          <!--<button @click="showAddAddressForm" class="add-address-button">Add a new address</button>
-          <div v-if="showAddAddress" class="add-address-form-container">
-            <h3>Add a new address</h3>
-            <form @submit.prevent="addNewAddress">
+                <!--<button @click="showAddAddressForm" class="add-address-button">Add a new address</button>
+                <div v-if="showAddAddress" class="add-address-form-container">
+                <h3>Add a new address</h3>
+                <form @submit.prevent="addNewAddress">
               <div class="form-row">
                 <div class="form-group">
                   <label for="firstName">First Name:</label>
@@ -90,17 +71,20 @@
                 <input v-model="newAddress.phone" required>
               </div>
               <button type="submit">Add Address</button>
-            </form>
-          </div>-->
+                </form>
+                </div>-->
         </div>
+
         <div v-if="currentTab === 'wishlists'">
-          <h2 class="tab-title">Wishlists</h2>
+            <h2 class="tab-title">Wishlists</h2>
         </div>
   
         <div v-if="currentTab === 'accountSettings'">
           <h2 class="tab-title">Account Settings</h2>
         </div>
+
       </div>
+
     </div>
   </template>
   
@@ -122,7 +106,7 @@
                 number : "",
                 bdate : "",
                 signindate : "",
-
+                errorMessage:"",
             }
         },
         methods: {
@@ -140,17 +124,16 @@
                 onAuthStateChanged(auth, (user) => {
                     if (user){ 
                         v.email = user.email;
-                        v.fetchUserData()
+                        v.fetchUserData(v.email)
                     }
                 });
             },
-            fetchUserData (){
+            fetchUserData (email){
                 let v = this;
                 v.errorMessage = "";
                 
-                Axios.get(`https://localhost:7115/v1/api/User/${v.email}`)
+                Axios.get(`https://localhost:7115/v1/api/User/${email}`)
                 .then(response => {
-                    v.errorMessage = "Connected";
                     v.name = response.data.FirstName;
                     v.lastName = response.data.LastName;
                     v.address = response.data.Address === "" ? "Not Registered" : response.data.Address;
@@ -159,7 +142,7 @@
                     v.signindate = response.data.SignInDate === "" ? "Not Registered" : response.data.SignInDate;
                 })
                 .catch(error => {
-                    v.errorMessage = "Not connected";
+                    v.errorMessage = "Not Connected";
                     console.error('Failed to connect to databank', error);
                 });
             },
@@ -212,6 +195,16 @@
   * {
     box-sizing: border-box;
   }
+
+  /*.test{
+    display: flex;
+    max-width: 100%;
+    height: 2vh;
+    margin: 100px auto;
+    background-color: #fff;
+    margin-top: 80px;
+    margin-bottom: 1px;
+  }*/
   
   .profile {
     display: flex;
@@ -219,7 +212,7 @@
     height: 290vh;
     margin: 100px auto;
     background-color: #fff;
-    margin-top: 80px;
+    margin-top: 10px;
     margin-bottom: 1px;
   }
   

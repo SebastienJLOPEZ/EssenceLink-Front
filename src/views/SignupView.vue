@@ -88,12 +88,12 @@ export default {
       const auth = getAuth(firebase);
 
       createUserWithEmailAndPassword(auth, v.email, v.password)
-        .then((userCredential) => {
+        /*.then((userCredential) => {
           // Set display name directly on the user object
           return userCredential.user.updateProfile({
             displayName: v.name,
           });
-        })
+        })*/
         .then(() => {
           return sendEmailVerification(auth.currentUser);
         })
@@ -107,7 +107,6 @@ export default {
             console.log('In databank', response.data);
           })
           .catch(error => {
-            v.errorMessage = "NO"
             console.error('Not in databank',error.message);
           });
           v.successMessage = "Signup successful. Confirmation code has been sent to your email.";
