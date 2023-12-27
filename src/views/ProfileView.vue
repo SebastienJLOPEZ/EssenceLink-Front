@@ -96,9 +96,10 @@
 
     export default{
         name: "ProfileView",
-        currentTab: 'orders',
+        
         data(){
             return {
+                currentTab: 'orders',
                 name: "",
                 lastName: "",
                 email: "",
