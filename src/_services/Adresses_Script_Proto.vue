@@ -17,10 +17,8 @@ export default {
     FetchUserData,
   },
   methods : {
-    FetchUserId(){
+    async FetchUserAdress(){  //Check number of adresses 
       this.uid = this.$refs.fetchUserDataComponent.userId;
-    },
-    async FetchUserAdress(){ //Check number of adresses 
       try {
         const response = await Axios.get(`https://localhost:7115/v1/api/Adresses/${this.uid}`);
         console.log(response);
