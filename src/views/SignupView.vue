@@ -46,9 +46,8 @@
 
 <script>
 import Axios from 'axios';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 //import { baseURL } from '@/_services/APICaller.service.js'
-import 'firebase/auth';
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 
 export default {

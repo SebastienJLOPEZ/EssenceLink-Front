@@ -1,27 +1,3 @@
-
-<template>
-<div v-if="errorMessage !== ''" class="alert alert-danger" role="alert">
-        {{ errorMessage }}
-      </div>
-    <div>
-        <h1>User Information :</h1>
-    </div>
-    <div>
-        Name : {{ name }} {{ lastName }}
-    </div>
-    <div>
-        Address : {{ address }}
-    </div>
-    <div>
-        Number : {{ number }}
-    </div>
-    <div>
-        <h1>Recent Command :</h1>
-    </div>
-    <div>
-        <h1>Wishlist :</h1>
-    </div>
-</template>
 <template>
     <div class="profile">
       <div class="menu"> <!--TODO : Put Menu in called file-->
