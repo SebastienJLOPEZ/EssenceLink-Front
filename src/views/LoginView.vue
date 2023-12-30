@@ -80,8 +80,8 @@ export default {
           checkUserType(v.email, 
                         () => this.$router.push(v.redirectPaths.ACPath),
                         () => this.$router.push(v.redirectPaths.APPath),
-                        () => this.$router.push(v.redirectPaths.defaultPath)
-                        );
+                        () => this.$router.push(v.redirectPaths.defaultPath),
+                        () => this.$router.push(v.redirectPaths.defaultPath));
         })
         .catch(error => {
           console.error('Login Error:', error.message);

@@ -1,7 +1,7 @@
 // CheckerRole.js
 import Axios from 'axios';
 
-export default async function checkUserType(A1, A2, A3, A4) {
+export default async function checkUserType(A1, A2, A3, A4, A5) {
   try {
     const response = await Axios.get(`https://localhost:7115/v1/api/User/${A1}`);
     console.log(response);
@@ -17,7 +17,7 @@ export default async function checkUserType(A1, A2, A3, A4) {
         A4();
         break;
       default:
-        // Gestion d'un rôle inconnu, si nécessaire.
+        A5();
         break;
     }
   } catch (error) {
