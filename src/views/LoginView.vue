@@ -42,94 +42,75 @@
     </router-link>
     </div>
   </div>
+  <!--CheckerRole /-->
 </template>
 
 <script>
-import Axios from 'axios';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
-
+import checkUserType from '@/_services/CheckerRole.js';
 
 export default {
   name: "LoginView",
+  mixins: [checkUserType],
   data() {
     return {
       email: "",
       password: "",
       xhrRequest: false,
       errorMessage: "",
+      redirectPaths: {
+        defaultPath: localStorage.getItem('currentPage'),
+        ACPath: '/AdminClientProfile',
+        APPath: '/AdminProductProfile',
+      },
     };
   },
+
   methods: {
     loginRequest() {
       let v = this;
-      // v.xhrRequest = true;
       v.errorMessage = "";
 
       const auth = getAuth(firebase);
 
       signInWithEmailAndPassword(auth, v.email, v.password)
         .then(() => {
-          this.checkUserType(v.email);
-          //this.$router.push(localStorage.getItem('currentPage'));
-          // v.xhrRequest = false;
+          checkUserType(v.email, 
+                        () => this.$router.push(v.redirectPaths.ACPath),
+                        () => this.$router.push(v.redirectPaths.APPath),
+                        () => this.$router.push(v.redirectPaths.defaultPath)
+                        );
         })
         .catch(error => {
           console.error('Login Error:', error.message);
-          v.errorMessage =error.message
-          // v.errorMessage = "Invalid email or password. Please try again.";
+          v.errorMessage = error.message;
           v.xhrRequest = false;
         });
     },
-    async checkUserType(email) {
-  try {
-    const response = await Axios.get(`https://localhost:7115/v1/api/User/${email}`);
-    console.log(response);
-
-    switch (response.data.Role) {
-      case "AdminClient":
-        this.$router.push('/AdminClientProfile');
-        break;
-      case "AdminProduct":
-        this.$router.push('/AdminProductProfile');
-        break;
-      case "Client":
-        this.$router.push(localStorage.getItem('currentPage'));
-        break;
-      default:
-        // Gestion d'un rôle inconnu, si nécessaire.
-        break;
-    }
-  } catch (error) {
-    console.error('Failed to connect to databank', error);
-  }
-}
-,
+    
     async checkAuthentication() {
-    const auth = getAuth(firebase);
+      const auth = getAuth(firebase);
 
-    try {
-      const user = await new Promise(resolve => onAuthStateChanged(auth, resolve));
+      try {
+        const user = await new Promise(resolve => onAuthStateChanged(auth, resolve));
 
-      if (user) {
-        // User is signed in, redirect to the profile page
-        this.$router.push('/profile');
+        if (user) {
+          this.$router.push('/profile');
+        }
+      } catch (error) {
+        console.error('Error checking authentication status:', error);
       }
-    } catch (error) {
-      console.error('Error checking authentication status:', error);
     }
-  }
-},
-beforeMount(){
+  },
+
+  beforeMount() {
     this.checkAuthentication();
-}}
-
-//TODO:
-//Correct the account checker
-//Test if the axios.get is an async instead of a .then, does it correct the problem
-
+  }
+};
 </script>
+
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");

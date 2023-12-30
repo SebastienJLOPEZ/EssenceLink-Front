@@ -96,7 +96,6 @@
 
     export default{
         name: "ProfileView",
-        currentTab: 'orders',
         data(){
             return {
                 name: "",
@@ -107,6 +106,8 @@
                 bdate : "",
                 signindate : "",
                 errorMessage:"",
+        currentTab: 'orders',
+
             }
         },
         methods: {
