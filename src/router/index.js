@@ -7,7 +7,11 @@ import ProfileView from '../views/ProfileView.vue';
 import ShopView from '../views/ShopView.vue';
 import ACProfileView from '../views/ACProfileView.vue';
 import ACList from '../views/ACList.vue'
-
+import ACSearch from '../views/ACSearch.vue';
+import APProfileView from '../views/APPRofileView.vue';
+import APList from '../views/APList.vue'
+import APSearch from '../views/APSearch.vue';
+import NewProduct from '../views/NewProduct';
 
 const routes = [
   {
@@ -49,6 +53,31 @@ const routes = [
   path: "/ACList",
   name: "ACList",
   component: ACList,
+},
+{
+  path: "/ACSearch",
+  name:"ACSearch",
+  component: ACSearch
+},
+{
+  path: "/AdminProductProfile",
+  name: "APProfileView",
+  component: APProfileView,
+},
+{
+  path: "/APList",
+  name: "APList",
+  component: APList,
+},
+{
+  path: "/APSearch",
+  name:"APSearch",
+  component: APSearch,
+},
+{
+  path:"/NewProduct",
+  name:"NewProduct",
+  component: NewProduct,
 }
 ]
 

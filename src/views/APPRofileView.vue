@@ -13,9 +13,9 @@
 
     </div>
     <div class = NonPermanent>
-        <router-link class="nav-link" to="/ACList">Client</router-link>
-        <router-link class="nav-link" to="/ACSearch">Search</router-link>
-        <!--router-link class="nav-link" to="/ACResearch">Research</router-link-->
+        <router-link class="nav-link" to="/APList">Product</router-link>
+        <router-link class="nav-link" to="/APSearch">Search</router-link>
+        <router-link class="nav-link" to="/NewProduct">New Product</router-link>
     </div>
 </template>
 <script>

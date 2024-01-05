@@ -54,7 +54,7 @@ import checkUserStatus from '@/_services/CheckerStatus.js';
 
 export default {
   name: "LoginView",
-  mixins: [checkUserType],
+  mixins: [checkUserType, checkUserStatus],
   data() {
     return {
       email: "",
