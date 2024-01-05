@@ -50,6 +50,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import checkUserType from '@/_services/CheckerRole.js';
+import checkUserStatus from '@/_services/CheckerStatus.js';
 
 export default {
   name: "LoginView",
@@ -75,21 +76,31 @@ export default {
 
       const auth = getAuth(firebase);
 
-      signInWithEmailAndPassword(auth, v.email, v.password)
-        .then(() => {
-          checkUserType(v.email, 
-                        () => this.$router.push(v.redirectPaths.ACPath),
-                        () => this.$router.push(v.redirectPaths.APPath),
-                        () => this.$router.push(v.redirectPaths.defaultPath),
-                        () => this.$router.push(v.redirectPaths.defaultPath));
-        })
-        .catch(error => {
-          console.error('Login Error:', error.message);
-          v.errorMessage = error.message;
-          v.xhrRequest = false;
-        });
+      const status = checkUserStatus(v.email);
+          switch (status){
+            case "Banned":
+              v.errorMessage = "You are Banned. You can not connect";
+              break;
+            case "Deactivated":
+              v.errorMessage = "Email or Password false. Check again with correct credentials";
+              break;
+            default:
+            signInWithEmailAndPassword(auth, v.email, v.password)
+                .then(() => {
+                  checkUserType(v.email, 
+                                () => this.$router.push(v.redirectPaths.ACPath),
+                                () => this.$router.push(v.redirectPaths.APPath),
+                                () => this.$router.push(v.redirectPaths.defaultPath),
+                                () => this.$router.push(v.redirectPaths.defaultPath));
+                })
+                .catch(error => {
+                  console.error('Login Error:', error.message);
+                  v.errorMessage = error.message;
+                 v.xhrRequest = false;
+                });
+              break;
+          }
     },
-    
     async checkAuthentication() {
       const auth = getAuth(firebase);
 
