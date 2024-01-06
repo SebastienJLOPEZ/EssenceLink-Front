@@ -142,6 +142,7 @@ export default {
   justify-content: center;
   background-image: url('@/assets/POST.jpg'); 
   background-size: cover;
+  margin-top: 120PX;
   
 }
 .card {
@@ -194,7 +195,7 @@ export default {
 }
 
 .form button {
-  background-color: #095328;
+  background-color:  #93ab91;
   color: #ffffff;
   font-size: 16px;
   outline: none;

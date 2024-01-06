@@ -1,34 +1,110 @@
 <template>
+  <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
   <div>
     <div id="app">
-    <router-view />
-  </div>
- 
-    <header>
+      <router-view />
+    </div>
+
+
+    <nav class="main-navbar">
       <router-link to="/">
-       <img src="@/assets/logo1.png" alt="Logo" class="logo-image">
-     </router-link>
+        <img src="@/assets/logo1.png" alt="Logo" class="logo-image" />
+      </router-link>
       <div class="group">
         <ul class="navigation" :class="{ open: isMenuOpen }">
-          <li><router-link class="nav-link" to="/shop">SHOP</router-link></li>
-          <li><router-link class="nav-link" to="/about">ABOUT US</router-link></li>
-          <li><router-link class="nav-link" to="/login">PROFILE</router-link></li>
-          <li><router-link class="nav-link" to="/cart">
-            <ion-icon name="cart-outline" class="cartBtn"></ion-icon>
-          </router-link></li>
+          <li v-on:mouseover="showSubcategories('hydrolats')" v-on:mouseout="hideSubcategories">
+          <router-link to="#hydrolats" class="nav-link">Hydrolats</router-link>
+          <div v-show="showSubcategory === 'hydrolats'" class="subcategory">
+            <ul>
+              <li>Hydrating Facial Mist</li>
+              <li>Aromatherapy Room Spray</li>
+            </ul>
+          </div>
+        </li>
+          <li v-on:mouseover="showSubcategories('tisanes')" v-on:mouseout="hideSubcategories">
+            <router-link to="#tisanes" class="nav-link">Tisanes & Plante Sèche</router-link>
+            <div v-show="showSubcategory === 'tisanes'" class="subcategory">
+              <ul>
+                <li>Green Tea</li>
+                <li>Black Tea</li>
+                <li>Herbes Culinaires Bio</li>
+                <li>Épices Séchées pour la Cuisine</li>
+              </ul>
+            </div>
+          </li>
+          <li v-on:mouseover="showSubcategories('gemmotherapie')" v-on:mouseout="hideSubcategories">
+            <router-link to="#gemmotherapie" class="nav-link">Gemmothérapie</router-link>
+            <div v-show="showSubcategory === 'gemmotherapie'" class="subcategory">
+              <ul>
+                <li>Gemstone Elixir Kits</li>
+                <li>Gemmotherapy Skin Care</li>
+              </ul>
+            </div>
+          </li>
+          <li v-on:mouseover="showSubcategories('aromates')" v-on:mouseout="hideSubcategories">
+            <router-link to="#aromates" class="nav-link">Aromates</router-link>
+            <div v-show="showSubcategory === 'aromates'" class="subcategory">
+              <ul>
+                <li>Herb-infused Oils</li>
+                <li>Aromatic Herb Sachets</li>
+              </ul>
+            </div>
+          </li>
+          <li v-on:mouseover="showSubcategories('boisson')" v-on:mouseout="hideSubcategories">
+            <router-link to="/shop" class="nav-link">Boisson</router-link>
+            <div v-show="showSubcategory === 'boisson'" class="subcategory">
+              <ul>
+                <li>W alchool</li>
+                <li>W/ alchool</li>
+              </ul>
+            </div>
+          </li>
+          <ul class="navigation about-contact">
+          <li v-on:mouseover="showSubcategories('aboutUs')" v-on:mouseout="hideSubcategories">
+            <router-link to="/about" class="nav-link">About Us</router-link>
+          </li>
+          <li v-on:mouseover="showSubcategories('contactUs')" v-on:mouseout="hideSubcategories">
+            <router-link to="/contact" class="nav-link">Contact Us</router-link>
+          </li>
         </ul>
+        </ul>
+        
+        <router-link to="/cart" class="cart-link" style="color: black;">
+  <ion-icon name="cart-outline" class="cartBtn" v-on:click="toggleCart"></ion-icon>
+</router-link>
+
+<router-link to="/profile" class="profile-link" style="color: black;">
+  <ion-icon name="person-outline" class="profileBtn" v-on:click="toggleProfile"></ion-icon>
+</router-link>
+
+
+
+
+
+
+
+
         <div class="search" @click="toggleSearch">
           <span class="icon">
             <ion-icon name="search-outline" class="searchBtn"></ion-icon>
             <ion-icon name="close-outline" class="closeBtn"></ion-icon>
           </span>
         </div>
-        <ion-icon name="menu-outline" class="menuToggle" @click="toggleMenu"></ion-icon>
+        <ion-icon
+          name="menu-outline"
+          class="menuToggle"
+          @click="toggleMenu"
+        ></ion-icon>
       </div>
       <div class="searchBox">
         <input type="text" placeholder="Search here . .">
       </div>
-    </header>
+    </nav>
+
+    <nav class="announcement-bar">
+      <div class="announcement-text">{{ currentAnnouncement }}</div>
+    </nav>
+
     <footer class="footer">
       <div class="container">
         <div class="row">
@@ -54,10 +130,11 @@
           <div class="footer-col">
             <h4>online shop</h4>
             <ul>
-              <li><a href="#">Oils</a></li>
-              <li><a href="#">Perfum</a></li>
-              <li><a href="#">Herbs</a></li>
-              <li><a href="#">Accesories</a></li>
+              <li><a href="#">Hydrolats</a></li>
+              <li><a href="#">Tisanes & Plante sèche</a></li>
+              <li><a href="#">Gemmothérapie</a></li>
+              <li><a href="#">Aromates</a></li>
+              <li><a href="#">Boisson</a></li>
             </ul>
           </div>
           <div class="footer-col">
@@ -73,17 +150,30 @@
       </div>
     </footer>
   </div>
-  
 </template>
+
 
 <script>
 export default {
   data() {
     return {
+      showSubcategory: null,
+      currentAnnouncementIndex: 0,
+      announcements: [
+        "20% off first purchase",
+        "Free US delivery",
+        
+      ],
       
       isMenuOpen: false,
       isMenuInitialClick: true,
     };
+    
+  },
+  computed: {
+    currentAnnouncement() {
+      return this.announcements[this.currentAnnouncementIndex];
+    },
   },
   mounted() {
     
@@ -114,9 +204,20 @@ export default {
       document.querySelector('.navigation').classList.remove('hide');
     };
 
+    setInterval(this.changeAnnouncement, 3000);
+
+    
+
     
   },
   methods: {
+
+    showSubcategories(category) {
+      this.showSubcategory = category;
+    },
+    hideSubcategories() {
+      this.showSubcategory = null;
+    },
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
 
@@ -129,7 +230,16 @@ export default {
     toggleSearch() {
       
     },
+    changeAnnouncement() {
+      this.currentAnnouncementIndex =
+        (this.currentAnnouncementIndex + 1) % this.announcements.length;
+    },
+    toggleCart() {
     
+  },
+  toggleProfile() {
+    // Your implementation for toggling the profile
+  },
   },
 };
 </script>
@@ -138,7 +248,6 @@ export default {
 
 <style scoped>
 
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap");
 
 
 * {
@@ -149,21 +258,21 @@ export default {
 
 body {
   background: #ffffff;
-  min-height: 100vh; /* Ensure body fills the viewport */
+  min-height: 150vh;
   overflow-x: hidden;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Kalesi', sans-serif;
 }
 
 html {
   min-height: 100%;
 }
 
-header {
+.main-navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 80px;
+  height: 120px;
   background: #fff;
   padding: 20px;
   display: flex;
@@ -171,38 +280,39 @@ header {
   align-items: center;
   box-shadow: 0 15px 15px rgba(0, 0, 0, 0.05);
   z-index: 1000;
+  margin-top: 0PX;
 }
-
-header .logo-image {
-  max-height: 130px; 
-  margin-right: 18px; 
+.main-navbar .logo-image {
+  max-height: 120px; 
+  margin-right: 170px;
 }
-
 .group {
   display: flex;
   align-items: center;
 }
 
-header ul {
+.main-navbar ul {
   display: flex;
   gap: 30px;
   list-style: none;
 }
 
-header ul li {
+.main-navbar ul li {
   position: relative;
 }
 
-header ul li a {
+.main-navbar ul li a {
   text-decoration: none;
-  font-size: 1em;
+  font-size: 0.75em;
   color: #333;
   text-transform: uppercase;
   letter-spacing: 0.2em;
   position: relative;
+  right: 100PX;
+  bottom: 25PX;
 }
 
-header ul li a::before {
+.main-navbar ul li a::before {
   content: ' ';
   position: absolute;
   bottom: -2px;
@@ -214,17 +324,17 @@ header ul li a::before {
   transform-origin: right;
 }
 
-header ul li a:hover::before {
+.main-navbar ul li a:hover::before {
   transform: scaleX(1);
   transform-origin: left;
 }
 
-header .search {
+.main-navbar .search {
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1.5em;
-  z-index: 1001; /* Updated z-index */
+  z-index: 1001; 
   cursor: pointer;
 }
 
@@ -234,7 +344,7 @@ header .search {
 
 .searchBox {
   position: fixed;
-  top: 0px;
+  top: 20px;
   right: -100%;
   width: 60%;
   height: 80px;
@@ -245,6 +355,7 @@ header .search {
   padding: 0 30px;
   transition: 0.5s ease-in-out;
   z-index: 1000;
+  
 }
 
 .searchBox input {
@@ -265,13 +376,38 @@ header .search {
 
 .searchBtn {
   position: relative;
-  left: 30px;
+  left: 40px;
+  top: 5px;
+  transition: 0.5s ease-in-out;
+  
+}
+
+.cartBtn {
+  position: relative;
+  left: 0px;
+  top: 2.5px;
+  transition: 0.5s ease-in-out;
+  
+}
+
+.profileBtn {
+  position: relative;
+  left: 20px;
   top: 2.5px;
   transition: 0.5s ease-in-out;
 }
 
+
+
+
+.searchBtn,
+.closeBtn {
+  outline: none; /* Add this line */
+}
+
 .searchBtn.active {
   left: 0;
+  background-color: #fff;
 }
 
 .closeBtn {
@@ -279,6 +415,8 @@ header .search {
   visibility: hidden;
   transition: 0.55s;
   transform: scale(0);
+  position: relative;
+  top: -2px;
 }
 
 .closeBtn.active {
@@ -286,16 +424,14 @@ header .search {
   visibility: visible;
   transition: 0.5s;
   transform: scale(1);
+  position: relative;
+  top: 4px;
+  background-color: #fff;
 }
 
-.cartBtn {
-  position: relative;
-  left: 0px;
-  font-size: 1.3em;
-  transition: 0.5s ease-in-out;
-  max-height: 130px; 
-  margin-right: 18px;
-}
+
+
+
 
 .cartBtn.active {
   left: 0;
@@ -314,7 +450,7 @@ header .search {
     display: block;
   }
 
-  header ul {
+  .main-navbar ul {
     display: none;
     flex-direction: column;
     position: absolute;
@@ -326,11 +462,11 @@ header .search {
     box-shadow: 0 15px 15px rgba(0, 0, 0, 0.05);
   }
 
-  header ul.open {
+  .main-navbar ul.open {
     display: flex;
   }
 
-  header ul li {
+  .main-navbar ul li {
     margin-bottom: 10px;
   }
 }
@@ -351,12 +487,11 @@ ul {
 }
 #app {
   position: relative;
-  min-height: 80vh; /* Ensure #app takes at least the full height of the viewport */
-  padding-bottom: 100px; /* Adjusted to accommodate the footer */
+  z-index: 1; 
 }
 
 .footer {
-  background-color: #568203;
+  background-color:  #758873;
   padding: 70px 10px;
   width: 100%;
   
@@ -381,7 +516,7 @@ ul {
   position: absolute;
   left: 0;
   bottom: -10px;
-  background-color: #DADD98; /* Updated line color */
+  background-color: #333; 
   height: 2px;
   box-sizing: border-box;
   width: 50px;
@@ -425,7 +560,6 @@ ul {
   background-color: #ffffff;
 }
 
-/* Responsive styles for the footer */
 @media (max-width: 767px) {
   .footer-col {
     width: 50%;
@@ -439,5 +573,135 @@ ul {
   }
 }
 
+.navbar-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
 
+}
+
+
+
+.navbar-links router-link {
+  text-decoration: none;
+  font-size: 0.8em;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  position: relative;
+  
+}
+
+.navbar-links span {
+  margin-right: 10px;
+}
+
+.navbar-links img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.announcement-bar {
+  background-color: #acc6aa;
+  color: #333;
+  padding: 10px;
+  text-align: center;
+  position: fixed;
+  top: 150px; 
+  left: 0;
+  width: 100%;
+  z-index: 999; 
+  margin-top: -30PX;
+}
+
+.announcement-text{
+  font-weight: 500;
+  font-family:'Kaisei Decol' ;
+  font-size: 15px;
+}
+
+@media (max-width: 768px) {
+  .navbar-links {
+    justify-content: center;
+  }
+
+  .navbar-links router-link {
+  text-decoration: none; 
+  color: #000000;
+}
+
+  .main-navbar {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .categories {
+    margin-top: 10px;
+  }
+
+  .category {
+    margin: 5px;
+  }
+
+  .actions {
+    margin-top: 10px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .actions input {
+    margin-bottom: 5px;
+  }
+}
+
+.main-navbar .group {
+  display: flex;
+  align-items: center;
+}
+
+.main-navbar .group {
+  display: flex;
+  align-items: center;
+}
+
+.main-navbar .group ion-icon {
+  font-size: 1.2em; 
+  margin-right: 10px; 
+}
+
+
+.subcategory {
+  position: absolute;
+  top: 100%;
+  left: -100PX; 
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  display: none;
+  width: 300px;
+}
+.navigation li {
+  position: relative;
+}
+
+.subcategory ul {
+  list-style: none;
+  padding: 30px;
+  margin: 0;
+  display: flex; 
+  flex-direction: column; 
+}
+
+.navigation li:hover .subcategory {
+  display: block;
+}
+
+.about-contact {
+  position: absolute;
+  bottom: 0;
+  left: 312px;
+  margin: 0;
+}
 </style>

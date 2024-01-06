@@ -1,4 +1,5 @@
 <template>
+  <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
     <div class="profile">
       <div class="menu"> <!--TODO : Put Menu in called file-->
         <div @click="changeTab('orders')" :class="{ active: currentTab === 'orders' }">ORDERS</div>
@@ -179,7 +180,7 @@
     height: 290vh;
     margin: 100px auto;
     background-color: #fff;
-    margin-top: 80px;
+    margin-top: 130px;
     margin-bottom: 1px;
   }
   
