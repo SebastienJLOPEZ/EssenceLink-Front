@@ -94,6 +94,7 @@
         name: "ProfileView",
         data(){
             return {
+                currentTab: 'orders',
                 name: "",
                 lastName: "",
                 email: "",
@@ -102,7 +103,6 @@
                 bdate : "",
                 signindate : "",
                 errorMessage:"",
-        currentTab: 'orders',
 
             }
         },
