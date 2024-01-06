@@ -1,122 +1,443 @@
 <template>
-    <div class="shop-page">
-      <!-- Filter Section -->
-      <div class="filter-section">
-        <div class="filter-title">Category:</div>
-        <div class="filter-title" style="margin-top: 30px;">Price:</div>
-        <div class="vertical-line"></div>
-        <div class="dots-container">
-          <div class="dot"></div>
-          <div class="dot" style="top: 30px;"></div>
-          <div class="dot" style="top: 60px;"></div>
-          <div class="dot" style="top: 90px;"></div>
-          <div class="dot" style="top: 120px;"></div>
-        </div>
-        <div class="border-line"></div>
-        <div class="round-dot"></div>
-        <div class="number-label">6</div>
-        <div class="number-label" style="left: 122px;">50</div>
-        <!-- Vertical line -->
-        <div class="vertical-line" style="height: 400px;"></div>
-      </div>
-  
-      <!-- Product Section -->
-      <div class="product-section">
-        <!-- Display your products here -->
+  <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
+  <div>
+    <!-- Category Banner -->
+    <div class="category-banner-container">
+      <img src="@/assets/BG4.jpg" alt="Category Banner" class="category-banner" />
+      <div class="category-overlay">
+        <h1 class="category-title">Green Tea</h1>
+        <p class="category-description">
+          Lovingly blended by our artisan experts, these teas offer an array of flavors to support health and wellbeing.
+        </p>
       </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    // Your component logic goes here
+
+    <!-- Filter Container -->
+    <div class="filter-container">
+      <div class="price-filter" @click="togglePriceFilter">
+        Price Filter <ion-icon name="chevron-down-outline"></ion-icon>
+      </div>
+      <div v-show="isPriceFilterOpen" class="price-options">
+        <label v-for="filter in priceFilters" :key="filter.value">
+          <input type="radio" v-model="selectedFilter" :value="filter.value" @change="applyPriceFilter" />
+          {{ filter.label }}
+        </label>
+      </div>
+      <div v-if="selectedFilter" class="selected-filter-container">
+        {{ selectedFilter }}
+        <span @click="clearFilter" class="remove-filter">X</span>
+      </div>
+    </div>
+
+    <!-- Products Container -->
+    <div class="products-and-garden-container">
+      <div class="product-container">
+        <div v-for="(product, index) in products" :key="index" :class="'product-item product-' + index">
+          <div class="product-content">
+            <img :src="product.image" alt="Product Image" />
+            <p class="description">{{ product.description }}</p>
+            <p class="price">{{ product.price }}</p>
+            <div class="line"></div>
+            <div class="buttons">
+              <button @click="quickView(product)" class="quick-view">Quick View</button>
+              <button @click="addToWishlist(product)" class="wishlist">Wishlist</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Popup for product details -->
+    <div v-if="showPopup" class="popup enlarged-popup">
+  <div class="popup-content">
+    <span class="close-popup" @click="closePopup">×</span>
+    <div class="popup-details">
+      <div class="popup-image-container">
+        <img :src="selectedProduct.image" alt="Product Image" class="popup-image" />
+      </div>
+      <div class="popup-description-and-price">
+      <h2 class="popup-title">{{ selectedProduct.name }}</h2>
+      <p class="popup-description">{{ selectedProduct.descriptionPopup }}</p>
+      <p class="popup-price">{{ selectedProduct.price }}</p>
+      <div class="quantity-control">
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" v-model="selectedProduct.quantity" min="1" />
+      </div>
+    </div>
+    </div>
+    <div class="buttons">
+      <button @click="addToWishlist(selectedProduct)" class="add-to-wishlist">
+        Add to Wishlist <ion-icon name="heart"></ion-icon>
+      </button>
+      <button @click="addToCart(selectedProduct)" class="add-to-cart">Add to Cart</button>
+    </div>
+  </div>
+</div>
+</div>
+</template>
+
+
+
+<script>
+import productImage1 from '@/assets/bg3.jpg';
+import productImage2 from '@/assets/bg3.jpg';
+import productImage3 from '@/assets/bg6.jpg';
+import productImage4 from '@/assets/bg6.jpg';
+import productImage5 from '@/assets/bg6.jpg';
+import productImage6 from '@/assets/bg6.jpg';
+import productImage7 from '@/assets/bg6.jpg';
+import productImage8 from '@/assets/bg6.jpg';
+
+export default {
+  data() {
+    return {
+      products: [
+        { name: 'Product 1', description: 'Description of Product 1', descriptionPopup: 'Popup description for Product 1', price: 19.99, image: productImage1 },
+        { name: 'Product 2', description: 'Description of Product 2', descriptionPopup: 'Popup description for Product 2', price: 24.99, image: productImage2 },
+        { name: 'Product 3', description: 'Description of Product 3', descriptionPopup: 'Popup description for Product 3', price: 29.99, image: productImage3 },
+        { name: 'Product 4', description: 'Description of Product 4', descriptionPopup: 'Popup description for Product 4', price: 14.99, image: productImage4 },
+        { name: 'Product 5', description: 'Description of Product 5', descriptionPopup: 'Popup description for Product 5', price: 22.99, image: productImage5 },
+        { name: 'Product 6', description: 'Description of Product 6', descriptionPopup: 'Popup description for Product 6', price: 17.99, image: productImage6 },
+        { name: 'Product 7', description: 'Description of Product 7', descriptionPopup: 'Popup description for Product 7', price: 27.99, image: productImage7 },
+        { name: 'Product 8', description: 'Description of Product 8', descriptionPopup: 'Popup description for Product 8', price: 32.99, image: productImage8 },
+      ],
+      isPriceFilterOpen: false,
+      priceFilters: [
+        { label: 'Low to High', value: 'low To High' },
+        { label: 'High to Low', value: 'high To Low' },
+      ],
+      selectedFilter: null,
+      showPopup: false,
+      selectedProduct: null,
+    };
+  },
+  methods: {
+    quickView(product) {
+  this.selectedProduct = {
+    ...product,
+    quantity: 1,
   };
-  </script>
+  this.showPopup = true;
+},
+
+    addToWishlist(product) {
+      console.log(`Added to wishlist: ${product.name}`);
+      // Implement your add to wishlist logic here
+    },
+    togglePriceFilter() {
+      this.isPriceFilterOpen = !this.isPriceFilterOpen;
+    },
+    applyPriceFilter() {
+      console.log(`Applying price filter: ${this.selectedFilter}`);
+      this.isPriceFilterOpen = false;
+    },
+    clearFilter() {
+      this.selectedFilter = null;
+    },
+    closePopup() {
+      this.showPopup = false;
+    },
+    addToCart(product) {
+      console.log(`Added to cart: ${product.name} (Quantity: ${product.quantity})`);
+      // Implement your add to cart logic here
+      this.showPopup = false; // Close the popup after adding to cart
+    },
+  },
+};
+</script>
+
+<style scoped>
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.category-banner-container {
+  position: relative;
+  width: 100%;
+  max-height: 550px;
+  overflow: hidden;
   
-  <style scoped>
-  /* Add your styling for the shop page here */
-  .shop-page {
-    display: flex;
-    height: 100vh;
-  }
-  
-  .filter-section {
-    width: 200px;
-    padding: 20px;
-    position: relative;
-    background: #f8f8f8;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .filter-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .vertical-line {
-    width: 2px;
-    height: 400px;
-    position: absolute;
-    left: 200px;
-    top: 20px;
-    background: black;
-  }
-  
-  .dots-container {
-    width: 16px;
-    height: 135px;
-    position: absolute;
-    left: 25px;
-    top: 53px;
-  }
-  
-  .dot {
-    width: 16px;
-    height: 15px;
-    position: absolute;
-    left: 0px;
-    background: #D9D9D9;
-  }
-  
-  .border-line {
-    width: 109px;
-    height: 0px;
-    position: absolute;
-    left: 23px;
-    top: 375px;
-    border: 1px black solid;
-  }
-  
-  .round-dot {
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    left: 68px;
-    top: 365px;
-    background: #D9D9D9;
-    border-radius: 9999px;
-  }
-  
-  .number-label {
-    width: 19px;
-    height: 29px;
-    position: absolute;
-    left: 23px;
-    top: 385px;
-    font-size: 20px;
-    font-family: Inter;
-    font-weight: 600;
-    line-height: 26px;
-    word-wrap: break-word;
-  }
-  
-  .product-section {
-    flex: 1;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    overflow-y: auto; /* Allow vertical scrolling */
-  }
-  </style>
-  
+}
+
+.category-banner {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+}
+
+.category-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.category-title {
+  color: white;
+  font-size: 64px;
+  text-align: center;
+  font-family: 'Kaisei Decol';
+  font-weight: 500;
+  margin-top: 100px;
+}
+
+.category-description {
+  color: white;
+  font-size: 32px;
+  text-align: center;
+  font-family: 'Kaisei Decol';
+  margin-top: 20px;
+  width: 80%;
+}
+
+.product-container {
+  width: 100%;
+  margin-top: 50px;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.product-item {
+  flex: 0 0 calc(25% - 20px);
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  max-width: 210px;
+}
+
+.product-item img {
+  width: 105%;
+  height: 210px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.product-item .description {
+  font-size: 16px;
+  color: black;
+  text-align: center;
+  margin-top: 4px;
+}
+
+.product-item .price {
+  font-size: 14px;
+  color: #333;
+  text-align: center;
+}
+
+.product-item .line {
+  width: 100%;
+  border-top: 1px solid #ddd;
+  margin: 10px 0;
+}
+
+.product-item .buttons {
+  display: flex;
+  justify-content: space-around;
+}
+
+.product-item button.quick-view,
+.product-item button.wishlist {
+  color: #fff;
+  font-size: 14px;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 48%;
+}
+
+.product-item button.quick-view {
+  background-color: #97c992;
+}
+
+.product-item button.wishlist {
+  background-color: #333;
+}
+
+.product-item button.quick-view:hover,
+.product-item button.wishlist:hover {
+  opacity: 0.9;
+}
+
+.filter-container {
+  margin-top: 20px;
+  text-align: left;
+  position: relative;
+}
+
+.price-filter {
+  cursor: pointer;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.selected-filter-container {
+  position: absolute;
+  right: 90px; 
+  top: 0;
+  padding: 5px 10px;
+  background-color: #333;
+  color: white;
+  border-radius: 5px;
+}
+
+.price-options {
+  display: inline-block;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+  text-align: left;
+}
+
+.price-options label {
+  display: block;
+  margin: 5px 0;
+  padding: 8px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.price-options input {
+  margin-right: 5px;
+}
+
+.remove-filter {
+  cursor: pointer;
+  margin-left: 5px;
+  font-weight: bold;
+}
+
+.popup {
+  position: fixed;
+  top: 62%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%; 
+  max-width: 800px; 
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 100%; 
+  max-width: 800px;
+  text-align: left; 
+}
+
+.popup-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.popup-image-container {
+  flex: 0 0 40%;
+}
+
+.popup-title {
+  font-size: 20px;
+  color: black;
+  margin-bottom: 10px;
+  right: 40px; 
+}
+
+.popup-image {
+  width: 100%;
+  height: 300px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.popup-description-and-price {
+  flex: 0 0 55%;
+  text-align: left;
+  margin-left: 20px; 
+}
+
+.popup-description {
+  font-size: 16px;
+  color: black;
+  margin-bottom: 10px;
+}
+
+.popup-price {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.quantity-control {
+  margin-top: 10px;
+}
+
+.quantity-control label {
+  font-size: 14px;
+  margin-right: 5px;
+}
+
+.quantity-control input {
+  width: 50px;
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px; 
+}
+
+.add-to-wishlist,
+.add-to-cart {
+  background-color: #97c992;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 10px; 
+}
+
+.add-to-wishlist:hover,
+.add-to-cart:hover {
+  opacity: 0.9;
+}
+
+.close-popup {
+  position: absolute;
+  top: 0px;
+  right: 10px; /* Adjust the right position as needed */
+  font-size: 30px;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+}
+</style>
+

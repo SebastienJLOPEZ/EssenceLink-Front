@@ -43,7 +43,6 @@
       <button @click="discoverMore">Discover More Products</button>
     </div>
 
-     <!-- First three products in a row -->
      <div class="product-container">
         <div v-for="(product, index) in products.slice(0, 3)" :key="index" :class="'product-item product-' + index">
           <div class="product-content">
@@ -55,11 +54,9 @@
         </div>
       </div>
 
-      <!-- Second line with the next four products -->
       <div class="product-container extra-left">
         <div v-for="(product, index) in products.slice(3, 7)" :key="index" :class="'product-item product-' + index">
           <div class="product-content">
-            <!-- Use the imported image directly -->
             <img :src="product.image" alt="Product Image">
             <hr>
             <p>{{ product.description }}</p>
@@ -77,7 +74,7 @@
     </div>
 
     <section class="email-section">
-      <div class="newsletter-title">Join NeoHerba Newsletter</div>
+      <div class="newsletter-title">Join Essence Link Newsletter</div>
       <div class="newsletter-description">Be the first one to know about new products and exclusive offers</div>
       <div class="email-input-container">
         <input type="email" placeholder="Enter your email" class="email-input">
@@ -89,7 +86,7 @@
 </template>
 
 <script>
-import productImage1 from '@/assets/bg1.jpg';
+import productImage1 from '@/assets/Leafs.png';
 import productImage2 from '@/assets/bg3.jpg';
 import productImage3 from '@/assets/bg6.jpg';
 import productImage4 from '@/assets/bg6.jpg';
@@ -117,7 +114,7 @@ export default {
         { name: 'Product 5', description: 'Description of Product 5', image: productImage5 },
         { name: 'Product 6', description: 'Description of Product 6', image: productImage6 },
         { name: 'Product 7', description: 'Description of Product 7', image: productImage7 },
-        // Add more products as needed
+        
       ],
     };
   },
@@ -170,23 +167,18 @@ export default {
         this.plusSlides(-1);
       }
     },
-    // New method for the "Discover More Products" button
     discoverMore() {
-      // Handle the "Discover More Products" button click event
       console.log('Discover More Products clicked');
-      // You can add additional logic or navigation here
+       // ADD CODE 
     },
-    addToCart(product) {
-      // Handle the "Add to Cart" button click event
-      console.log('Product added to cart:', product);
-      // You can add additional logic for cart management here
-    },
+   
   },
 };
 </script>
 <style>
 * {
   font-family: 'Kaisei Decol', sans-serif;
+ 
 }
 
 .popup {
@@ -224,11 +216,14 @@ export default {
   margin-left: 10px;
 }
 
+
 .slideshow-container {
   position: relative;
   width: 100%;
+  height: 400px;
   max-height: 500px; 
   overflow: hidden;
+  margin-top: 160px;
 }
 
 .mySlides {
@@ -246,22 +241,23 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(255, 255, 255, 0.78);
-  width: 60%; 
+  background: rgb(255, 255, 255);
+  width: 45%; 
   height: 50%;
-  margin-top: 20px; 
-  border-radius: 57px;
+  margin-top: -55px; 
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  
 }
 
 .mid-title {
   color: black;
   font-size: 45px;
-  font-family: 'Kaisei Decol';
-  font-weight: 700;
+  font-family:' Kaisei Decol' ;
+  font-weight: 550;
   line-height: 136px;
   word-wrap: break-word;
   margin-top: -55px; 
@@ -269,7 +265,7 @@ export default {
 
 .mid-container h2 {
   color: black;
-  font-size: 28px;
+  font-size: 22px;
   font-family: 'Kaisei Decol';
   font-weight: 400;
   line-height: 76.80px;
@@ -282,19 +278,20 @@ export default {
   color: white;
   font-size: 20px;
   font-family: 'Kaisei Decol';
-  font-weight: 600;
+  font-weight: 300;
   line-height: 26px;
   word-wrap: break-word;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
   margin-top: -10px; 
+  font-family:'Newsreader' ;
 }
 
 .prev, .next {
   cursor: pointer;
   position: absolute;
-  top: 50%;
+  top: 45%;
   width: auto;
   margin-top: -22px;
   padding: 16px;
@@ -334,17 +331,17 @@ export default {
   margin-top: 40px;
 }
 
-/* Updated styles for the product and garden container */
+
 .products-and-garden-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  align-items: flex-start; /* Align items to the top */
+  align-items: flex-start; 
   margin-top: 60px;
 }
 
 .garden-container {
-  width: 30%; /* Adjust the width based on your design preference */
+  width: 30%; 
   text-align: left; 
   margin-top: 60px;
 }
@@ -364,7 +361,7 @@ export default {
 }
 
 .garden-container button {
-  background-color: rgb(60, 193, 20);
+  background-color:#77ab73;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -390,7 +387,7 @@ export default {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin: 10px;
   max-width: 190px;
-  display: inline-block; /* Ensure each product is on the same line */
+  display: inline-block; 
 }
 
 .product-item img {
@@ -433,33 +430,33 @@ export default {
   display: block;
   margin-top: 10px;
   padding: 10px;
-  border-top: 1px solid rgb(60, 193, 20);
-  background-color: transparent; /* Set background color to transparent */
+  border-top: 1px solid #56b44f;
+  background-color: transparent; 
 }
 
 .product-item .more-details:hover {
-  color: rgb(60, 193, 20); /* Change text color on hover */
-  background-color: transparent; /* Keep background color transparent on hover */
+  color:#56b44f; 
+  background-color: transparent; 
 }
 
 .product-container.extra-left {
   justify-content: flex-start; 
-  margin-right: 260PX;/* Align items to the start (extra left) */
+  margin-right: 260PX;
 }
 .product-container.extra-left {
   margin-top: 20px;
   display: flex;
-  justify-content: space-between; /* Adjust the spacing between the second line products */
+  justify-content: space-between; 
 }
 
-/* Styles for the product items within the second line */
+
 .product-container.extra-left .product-item {
   background-color: white;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   max-width: 190px;
-  flex: 0 0 67%; /* Adjust the width based on your design preference */
+  flex: 0 0 67%; 
   margin-left: 40PX;
 }
 
@@ -467,8 +464,8 @@ export default {
   width: 421px;
   height: 403px;
   border-radius: 20px;
-  margin-top: 100px;
-  margin-left: 230px; /* Correct the property name to lowercase 'px' */
+  margin-top: 130px;
+  margin-left: 230px; 
 }
 
 .support-container {
@@ -476,11 +473,11 @@ export default {
   height: 403px;
   border-radius: 20px;
   margin-top: 300px;
-  background: #426B1F;
+  background: #93ab91;
   color: white;
   position: relative; 
   margin-right: 130px;
-  z-index: 4; /* Set a higher z-index to make it appear on top */
+  z-index: 4; 
 }
 
 .support-container h3 {
@@ -503,7 +500,7 @@ export default {
 }
 .email-section {
   text-align: center;
-  margin-top: 90px; /* Adjust the margin based on your design preference */
+  margin-top: 90px; 
 }
 
 .newsletter-title {
@@ -524,7 +521,7 @@ export default {
   font-size: 20px;
   font-family: 'Newsreader';
   font-weight: 300;
-  margin-top: 10px; /* Adjust the margin based on your design preference */
+  margin-top: 10px; 
 }
 
 .email-input-container {
@@ -535,7 +532,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 20px; /* Adjust the margin based on your design preference */
+  margin-top: 20px; 
 }
 
 .email-input {
@@ -543,18 +540,17 @@ export default {
   padding: 10px;
   border: none;
   outline: none;
-  background: white; /* Ensure the background is white */
-  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1); /* Add a shadow */
+  background: white; 
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1); 
 
 }
 
-/* Always show placeholder text */
 .email-input::placeholder {
-  color: #888; /* Adjust the placeholder color */
+  color: #888; 
 }
 
 .email-input:focus::placeholder {
-  color: #888; /* Keep the same color when the input is focused */
+  color: #888; 
 }
 
 .add-button {
@@ -569,10 +565,11 @@ export default {
   font-family: 'Newsreader';
   font-weight: 300;
   transition: background-color 0.3s ease;
-  margin-top: 30px;
+  margin-bottom: 90px;
+  margin-top: 40PX;
 }
 
 .add-button:hover {
-  background-color: #426B1F; 
+  background-color:  #93ab91; 
 }
 </style>

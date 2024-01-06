@@ -90,17 +90,19 @@ export default {
   padding: 0;
   box-sizing: border-box;
   font-family: 'Kaisei Decol', sans-serif;
+
 }
 
 .container {
-  height: 130vh;
+  margin-top: 160PX;
+  height: 140vh;
   width: 100%;
   align-items: center;
   display: flex;
   justify-content: center;
   background-image: url('@/assets/POST.jpg');
   background-size: cover;
-  margin-bottom: 80PX;
+  margin-TOP: 150PX;
 }
 
 .card {
@@ -133,7 +135,7 @@ export default {
 }
 
 .form button {
-  background-color: #095328;
+  background-color: #93ab91;
   color: #ffffff;
   font-size: 16px;
   outline: none;
@@ -199,7 +201,7 @@ export default {
 }
 
 .additional-content button {
-  background-color: #095328;
+  background-color: #93ab91;
   color: #ffffff;
   font-size: 16px;
   outline: none;
