@@ -7,6 +7,8 @@ import ProfileView from '../views/ProfileView.vue';
 import ShopView from '../views/ShopView.vue';
 import AboutView from '../views/AboutView.vue'; 
 import ContactView from '../views/ContactView.vue'; 
+import ACProfileView from '../views/ACProfileView.vue';
+
 
 const routes = [
   {
@@ -49,7 +51,32 @@ const routes = [
     name: 'ContactView',
     component: ContactView,
   },
-];
+{
+    path: "/login",
+    name: "LoginView", 
+    component: LoginView,
+},
+{
+    path: "/signup",
+    name: "SignupView", 
+    component: SignupView,
+},
+{
+  path: "/profile",
+  name: "ProfileView", 
+  component: ProfileView,
+},
+{
+  path: "/shop",
+  name: "ShopView", 
+  component: ShopView,
+},
+{
+  path: "/AdminClientProfile",
+  name: "ACProfileView",
+  component: ACProfileView,
+}
+]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),

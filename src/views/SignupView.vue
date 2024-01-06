@@ -63,6 +63,9 @@ export default {
       successMessage: "",
     };
   },
+  mounted(){
+    this.currentPage = localStorage.getItem('currentPage')
+  },
   methods: {
     signupRequest() {
       let v = this;
@@ -84,16 +87,17 @@ export default {
       const auth = getAuth(firebase);
 
       createUserWithEmailAndPassword(auth, v.email, v.password)
-        .then((userCredential) => {
+        /*.then((userCredential) => {
           // Set display name directly on the user object
           return userCredential.user.updateProfile({
             displayName: v.name,
           });
-        })
+        })*/
         .then(() => {
           return sendEmailVerification(auth.currentUser);
         })
         .then(() => {
+          v.SignInDate = new Date().toISOString();
           Axios.post('https://localhost:7115/v1/api/User', userData, {
              headers: {
               'Content-Type': 'application/json',
@@ -102,11 +106,10 @@ export default {
             console.log('In databank', response.data);
           })
           .catch(error => {
-            v.errorMessage = "NO"
             console.error('Not in databank',error.message);
           });
           v.successMessage = "Signup successful. Confirmation code has been sent to your email.";
-          this.$router.push('/login');
+          this.$router.push(this.currentPage);
         })
         .catch(error => {
           console.error('Signup Error:', error);

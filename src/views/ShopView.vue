@@ -143,6 +143,10 @@ export default {
       this.showPopup = false; // Close the popup after adding to cart
     },
   },
+    mounted(){
+      const currentPagePath = this.$route.path;
+      localStorage.setItem('currentPage', currentPagePath);
+    }
 };
 </script>
 

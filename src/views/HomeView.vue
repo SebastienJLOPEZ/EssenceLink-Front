@@ -119,6 +119,10 @@ export default {
     };
   },
   mounted() {
+
+    const currentPagePath = this.$route.path;
+    localStorage.setItem('currentPage', currentPagePath);
+    
     setTimeout(() => {
       this.showPopup = true;
       this.showSlides(this.slideIndex);

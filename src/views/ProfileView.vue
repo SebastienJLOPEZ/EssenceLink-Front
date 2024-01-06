@@ -1,33 +1,33 @@
 <template>
   <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
     <div class="profile">
-      <div class="menu"> <!--TODO : Put Menu in called file-->
-        <div @click="changeTab('orders')" :class="{ active: currentTab === 'orders' }">ORDERS</div>
-        <div @click="changeTab('addresses')" :class="{ active: currentTab === 'addresses' }">ADDRESSES</div>
-        <div @click="changeTab('wishlists')" :class="{ active: currentTab === 'wishlists' }">WISHLISTS</div>
-        <div @click="changeTab('accountSettings')" :class="{ active: currentTab === 'accountSettings' }">ACCOUNT SETTINGS</div>
-        <div @click="changeTab('logout')" class="logout-button" :class="{ active: currentTab === 'logout' }">LOGOUT</div>
-      </div>
+        <div class="menu"> <!--TODO : Put Menu in called file-->
+            <div @click="changeTab('orders')" :class="{ active: currentTab === 'orders' }">ORDERS</div>
+            <div @click="changeTab('addresses')" :class="{ active: currentTab === 'addresses' }">ADDRESSES</div>
+            <div @click="changeTab('wishlists')" :class="{ active: currentTab === 'wishlists' }">WISHLISTS</div>
+            <div @click="changeTab('accountSettings')" :class="{ active: currentTab === 'accountSettings' }">ACCOUNT SETTINGS</div>
+            <div @click="changeTab('logout')" class="logout-button" :class="{ active: currentTab === 'logout' }">LOGOUT</div>
+        </div>
   
-      <div class="content">
-        <div v-if="currentTab === 'orders'">
-          <h2 class="tab-title">Orders</h2>
-          <p>You haven't placed any orders yet.</p>
+        <div class="content">
+            <div v-if="currentTab === 'orders'">
+            <h2 class="tab-title">Orders</h2>
+            <p>You haven't placed any orders yet.</p>
         </div>
   
         <div v-if="currentTab === 'addresses'">
-          <h2 class="tab-title">Addresses</h2>
-          <!--div v-for="(address, index) in addresses" :key="index" class="address-card"></div-->
-            <h3>{{ name }} {{ lastName }}</h3>
-            <p>Email : {{ email.substring(0, 5) }}***{{ email.includes('@') ? '...' + email.split('@')[1] : '' }}</p>
-            <p>{{ address }}<!--, {{ address.city }}, {{ address.region }}, {{ address.province }}, {{ address.zipCode }}--></p>
-            <p>Phone: {{ number}}</p>
-            <p>Birthday : {{ bdate }}</p>
+            <h2 class="tab-title">Addresses</h2>
+            <!--div v-for="(address, index) in addresses" :key="index" class="address-card"></div-->
+                <h3>{{ name }} {{ lastName }}</h3>
+                <p>Email : {{ email.substring(0, 5) }}***{{ email.includes('@') ? '...' + email.split('@')[1] : '' }}</p>
+                <p>{{ address }}<!--, {{ address.city }}, {{ address.region }}, {{ address.province }}, {{ address.zipCode }}--></p>
+                <p>Phone: {{ number}}</p>
+                <p>Birthday : {{ bdate }}</p>
           
-          <!--<button @click="showAddAddressForm" class="add-address-button">Add a new address</button>
-          <div v-if="showAddAddress" class="add-address-form-container">
-            <h3>Add a new address</h3>
-            <form @submit.prevent="addNewAddress">
+                <!--<button @click="showAddAddressForm" class="add-address-button">Add a new address</button>
+                <div v-if="showAddAddress" class="add-address-form-container">
+                <h3>Add a new address</h3>
+                <form @submit.prevent="addNewAddress">
               <div class="form-row">
                 <div class="form-group">
                   <label for="firstName">First Name:</label>
@@ -67,17 +67,20 @@
                 <input v-model="newAddress.phone" required>
               </div>
               <button type="submit">Add Address</button>
-            </form>
-          </div>-->
+                </form>
+                </div>-->
         </div>
+
         <div v-if="currentTab === 'wishlists'">
-          <h2 class="tab-title">Wishlists</h2>
+            <h2 class="tab-title">Wishlists</h2>
         </div>
   
         <div v-if="currentTab === 'accountSettings'">
           <h2 class="tab-title">Account Settings</h2>
         </div>
+
       </div>
+
     </div>
   </template>
   
@@ -85,7 +88,7 @@
     import Axios from 'axios';
     import firebase from 'firebase/app';
     import 'firebase/auth';
-    import {getAuth, onAuthStateChanged} from 'firebase/auth';
+    import {getAuth, onAuthStateChanged, signOut} from 'firebase/auth';
 
     export default{
         name: "ProfileView",
@@ -98,10 +101,19 @@
                 number : "",
                 bdate : "",
                 signindate : "",
+                errorMessage:"",
+        currentTab: 'orders',
 
             }
         },
         methods: {
+            changeTab(tab) {
+                if (tab === 'logout') {
+                    this.logout();
+                } else {
+                    this.currentTab = tab;
+                }
+            },
             currentUser(){
                 let v = this;
                 const auth = getAuth(firebase);
@@ -109,17 +121,16 @@
                 onAuthStateChanged(auth, (user) => {
                     if (user){ 
                         v.email = user.email;
-                        v.fetchUserData()
+                        v.fetchUserData(v.email)
                     }
                 });
             },
-            fetchUserData (){
+            fetchUserData (email){
                 let v = this;
                 v.errorMessage = "";
                 
-                    Axios.get(`https://localhost:7115/v1/api/User/${v.email}`)
+                Axios.get(`https://localhost:7115/v1/api/User/${email}`)
                 .then(response => {
-                    v.errorMessage = "Connected";
                     v.name = response.data.FirstName;
                     v.lastName = response.data.LastName;
                     v.address = response.data.Address === "" ? "Not Registered" : response.data.Address;
@@ -128,19 +139,27 @@
                     v.signindate = response.data.SignInDate === "" ? "Not Registered" : response.data.SignInDate;
                 })
                 .catch(error => {
-                    v.errorMessage = "Not connected";
+                    v.errorMessage = "Not Connected";
                     console.error('Failed to connect to databank', error);
                 });
+            },
+            logout() {
+                const auth = getAuth(firebase);
+                signOut(auth)
+                .then (() => {
+                    this.$nextTick(() => {
+                        this.$router.push('/');
+                    });
+                })
+                .catch(error =>{
+                    console.log('logout error: ', error.message);
+                })
             }
         },
         mounted() {
                 this.currentUser();
         },
-        logout() {
-        this.$nextTick(() => {
-        this.$router.push('/login');
-        });
-        }
+        
     } 
 </script>
 <!--,
@@ -173,6 +192,16 @@
   * {
     box-sizing: border-box;
   }
+
+  /*.test{
+    display: flex;
+    max-width: 100%;
+    height: 2vh;
+    margin: 100px auto;
+    background-color: #fff;
+    margin-top: 80px;
+    margin-bottom: 1px;
+  }*/
   
   .profile {
     display: flex;

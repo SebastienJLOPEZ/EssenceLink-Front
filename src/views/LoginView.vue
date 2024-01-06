@@ -42,45 +42,75 @@
     </router-link>
     </div>
   </div>
+  <!--CheckerRole /-->
 </template>
 
 <script>
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import checkUserType from '@/_services/CheckerRole.js';
 
 export default {
   name: "LoginView",
+  mixins: [checkUserType],
   data() {
     return {
       email: "",
       password: "",
       xhrRequest: false,
       errorMessage: "",
+      redirectPaths: {
+        defaultPath: localStorage.getItem('currentPage'),
+        ACPath: '/AdminClientProfile',
+        APPath: '/AdminProductProfile',
+      },
     };
   },
+
   methods: {
     loginRequest() {
       let v = this;
-      v.xhrRequest = true;
       v.errorMessage = "";
 
       const auth = getAuth(firebase);
 
       signInWithEmailAndPassword(auth, v.email, v.password)
         .then(() => {
-          this.$router.push('/profile');
-          v.xhrRequest = false;
+          checkUserType(v.email, 
+                        () => this.$router.push(v.redirectPaths.ACPath),
+                        () => this.$router.push(v.redirectPaths.APPath),
+                        () => this.$router.push(v.redirectPaths.defaultPath),
+                        () => this.$router.push(v.redirectPaths.defaultPath));
         })
         .catch(error => {
           console.error('Login Error:', error.message);
-          v.errorMessage = "Invalid email or password. Please try again.";
+          v.errorMessage = error.message;
           v.xhrRequest = false;
         });
     },
+    
+    async checkAuthentication() {
+      const auth = getAuth(firebase);
+
+      try {
+        const user = await new Promise(resolve => onAuthStateChanged(auth, resolve));
+
+        if (user) {
+          this.$router.push('/profile');
+        }
+      } catch (error) {
+        console.error('Error checking authentication status:', error);
+      }
+    }
   },
+
+  beforeMount() {
+    this.checkAuthentication();
+  }
 };
 </script>
+
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
