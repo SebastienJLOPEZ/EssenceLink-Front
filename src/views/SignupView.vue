@@ -15,7 +15,7 @@
             <input type="text" id="name" v-model="name" placeholder="First name">
           </div>
           <div class="form-group">
-            <input type="text" id="name" v-model="lastName" placeholder="Last name">
+            <input type="text" id="lastName" v-model="lastName" placeholder="Last name">
           </div>
           <div class="form-group">
             <input type="email" id="email" v-model="email" placeholder="Your email">
@@ -77,11 +77,11 @@ export default {
         FirstName : v.name,
         LastName : v.lastName,
         Email : v.email,
-        address: "",
-        Number: 0,
+        Number: 'Not Defined',
         Role: "Client",
         BDate: "",
-        SignInDate: ""
+        SignInDate: new Date().toISOString(),
+        Status: "Activate",
       };
 
       const auth = getAuth(firebase);
@@ -97,7 +97,6 @@ export default {
           return sendEmailVerification(auth.currentUser);
         })
         .then(() => {
-          v.SignInDate = new Date().toISOString();
           Axios.post('https://localhost:7115/v1/api/User', userData, {
              headers: {
               'Content-Type': 'application/json',

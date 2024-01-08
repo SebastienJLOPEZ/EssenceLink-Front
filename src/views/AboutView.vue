@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
     <div>
       <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
       <div class="header"></div>
@@ -193,12 +192,3 @@
   }
   </style>
   
-=======
-  <div class="about">
-    about page 
-    </div>
-    
-    
-</template>
-
->>>>>>> PageSaver

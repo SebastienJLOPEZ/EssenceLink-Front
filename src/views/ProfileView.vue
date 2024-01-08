@@ -103,7 +103,7 @@
                 bdate : "",
                 signindate : "",
                 errorMessage:"",
-
+                wishlist: [],
             }
         },
         methods: {
@@ -121,7 +121,9 @@
                 onAuthStateChanged(auth, (user) => {
                     if (user){ 
                         v.email = user.email;
-                        v.fetchUserData(v.email)
+                        v.fetchUserData(v.email);
+                        v.fetchUserWishlist(v.email);
+                        v.fetchUserCommand(v.email);
                     }
                 });
             },
@@ -131,6 +133,7 @@
                 
                 Axios.get(`https://localhost:7115/v1/api/User/${email}`)
                 .then(response => {
+                    v.id = response.data.Id;
                     v.name = response.data.FirstName;
                     v.lastName = response.data.LastName;
                     v.address = response.data.Address === "" ? "Not Registered" : response.data.Address;
@@ -142,6 +145,26 @@
                     v.errorMessage = "Not Connected";
                     console.error('Failed to connect to databank', error);
                 });
+            },
+            async fetchUserWishlist(uid){
+              let v=this;
+              v.errorMessage="";
+              try  {
+                const response = await Axios.get(`https://localhost:7115/v1/api/Wishlist/User/${uid}`)
+                this.wishlist = response.data;
+              } catch(error){
+                console.error('Failed to connect to databank', error);
+              }
+            },
+            async fetchUserCommand(uid){
+              let v=this;
+              v.errorMessage="";
+              try  {
+                const response = await Axios.get(`https://localhost:7115/v1/api/Command/User/${uid}`)
+                this.wishlist = response.data;
+              } catch(error){
+                console.error('Failed to connect to databank', error);
+              }
             },
             logout() {
                 const auth = getAuth(firebase);

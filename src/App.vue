@@ -73,7 +73,7 @@
   <ion-icon name="cart-outline" class="cartBtn" v-on:click="toggleCart"></ion-icon>
 </router-link>
 
-<router-link to="/profile" class="profile-link" style="color: black;">
+<router-link to="/login" class="profile-link" style="color: black;">
   <ion-icon name="person-outline" class="profileBtn" v-on:click="toggleProfile"></ion-icon>
 </router-link>
 

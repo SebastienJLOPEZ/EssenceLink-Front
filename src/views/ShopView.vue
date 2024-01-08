@@ -32,11 +32,11 @@
     <!-- Products Container -->
     <div class="products-and-garden-container">
       <div class="product-container">
-        <div v-for="(product, index) in products" :key="index" :class="'product-item product-' + index">
+        <div v-for="product in productList" :key="product.Id" :class="'product-item product-'">
           <div class="product-content">
-            <img :src="product.image" alt="Product Image" />
-            <p class="description">{{ product.description }}</p>
-            <p class="price">{{ product.price }}</p>
+            <img :src="require('@/assets/bg3.jpg')" alt="Product Image" />
+            <p class="description">{{ product.Description }}</p>
+            <p class="price">{{ product.Price }}€</p>
             <div class="line"></div>
             <div class="buttons">
               <button @click="quickView(product)" class="quick-view">Quick View</button>
@@ -56,12 +56,12 @@
         <img :src="selectedProduct.image" alt="Product Image" class="popup-image" />
       </div>
       <div class="popup-description-and-price">
-      <h2 class="popup-title">{{ selectedProduct.name }}</h2>
-      <p class="popup-description">{{ selectedProduct.descriptionPopup }}</p>
-      <p class="popup-price">{{ selectedProduct.price }}</p>
+      <h2 class="popup-title">{{ selectedProduct.Name }}</h2>
+      <p class="popup-description">{{ selectedProduct.Description }}</p>
+      <p class="popup-price">{{ selectedProduct.Price }}</p>
       <div class="quantity-control">
         <label for="quantity">Quantity:</label>
-        <input type="number" id="quantity" v-model="selectedProduct.quantity" min="1" />
+        <input type="number" id="quantity" v-model="selectedProduct.quantity" min="1" /> <p> {{ selectedProduct.Quantity > 10 ? "" : "Il ne reste que "+ selected.Quantity +" unité." }}</p>
       </div>
     </div>
     </div>
@@ -79,28 +79,38 @@
 
 
 <script>
-import productImage1 from '@/assets/bg3.jpg';
+/*import productImage1 from '@/assets/bg3.jpg';
 import productImage2 from '@/assets/bg3.jpg';
 import productImage3 from '@/assets/bg6.jpg';
 import productImage4 from '@/assets/bg6.jpg';
 import productImage5 from '@/assets/bg6.jpg';
 import productImage6 from '@/assets/bg6.jpg';
 import productImage7 from '@/assets/bg6.jpg';
-import productImage8 from '@/assets/bg6.jpg';
+import productImage8 from '@/assets/bg6.jpg';*/
+import Axios from 'axios';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import currentUser from '@/_services/FetchUserData.js';
+import ProductCaller from '@/_services/ProductCaller.js';
 
 export default {
+  name: "ShopView",
+  mixins: [currentUser, ProductCaller],
   data() {
     return {
-      products: [
-        { name: 'Product 1', description: 'Description of Product 1', descriptionPopup: 'Popup description for Product 1', price: 19.99, image: productImage1 },
-        { name: 'Product 2', description: 'Description of Product 2', descriptionPopup: 'Popup description for Product 2', price: 24.99, image: productImage2 },
-        { name: 'Product 3', description: 'Description of Product 3', descriptionPopup: 'Popup description for Product 3', price: 29.99, image: productImage3 },
-        { name: 'Product 4', description: 'Description of Product 4', descriptionPopup: 'Popup description for Product 4', price: 14.99, image: productImage4 },
-        { name: 'Product 5', description: 'Description of Product 5', descriptionPopup: 'Popup description for Product 5', price: 22.99, image: productImage5 },
-        { name: 'Product 6', description: 'Description of Product 6', descriptionPopup: 'Popup description for Product 6', price: 17.99, image: productImage6 },
-        { name: 'Product 7', description: 'Description of Product 7', descriptionPopup: 'Popup description for Product 7', price: 27.99, image: productImage7 },
-        { name: 'Product 8', description: 'Description of Product 8', descriptionPopup: 'Popup description for Product 8', price: 32.99, image: productImage8 },
-      ],
+      email:"",
+      product: [],
+      /*products: [
+        { id: "659b72be731240ade0365ecf", name: 'Product 1', description: 'Description of Product 1', descriptionPopup: 'Popup description for Product 1', price: 19.99, image: productImage1 },
+        { id: "2", name: 'Product 2', description: 'Description of Product 2', descriptionPopup: 'Popup description for Product 2', price: 24.99, image: productImage2 },
+        { id: "3", name: 'Product 3', description: 'Description of Product 3', descriptionPopup: 'Popup description for Product 3', price: 29.99, image: productImage3 },
+        { id: "4", name: 'Product 4', description: 'Description of Product 4', descriptionPopup: 'Popup description for Product 4', price: 14.99, image: productImage4 },
+        { id: "5", name: 'Product 5', description: 'Description of Product 5', descriptionPopup: 'Popup description for Product 5', price: 22.99, image: productImage5 },
+        { id: "6", name: 'Product 6', description: 'Description of Product 6', descriptionPopup: 'Popup description for Product 6', price: 17.99, image: productImage6 },
+        { id: "7", name: 'Product 7', description: 'Description of Product 7', descriptionPopup: 'Popup description for Product 7', price: 27.99, image: productImage7 },
+        { id: "8", name: 'Product 8', description: 'Description of Product 8', descriptionPopup: 'Popup description for Product 8', price: 32.99, image: productImage8 },
+      ],*/
       isPriceFilterOpen: false,
       priceFilters: [
         { label: 'Low to High', value: 'low To High' },
@@ -109,6 +119,8 @@ export default {
       selectedFilter: null,
       showPopup: false,
       selectedProduct: null,
+      currentType: "Boisson",
+      productList: [],
     };
   },
   methods: {
@@ -120,9 +132,27 @@ export default {
   this.showPopup = true;
 },
 
-    addToWishlist(product) {
-      console.log(`Added to wishlist: ${product.name}`);
-      // Implement your add to wishlist logic here
+    async addToWishlist(product) {
+      if (!this.checkAuthentication()) {
+        // Redirection effectuée, donc on arrête l'exécution restante du code.
+        return;
+      }
+      try {
+        await this.currentUser(); //Use to fetch the user ID
+        const newWLData = {
+          UserId: this.id,
+          ProductId: product.Id,
+        }
+        const response = await Axios.post('https://localhost:7115/v1/api/Wishlist', newWLData , {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },)
+        console.log(`Added to wishlist: ${product.name}`, response);
+
+      } catch (error) {
+            console.error('Failed to connect to databank', error.message);
+          }
     },
     togglePriceFilter() {
       this.isPriceFilterOpen = !this.isPriceFilterOpen;
@@ -138,12 +168,38 @@ export default {
       this.showPopup = false;
     },
     addToCart(product) {
-      console.log(`Added to cart: ${product.name} (Quantity: ${product.quantity})`);
-      // Implement your add to cart logic here
+      console.log(`Added to cart: ${product.name} (Quantity: ${product.quantity})`); 
+      
+      const cart = JSON.parse(localStorage.getItem('cart')) || []; //Récupérer dans le localstorage le panier actuel et s'il n'existe pas, en créer un
+
+      const productInCart = cart.find(item => item.product.id === product.id); // Rechercher si le produit est déjà dans le panier
+
+      if (productInCart) { // Si vrai, augmenter quantité. Sinon, mettre dans le panier.
+        productInCart.product.quantity += product.quantity;
+      } else {
+        cart.push({ product });
+      }
+
+      localStorage.setItem('cart', JSON.stringify(cart));
+
       this.showPopup = false; // Close the popup after adding to cart
     },
+    async checkAuthentication() {
+      const auth = getAuth(firebase);
+
+      try {
+        const user = await new Promise(resolve => onAuthStateChanged(auth, resolve));
+
+        if (!user) {
+          this.$router.push('/login');
+        }
+      } catch (error) {
+        console.error('Error checking authentication status:', error);
+      }
+    }
   },
     mounted(){
+      this.ProductFetcher(this.currentType);
       const currentPagePath = this.$route.path;
       localStorage.setItem('currentPage', currentPagePath);
     }

@@ -15,14 +15,14 @@
             <p class="product-description">{{ item.description }}</p>
           </div>
         </div>
-        <div class="product-price">{{ item.price.toFixed(2) }}</div>
+        <div class="product-price">{{ item.Price.toFixed(2) }}</div>
         <div class="product-quantity">
           <input type="number" v-model="item.quantity" min="1" @input="updateQuantity(index)">
         </div>
         <div class="product-removal">
           <button @click="removeItem(index)">Remove</button>
         </div>
-        <div class="product-line-price">{{ (item.price * item.quantity).toFixed(2) }}</div>
+        <div class="product-line-price">{{ (item.Price * item.quantity).toFixed(2) }}</div>
       </div>
     </div>
     <div class="cart-summary">
@@ -36,36 +36,154 @@
 </template>
 
 <script>
+import Axios from 'axios';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import currentUser from '@/_services/FetchUserData.js';
+
+
 export default {
+  mixins: [currentUser],
   data() {
     return {
       cartItems: [
-        { name: 'HYDROLAT - Bleuet bio', description: 'Hydrolat 100 % pur et naturel ', price: 12.99, quantity: 2, image: require('@/assets/CART2.jpg'), linePrice: 0 },
-        { name: 'Provence D Antan', description: 'Herbes De Provence 100G Bio', price: 15.99, quantity: 1, image: require('@/assets/CART1.png'), linePrice: 0 },
+        /*{ name: 'HYDROLAT - Bleuet bio', description: 'Hydrolat 100 % pur et naturel ', Price: 12.99, quantity: 2, image: require('@/assets/CART2.jpg'), linePrice: 0 },
+        { name: 'Provence D Antan', description: 'Herbes De Provence 100G Bio', Price: 15.99, quantity: 1, image: require('@/assets/CART1.png'), linePrice: 0 },*/
         
       ],
+      data: "",
+      totallPrice:"",
     };
   },
   created() {
     this.cartItems.forEach((item) => {
-      item.linePrice = item.price * item.quantity;
+      item.linePrice = item.Price * item.quantity;
     });
+  },
+  computed(){
+    this.calculateTotal();
   },
   methods: {
     updateQuantity(index) {
       const item = this.cartItems[index];
-      item.linePrice = item.price * item.quantity;
+      item.linePrice = item.Price * item.quantity;
     },
     removeItem(index) {
       this.cartItems.splice(index, 1);
     },
     calculateTotal() {
-      return this.cartItems.reduce((total, item) => total + item.linePrice, 0);
+      return this.totalPrice = this.cartItems.reduce((total, item) => total + item.linePrice, 0);
     },
-    checkout() {
-      alert('Checkout successful!');
+    async checkout() {
+      if (!this.checkAuthentication()) {
+        // Redirection effectuée, donc on arrête l'exécution restante du code.
+        return;
+      }
+      try {
+      await this.currentUser();
+      await this.createInvoice(this.id);
+        console.log("test de log");
+      } catch (error) {
+            console.error('Failed to connect to databank', error.message);
+      }
+      //alert('Checkout successful!');
     },
+    async fetchCartItem() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    for (const cartItem of cart) {
+      try {
+        const response = await Axios.get(`https://localhost:7115/v1/api/Product/${cartItem.product.Id}`);
+        const productFromDB = response.data;
+
+        // Ajouter le produit récupéré depuis la base de données à cartItems
+        this.cartItems.push({
+          name: productFromDB.Name,
+          description: productFromDB.Description,
+          Price: productFromDB.Price,
+          quantity: cartItem.product.quantity,
+          image:require('@/assets/CART1.png'), 
+          linePrice: 0 
+        });
+        this.calculateTotal();
+      } catch (error) {
+        console.error('Failed to fetch product from database', error);
+      }
+    }
   },
+
+  async createInvoice(uid) {
+      try {
+        const comData = {
+          UserId: uid,
+          TotalPrice: this.totalPrice,
+          Shipment_Status: 'Pending',
+          Shipping_Address: "",
+          Date: new Date().toISOString(),
+        };
+
+        const response = await Axios.post('https://localhost:7115/v1/api/Command', comData, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const cartProducts = JSON.parse(localStorage.getItem('cart'));
+
+        for (const cartProduct of cartProducts) {
+          try {
+            const productDetails = await Axios.get(`https://localhost:7115/v1/api/Product/${cartProduct.product.Id}`);
+
+            const comPData = {
+              ProductId: cartProduct.product.Id,
+              CommandId: response.data.Id,
+              Quantity: cartProduct.product.quantity,
+              TotalPrice: productDetails.data.Price * cartProduct.product.quantity,
+            };
+
+            // Stockez le produit dans la collection CommandProduct
+            await this.storeInvoiceProduct(comPData);
+            //this.productUpdate(cartProduct.pid, cartProduct.quantity)
+          } catch (error) {
+            console.error('Failed to connect to databank', error.message);
+          }
+          localStorage.removeItem('cart');
+          this.$router.push('/');
+        }
+      } catch (error) {
+        console.error('Failed to connect to databank', error.message);
+      }
+    },
+
+    async storeInvoiceProduct(comPData) { // sera utilisé pour stocker le produit dans la collection CommandProduct
+      try {
+        await Axios.post('https://localhost:7115/v1/api/CommandProduct', comPData, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      } catch (error) {
+        console.error('Failed to connect to databank', error.message);
+      }
+    },
+    async checkAuthentication() {
+      const auth = getAuth(firebase);
+
+      try {
+        const user = await new Promise(resolve => onAuthStateChanged(auth, resolve));
+
+        if (!user) {
+          this.$router.push('/login');
+        }
+      } catch (error) {
+        console.error('Error checking authentication status:', error);
+      }
+    }
+  },
+  beforeMount(){
+    this.fetchCartItem();
+  }
 };
 </script>
 
