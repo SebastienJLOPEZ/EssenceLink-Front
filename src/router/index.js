@@ -13,7 +13,8 @@ import ACSearch from '../views/ACSearch.vue';
 import APProfileView from '../views/APPRofileView.vue';
 import APList from '../views/APList.vue'
 import APSearch from '../views/APSearch.vue';
-import NewProduct from '../views/NewProduct';
+import NewProduct from '../views/NewProduct.vue';
+import Temproute from '../views/temp-route.vue';
 
 const routes = [
   {
@@ -75,6 +76,8 @@ const routes = [
   path: "/shop",
   name: "ShopView", 
   component: ShopView,
+  props: (route) => ({ type: route.query.Type,
+    subtype: route.query.Subtype !== '' ? route.query.Subtype : null })
 },
 {
   path: "/AdminClientProfile",
@@ -110,6 +113,11 @@ const routes = [
   path:"/NewProduct",
   name:"NewProduct",
   component: NewProduct,
+},
+{
+  path:"/temproute",
+  name:"temproute",
+  component: Temproute,
 }
 ]
 

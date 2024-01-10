@@ -83,7 +83,6 @@ export default {
       try {
       await this.currentUser();
       await this.createInvoice(this.id);
-        console.log("test de log");
       } catch (error) {
             console.error('Failed to connect to databank', error.message);
       }

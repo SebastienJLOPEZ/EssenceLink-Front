@@ -13,7 +13,7 @@
 
     </div>
     <div class = NonPermanent>
-        <router-link class="nav-link" to="/ACList">Client</router-link>
+        <router-link class="nav-link" to="/ACList">Client</router-link><br>
         <router-link class="nav-link" to="/ACSearch">Search</router-link>
         <!--router-link class="nav-link" to="/ACResearch">Research</router-link-->
     </div>
@@ -86,28 +86,5 @@ export default{
     }
 }
 </script>
-<style scoped>
-* {
-    box-sizing: border-box;
-  }
-
-  .Profile{
-    display: flex;
-    max-width: 100%;
-    /*height: 2vh;*/
-    margin: 100px auto;
-    background-color: #fff;
-    margin-top: 80px;
-    margin-bottom: 1px;
-  }
-
-  .Alert {
-    display: flex;
-    max-width: 100%;
-    height: 2vh;
-    margin: 100px auto;
-    background-color: #fff;
-    margin-top: 80px;
-    margin-bottom: 1px;
-  }
+<style scoped src="@/assets/ACProfileStyle.css">
 </style>
