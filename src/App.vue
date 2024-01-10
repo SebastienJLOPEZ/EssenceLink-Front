@@ -244,12 +244,7 @@ export default {
     // Your implementation for toggling the profile
   },
   goToShop(Type, Subtype){
-    const showProduct = {
-      type: Type,
-      subtype: Subtype
-    }
-    localStorage.setItem("showProduct", JSON.stringify(showProduct));
-    if (Subtype === ""){
+    if (Subtype === "none"){
     this.$router.push({ path: "/shop", query: { Type } });
     } else {
       this.$router.push({path: "/shop", query: {Type, Subtype}})
