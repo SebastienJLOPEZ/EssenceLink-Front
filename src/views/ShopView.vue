@@ -61,7 +61,8 @@
       <p class="popup-price">{{ selectedProduct.Price }}</p>
       <div class="quantity-control">
         <label for="quantity">Quantity:</label>
-        <input type="number" id="quantity" v-model="selectedProduct.quantity" min="1" /> <p> {{ selectedProduct.Quantity > 10 ? "" : "Il ne reste que "+ selected.Quantity +" unité." }}</p>
+        <input type="number" id="quantity" v-model="selectedProduct.quantity" min="1" :max="selectedProduct.Quantity"/> <p> 
+          {{ selectedProduct.Quantity > 10 ? "" : "Il ne reste que "+ selectedProduct.Quantity +" unité." }}</p>
       </div>
     </div>
     </div>
@@ -173,12 +174,13 @@ export default {
       
       const cart = JSON.parse(localStorage.getItem('cart')) || []; //Récupérer dans le localstorage le panier actuel et s'il n'existe pas, en créer un
 
-      const productInCart = cart.find(item => item.product.id === product.id); // Rechercher si le produit est déjà dans le panier
+      const productInCart = cart.find(item => item.id === product.id);
+      const pid = product.Id; // Rechercher si le produit est déjà dans le panier
 
       if (productInCart) { // Si vrai, augmenter quantité. Sinon, mettre dans le panier.
         productInCart.product.quantity += product.quantity;
       } else {
-        cart.push({ product });
+        cart.push({ pid });
       }
 
       localStorage.setItem('cart', JSON.stringify(cart));
@@ -187,10 +189,11 @@ export default {
     },
     
   },
-  beforeMount(){
-    this.ProductFetcher(this.$route.query.Type); /*this.currentType*/
-  },
+  /*beforeMount(){
+    this.ProductFetcher(this.$route.query.Type); /*this.currentType
+  },*/
     mounted(){ 
+      this.ProductFetcher(this.$route.query.Type)
       const currentPagePath = this.$route.fullPath;
       localStorage.setItem('currentPage', currentPagePath);
     },

@@ -5,6 +5,7 @@
    <h1 class="cart-title">Your Cart</h1>
   <div class="cart-container">
     <div class="cart-items">
+      <div v-if ="cartItems.length > 0">
       <div class="product" v-for="(item, index) in cartItems" :key="index">
         <div class="product-content">
           <div class="product-image">
@@ -17,12 +18,16 @@
         </div>
         <div class="product-price">{{ item.Price.toFixed(2) }}</div>
         <div class="product-quantity">
-          <input type="number" v-model="item.quantity" min="1" @input="updateQuantity(index)">
+          <input type="number" v-model="item.quantity" min="1" :max="item.max" @input="updateQuantity(index)">
         </div>
         <div class="product-removal">
-          <button @click="removeItem(index)">Remove</button>
+          <button @click="removeItem(index, item)">Remove</button>
         </div>
         <div class="product-line-price">{{ (item.Price * item.quantity).toFixed(2) }}</div>
+      </div>
+      </div>
+      <div v-else class="No_Product_Text">
+        <p>Pas de produit. Continuez vos achats.</p>
       </div>
     </div>
     <div class="cart-summary">
@@ -37,10 +42,8 @@
 
 <script>
 import Axios from 'axios';
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import currentUser from '@/_services/FetchUserData.js';
+import checkAuthentication from '@/_services/SendToLogin.js'
 
 
 export default {
@@ -71,12 +74,15 @@ export default {
     },
     removeItem(index) {
       this.cartItems.splice(index, 1);
+      let devicesArray  = JSON.parse(localStorage.getItem("cart"))
+      devicesArray.splice(index, 1)
+      localStorage.setItem("cart", JSON.stringify(devicesArray));
     },
     calculateTotal() {
       return this.totalPrice = this.cartItems.reduce((total, item) => total + item.linePrice, 0);
     },
     async checkout() {
-      if (!this.checkAuthentication()) {
+      if (!(await checkAuthentication.call(this))) {
         // Redirection effectuée, donc on arrête l'exécution restante du code.
         return;
       }
@@ -101,6 +107,7 @@ export default {
           name: productFromDB.Name,
           description: productFromDB.Description,
           Price: productFromDB.Price,
+          max: productFromDB.Quantity,
           quantity: cartItem.product.quantity,
           image:require('@/assets/CART1.png'), 
           linePrice: 0 
@@ -166,19 +173,6 @@ export default {
         console.error('Failed to connect to databank', error.message);
       }
     },
-    async checkAuthentication() {
-      const auth = getAuth(firebase);
-
-      try {
-        const user = await new Promise(resolve => onAuthStateChanged(auth, resolve));
-
-        if (!user) {
-          this.$router.push('/login');
-        }
-      } catch (error) {
-        console.error('Error checking authentication status:', error);
-      }
-    }
   },
   beforeMount(){
     this.fetchCartItem();
@@ -312,5 +306,11 @@ button:hover {
   .cart-container {
     width: 95%;
   }
+}
+
+.No_Product_Text{
+  font-family: 'Kaisei Decol', sans-serif;
+  text-align : center;
+  position: relative
 }
 </style>
