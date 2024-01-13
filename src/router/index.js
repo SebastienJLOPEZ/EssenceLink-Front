@@ -14,7 +14,8 @@ import APProfileView from '../views/APPRofileView.vue';
 import APList from '../views/APList.vue'
 import APSearch from '../views/APSearch.vue';
 import NewProduct from '../views/NewProduct.vue';
-import Temproute from '../views/temp-route.vue';
+import CheckoutPage from '../views/CheckoutPageView.vue';
+import ProductView from '../views/ProductView.vue';
 
 const routes = [
   {
@@ -115,9 +116,15 @@ const routes = [
   component: NewProduct,
 },
 {
-  path:"/temproute",
-  name:"temproute",
-  component: Temproute,
+  path:"/checkout",
+  name:"Checkout",
+  component: CheckoutPage,
+},
+{
+  path:"/Product",
+  name:"Product",
+  component: ProductView,
+  props: (route) => ({ type: route.query.Type})
 }
 ]
 
