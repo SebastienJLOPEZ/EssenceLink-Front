@@ -192,22 +192,32 @@ export default {
 
       this.showPopup = false; // Close the popup after adding to cart
     },
-    goToProductPage(pid){
-      this.$router.push({ path: "/product", query: { pid }});
+    goToProductPage(pid) {
+      this.$router.push({ path: "/product", query: { pid } });
+    },
+    callProduct() {
+
+      if (this.$route.query.Search !== "") {
+        this.ProductSearchResult(this.$route.query.Search)
+      } else if (this.$route.query.Subtype !== "") {
+        this.ProductFetcherSub(this.$route.query.Type, this.$route.query.Subtype)
+      } else {
+        this.ProductFetcher(this.$route.query.Type)
+      }
     }
   },
   /*beforeMount(){
     this.ProductFetcher(this.$route.query.Type); /*this.currentType
   },*/
   mounted() {
-    this.ProductFetcher(this.$route.query.Type)
+    this.callProduct();
     const currentPagePath = this.$route.fullPath;
     localStorage.setItem('currentPage', currentPagePath);
   },
   updated() {
-    if (this.$route.query.Type !== this.previousContent) {
-      this.ProductFetcher(this.$route.query.Type);
-      this.previousContent = this.$route.query.Type;
+    if (JSON.stringify(this.$route.query) !== JSON.stringify(this.previousContent)) {
+      this.callProduct();
+      this.previousContent = JSON.parse(JSON.stringify(this.$route.query));
     }
   }
 };

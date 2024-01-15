@@ -12,7 +12,7 @@
                 <label v-for="address in AllAddresses" :key="address.Id">
                     <div>
                         {{ address.NumberName }}, {{ address.PostalCode }} {{ address.City }} <input type="radio"
-                            name="address" v-model="chosenAddress" value="address.Id" @click="deactivateAForm">
+                            name="address" v-model="chosenAddress" :value="address.Id" @click="deactivateAForm">
                     </div>
 
                 </label>

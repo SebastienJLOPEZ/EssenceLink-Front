@@ -14,7 +14,12 @@
       <div v-if="currentTab === 'orders'">
         <h2 class="tab-title">Orders</h2>
         <div v-for="command in commands" :key="command.Id">
-          Numéro de commande : {{ command.Id }}<br>s
+          Numéro de commande : {{ command.Id }}<br>
+          Prix Total : {{ command.TotalPrice }} <br>
+          Addresses de livraison : {{ shippinAddress === "" ? command.Address : shippinAddress }} <br>
+          Moyen de Paiement : {{ command.Paiement_Type }} <br>
+          Date : {{ command.Date }}
+          <!--Will need to make sure the Date is in dd/mm/yyyy format when showing it to the user-->
         </div>
         <div v-if="commands.length === 0">
           <p>You haven't placed any orders yet.</p>
@@ -25,6 +30,7 @@
         <h2 class="tab-title">Addresses</h2>
         <div v-for="address in addresses" :key="address.Id">
           Numéro et Rue : {{ address.NumberName }}<br>
+          Ville : {{ address.PostalCode }} {{ address.City }}
         </div>
         <!--div v-for="(address, index) in addresses" :key="index" class="address-card"></div-->
 
@@ -78,8 +84,11 @@
 
       <div v-if="currentTab === 'wishlists'">
         <h2 class="tab-title">Wishlists</h2>
-        <div v-for="wish in wishlist" :key="wish.Id">
-          Nom : {{ wish.Id }}<br>
+        <div v-for="wish in wishlistProduct" :key="wish.Id">
+          Nom : {{ wish.Name }}<br>
+          Price : {{ wish.Price }}<br>
+          <!--TODO : Add button to buy or delete the product-->
+          <!--The button to buy will send the user to the productPage-->
         </div>
       </div>
 
@@ -117,8 +126,9 @@ export default {
       bdate: "",
       signindate: "",
       errorMessage: "",
-      wishlist: [],
+      wishlistProduct: [],
       commands: [],
+      shippinAddress: "",
     }
   },
   methods: {
@@ -167,7 +177,12 @@ export default {
       v.errorMessage = "";
       try {
         const response = await Axios.get(`https://localhost:7115/v1/api/Wishlist/ByUser/${uid}`)
-        this.wishlist = response.data;
+        const wishlist = response.data;
+        for (const wish of wishlist){
+          const wresponse = await Axios.get(`https://localhost:7115/v1/api/Product/${wish.ProductId}`)
+          this.wishlistProduct.push(wresponse.data)
+          console.log(this.wishlistProduct)
+        }
       } catch (error) {
         console.error('Failed to connect to databank', error);
       }
@@ -178,6 +193,17 @@ export default {
       try {
         const response = await Axios.get(`https://localhost:7115/v1/api/Command/ByUser/${uid}`)
         this.commands = response.data;
+        for (const command of this.commands) {
+          console.log(command)
+          if (!command.Shipping_Address.includes('|')) {
+            console.log("test");
+            const sresponse = await Axios.get(`https://localhost:7115/v1/api/Adresses/adress/${command.Shipping_Address}`)
+            console.log(sresponse);
+            this.shippinAddress = sresponse.data.NumberName + " | " + sresponse.data.PostalCode + " | " + sresponse.data.City
+            console.log(this.shippinAddress);
+          }
+        }
+
       } catch (error) {
         console.error('Failed to connect to databank', error);
       }
