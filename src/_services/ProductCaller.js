@@ -8,6 +8,10 @@ export default {
             Price: "",
             Description: "",
             Score: "",
+            Quantity: "",
+            Date: "",
+            Type: "",
+            SubType: "",
         }
     },
 methods: {
@@ -31,6 +35,10 @@ methods: {
             this.Description = response.data.Description;
             this.Price = response.data.Price;
             this.Score = response.data.Score;
+            this.Quantity = response.data.Quantity;
+            this.Date = response.data.DateAdded;
+            this.Type = response.data.Type;
+            this.SubType = response.data.SubType;
         } catch (error) {
             console.error('Failed to connect to databank', error);
         }

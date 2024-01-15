@@ -71,6 +71,9 @@ export default {
     updateQuantity(index) {
       const item = this.cartItems[index];
       item.linePrice = item.Price * item.quantity;
+      let devicesArray = JSON.parse(localStorage.getItem('cart'))
+      devicesArray[index].quantity = item.quantity
+      localStorage.setItem("cart", JSON.stringify(devicesArray));
     },
     removeItem(index) {
       this.cartItems.splice(index, 1);

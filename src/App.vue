@@ -100,7 +100,8 @@
         ></ion-icon>
       </div>
       <div class="searchBox">
-        <input type="text" placeholder="Search here . .">
+        <input type="text" v-model="searchTerm" placeholder="Search here . ." @keyup.enter="searchProduct()">
+        <!--button @click="searchProduct" id="myBtn"></button-->
       </div>
     </nav>
 
@@ -157,6 +158,13 @@
 
 
 <script>
+/*var input = document.getElementById("myInput");
+input.addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    document.getElementById("myBtn").click();
+  }
+});*/
 export default {
   data() {
     return {
@@ -170,6 +178,7 @@ export default {
       
       isMenuOpen: false,
       isMenuInitialClick: true,
+      searchTerm: "",
     };
     
   },
@@ -248,6 +257,14 @@ export default {
     this.$router.push({ path: "/shop", query: { Type } });
     } else {
       this.$router.push({path: "/shop", query: {Type, Subtype}})
+    }
+  },
+  searchProduct(){
+    if (this.searchTerm === ""){
+      console.log("No Search Term Put")
+    } else {
+      const Search = this.searchTerm;
+      this.$router.push({path: "/shop", query: {Search}})
     }
   }
   }

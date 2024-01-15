@@ -77,8 +77,9 @@ const routes = [
   path: "/shop",
   name: "ShopView", 
   component: ShopView,
-  props: (route) => ({ type: route.query.Type,
-    subtype: route.query.Subtype !== '' ? route.query.Subtype : null })
+  props: (route) => ({ type: route.query.Type !== '' ? route.query.Type : null,
+    subtype: route.query.Subtype !== '' ? route.query.Subtype : null,
+    search: route.query.Search !== '' ? route.query.Search : null })
 },
 {
   path: "/AdminClientProfile",
