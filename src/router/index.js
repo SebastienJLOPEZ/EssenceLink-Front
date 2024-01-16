@@ -13,7 +13,9 @@ import ACSearch from '../views/ACSearch.vue';
 import APProfileView from '../views/APPRofileView.vue';
 import APList from '../views/APList.vue'
 import APSearch from '../views/APSearch.vue';
-import NewProduct from '../views/NewProduct';
+import NewProduct from '../views/NewProduct.vue';
+import CheckoutPage from '../views/CheckoutPageView.vue';
+import ProductView from '../views/ProductView.vue';
 
 const routes = [
   {
@@ -75,6 +77,9 @@ const routes = [
   path: "/shop",
   name: "ShopView", 
   component: ShopView,
+  props: (route) => ({ type: route.query.Type !== '' ? route.query.Type : null,
+    subtype: route.query.Subtype !== '' ? route.query.Subtype : null,
+    search: route.query.Search !== '' ? route.query.Search : null })
 },
 {
   path: "/AdminClientProfile",
@@ -110,6 +115,17 @@ const routes = [
   path:"/NewProduct",
   name:"NewProduct",
   component: NewProduct,
+},
+{
+  path:"/checkout",
+  name:"Checkout",
+  component: CheckoutPage,
+},
+{
+  path:"/Product",
+  name:"Product",
+  component: ProductView,
+  props: (route) => ({ type: route.query.Type})
 }
 ]
 

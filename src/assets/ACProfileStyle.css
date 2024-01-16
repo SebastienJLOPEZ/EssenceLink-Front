@@ -1,0 +1,33 @@
+* {
+    box-sizing: border-box;
+  }
+
+  .Profile{
+    display: flex;
+    max-width: 100%;
+    /*height: 2vh;*/
+    margin: 100px auto;
+    background-color: #fff;
+    margin-top: 180px;
+    margin-bottom: 1px;
+  }
+
+  .Alert {
+    display: flex;
+    max-width: 100%;
+    height: 2vh;
+    margin: 100px auto;
+    background-color: #fff;
+    margin-top: 20px;
+    margin-bottom: 1px;
+  }
+
+  .NonPermanent {
+    display: flex;
+    max-width: 100%;
+    height: 2vh;
+    margin: 100px auto;
+    background-color: #fff;
+    margin-top: 20px;
+    margin-bottom: 100px;
+  }

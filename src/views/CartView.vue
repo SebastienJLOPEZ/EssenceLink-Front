@@ -5,6 +5,7 @@
    <h1 class="cart-title">Your Cart</h1>
   <div class="cart-container">
     <div class="cart-items">
+      <div v-if ="cartItems.length > 0">
       <div class="product" v-for="(item, index) in cartItems" :key="index">
         <div class="product-content">
           <div class="product-image">
@@ -17,34 +18,36 @@
         </div>
         <div class="product-price">{{ item.Price.toFixed(2) }}</div>
         <div class="product-quantity">
-          <input type="number" v-model="item.quantity" min="1" @input="updateQuantity(index)">
+          <input type="number" v-model="item.quantity" min="1" :max="item.max" @input="updateQuantity(index)">
         </div>
         <div class="product-removal">
-          <button @click="removeItem(index)">Remove</button>
+          <button @click="removeItem(index, item)">Remove</button>
         </div>
         <div class="product-line-price">{{ (item.Price * item.quantity).toFixed(2) }}</div>
       </div>
+      </div>
+      <!--div v-else class="No_Product_Text">
+        <p>Pas de produit. Continuez vos achats.</p>
+      </div-->
     </div>
     <div class="cart-summary">
       <div class="total">
         <span>Total:</span>
         <span ref="totalAmount">{{ calculateTotal().toFixed(2) }}</span>
       </div>
-      <button  class="checkout-button" @click="checkout" ref="checkoutButton">Checkout</button>
+      <!--Will need to change this css-->
+      <button  class="checkout-button" @click="goToCheckout()" ref="checkoutButton">Confirmer</button>
     </div>
   </div>
 </template>
 
 <script>
 import Axios from 'axios';
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import currentUser from '@/_services/FetchUserData.js';
+import checkAuthentication from '@/_services/SendToLogin.js'
 
 
 export default {
-  mixins: [currentUser],
+  mixins: [checkAuthentication],
   data() {
     return {
       cartItems: [
@@ -53,7 +56,7 @@ export default {
         
       ],
       data: "",
-      totallPrice:"",
+      totalPrice:"",
     };
   },
   created() {
@@ -68,33 +71,40 @@ export default {
     updateQuantity(index) {
       const item = this.cartItems[index];
       item.linePrice = item.Price * item.quantity;
+      let devicesArray = JSON.parse(localStorage.getItem('cart'))
+      devicesArray[index].quantity = item.quantity
+      localStorage.setItem("cart", JSON.stringify(devicesArray));
     },
     removeItem(index) {
       this.cartItems.splice(index, 1);
+      let devicesArray  = JSON.parse(localStorage.getItem("cart"))
+      devicesArray.splice(index, 1)
+      localStorage.setItem("cart", JSON.stringify(devicesArray));
     },
     calculateTotal() {
       return this.totalPrice = this.cartItems.reduce((total, item) => total + item.linePrice, 0);
     },
-    async checkout() {
-      if (!this.checkAuthentication()) {
-        // Redirection effectuée, donc on arrête l'exécution restante du code.
+    async goToCheckout(){
+      try {
+        await checkAuthentication.call(this);
+      } catch (error) {
+        console.log('Redirection effectuée, donc on arrête l\'exécution restante du code.');
         return;
       }
-      try {
-      await this.currentUser();
-      await this.createInvoice(this.id);
-        console.log("test de log");
-      } catch (error) {
-            console.error('Failed to connect to databank', error.message);
+      try{
+      console.log("test");
+      this.$router.push('/checkout')
+      } catch(error) {
+        console.error('Failed to go to Checkout', error);
       }
-      //alert('Checkout successful!');
     },
+    
     async fetchCartItem() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     for (const cartItem of cart) {
       try {
-        const response = await Axios.get(`https://localhost:7115/v1/api/Product/${cartItem.product.Id}`);
+        const response = await Axios.get(`https://localhost:7115/v1/api/Product/${cartItem.pid}`);
         const productFromDB = response.data;
 
         // Ajouter le produit récupéré depuis la base de données à cartItems
@@ -102,7 +112,8 @@ export default {
           name: productFromDB.Name,
           description: productFromDB.Description,
           Price: productFromDB.Price,
-          quantity: cartItem.product.quantity,
+          max: productFromDB.Quantity,
+          quantity: cartItem.quantity,
           image:require('@/assets/CART1.png'), 
           linePrice: 0 
         });
@@ -112,74 +123,6 @@ export default {
       }
     }
   },
-
-  async createInvoice(uid) {
-      try {
-        const comData = {
-          UserId: uid,
-          TotalPrice: this.totalPrice,
-          Shipment_Status: 'Pending',
-          Shipping_Address: "",
-          Date: new Date().toISOString(),
-        };
-
-        const response = await Axios.post('https://localhost:7115/v1/api/Command', comData, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        const cartProducts = JSON.parse(localStorage.getItem('cart'));
-
-        for (const cartProduct of cartProducts) {
-          try {
-            const productDetails = await Axios.get(`https://localhost:7115/v1/api/Product/${cartProduct.product.Id}`);
-
-            const comPData = {
-              ProductId: cartProduct.product.Id,
-              CommandId: response.data.Id,
-              Quantity: cartProduct.product.quantity,
-              TotalPrice: productDetails.data.Price * cartProduct.product.quantity,
-            };
-
-            // Stockez le produit dans la collection CommandProduct
-            await this.storeInvoiceProduct(comPData);
-            //this.productUpdate(cartProduct.pid, cartProduct.quantity)
-          } catch (error) {
-            console.error('Failed to connect to databank', error.message);
-          }
-          localStorage.removeItem('cart');
-          this.$router.push('/');
-        }
-      } catch (error) {
-        console.error('Failed to connect to databank', error.message);
-      }
-    },
-
-    async storeInvoiceProduct(comPData) { // sera utilisé pour stocker le produit dans la collection CommandProduct
-      try {
-        await Axios.post('https://localhost:7115/v1/api/CommandProduct', comPData, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-      } catch (error) {
-        console.error('Failed to connect to databank', error.message);
-      }
-    },
-    async checkAuthentication() {
-      const auth = getAuth(firebase);
-
-      try {
-        const user = await new Promise(resolve => onAuthStateChanged(auth, resolve));
-
-        if (!user) {
-          this.$router.push('/login');
-        }
-      } catch (error) {
-        console.error('Error checking authentication status:', error);
-      }
-    }
   },
   beforeMount(){
     this.fetchCartItem();
@@ -313,5 +256,11 @@ button:hover {
   .cart-container {
     width: 95%;
   }
+}
+
+.No_Product_Text{
+  font-family: 'Kaisei Decol', sans-serif;
+  text-align : center;
+  position: relative
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Kaisei%20Decol' rel='stylesheet'>
   <div>
     <!-- Category Banner -->
     <div class="category-banner-container">
@@ -33,14 +33,14 @@
     <div class="products-and-garden-container">
       <div class="product-container">
         <div v-for="product in productList" :key="product.Id" :class="'product-item product-'">
-          <div class="product-content">
+          <div class="product-content" @click="goToProductPage(product.Id)">
             <img :src="require('@/assets/bg3.jpg')" alt="Product Image" />
-            <p class="description">{{ product.Description }}</p>
+            <p class="description">{{ product.Name }}</p>
             <p class="price">{{ product.Price }}€</p>
             <div class="line"></div>
             <div class="buttons">
-              <button @click="quickView(product)" class="quick-view">Quick View</button>
-              <button @click="addToWishlist(product)" class="wishlist">Wishlist</button>
+              <button @click.stop="quickView(product)" class="quick-view">Quick View</button>
+              <button @click.stop="addToWishlist(product)" class="wishlist">Wishlist</button>
             </div>
           </div>
         </div>
@@ -49,31 +49,34 @@
 
     <!-- Popup for product details -->
     <div v-if="showPopup" class="popup enlarged-popup">
-  <div class="popup-content">
-    <span class="close-popup" @click="closePopup">×</span>
-    <div class="popup-details">
-      <div class="popup-image-container">
-        <img :src="selectedProduct.image" alt="Product Image" class="popup-image" />
+      <div class="popup-content">
+        <span class="close-popup" @click="closePopup">×</span>
+        <div class="popup-details">
+          <div class="popup-image-container">
+            <img :src="require('@/assets/bg3.jpg')" alt="Product Image" class="popup-image" />
+          </div>
+          <div class="popup-description-and-price">
+            <h2 class="popup-title">{{ selectedProduct.Name }}</h2>
+            <p class="popup-description">{{ selectedProduct.Description }}</p>
+            <p class="popup-price">{{ selectedProduct.Price }}</p>
+            <div class="quantity-control">
+              <label for="quantity">Quantity:</label>
+              <input type="number" id="quantity" v-model="selectedProduct.quantity" min="1"
+                :max="selectedProduct.Quantity" />
+              <p>
+                {{ selectedProduct.Quantity > 10 ? "" : "Il ne reste que " + selectedProduct.Quantity + " unité." }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="buttons">
+          <button @click="addToWishlist(selectedProduct)" class="add-to-wishlist">
+            Add to Wishlist <ion-icon name="heart"></ion-icon>
+          </button>
+          <button @click="addToCart(selectedProduct)" class="add-to-cart">Add to Cart</button>
+        </div>
       </div>
-      <div class="popup-description-and-price">
-      <h2 class="popup-title">{{ selectedProduct.Name }}</h2>
-      <p class="popup-description">{{ selectedProduct.Description }}</p>
-      <p class="popup-price">{{ selectedProduct.Price }}</p>
-      <div class="quantity-control">
-        <label for="quantity">Quantity:</label>
-        <input type="number" id="quantity" v-model="selectedProduct.quantity" min="1" /> <p> {{ selectedProduct.Quantity > 10 ? "" : "Il ne reste que "+ selected.Quantity +" unité." }}</p>
-      </div>
-    </div>
-    </div>
-    <div class="buttons">
-      <button @click="addToWishlist(selectedProduct)" class="add-to-wishlist">
-        Add to Wishlist <ion-icon name="heart"></ion-icon>
-      </button>
-      <button @click="addToCart(selectedProduct)" class="add-to-cart">Add to Cart</button>
     </div>
   </div>
-</div>
-</div>
 </template>
 
 
@@ -88,18 +91,16 @@ import productImage6 from '@/assets/bg6.jpg';
 import productImage7 from '@/assets/bg6.jpg';
 import productImage8 from '@/assets/bg6.jpg';*/
 import Axios from 'axios';
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import currentUser from '@/_services/FetchUserData.js';
 import ProductCaller from '@/_services/ProductCaller.js';
+import checkAuthentication from '@/_services/SendToLogin.js'
 
 export default {
   name: "ShopView",
-  mixins: [currentUser, ProductCaller],
+  mixins: [currentUser, ProductCaller, checkAuthentication],
   data() {
     return {
-      email:"",
+      email: "",
       product: [],
       /*products: [
         { id: "659b72be731240ade0365ecf", name: 'Product 1', description: 'Description of Product 1', descriptionPopup: 'Popup description for Product 1', price: 19.99, image: productImage1 },
@@ -121,29 +122,36 @@ export default {
       selectedProduct: null,
       currentType: "Boisson",
       productList: [],
+      previousContent: null,
     };
+  },
+  watch: {
+    '$route.params.content': 'ProductFetcher',
   },
   methods: {
     quickView(product) {
-  this.selectedProduct = {
-    ...product,
-    quantity: 1,
-  };
-  this.showPopup = true;
-},
+      this.selectedProduct = {
+        ...product,
+        quantity: 1,
+      };
+      this.showPopup = true;
+    },
 
     async addToWishlist(product) {
-      if (!this.checkAuthentication()) {
-        // Redirection effectuée, donc on arrête l'exécution restante du code.
+      try {
+        await checkAuthentication.call(this);
+      } catch (error) {
+        console.log('Redirection effectuée, donc on arrête l\'exécution restante du code.');
         return;
       }
       try {
-        await this.currentUser(); //Use to fetch the user ID
+        await this.currentUser();
+        await this.authStateChangedPromise; //Use to fetch the user ID
         const newWLData = {
           UserId: this.id,
           ProductId: product.Id,
         }
-        const response = await Axios.post('https://localhost:7115/v1/api/Wishlist', newWLData , {
+        const response = await Axios.post('https://localhost:7115/v1/api/Wishlist', newWLData, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -151,8 +159,8 @@ export default {
         console.log(`Added to wishlist: ${product.name}`, response);
 
       } catch (error) {
-            console.error('Failed to connect to databank', error.message);
-          }
+        console.error('Failed to connect to databank', error.message);
+      }
     },
     togglePriceFilter() {
       this.isPriceFilterOpen = !this.isPriceFilterOpen;
@@ -168,41 +176,50 @@ export default {
       this.showPopup = false;
     },
     addToCart(product) {
-      console.log(`Added to cart: ${product.name} (Quantity: ${product.quantity})`); 
-      
+      console.log(`Added to cart: ${product.name} (Quantity: ${product.quantity})`);
+
       const cart = JSON.parse(localStorage.getItem('cart')) || []; //Récupérer dans le localstorage le panier actuel et s'il n'existe pas, en créer un
 
-      const productInCart = cart.find(item => item.product.id === product.id); // Rechercher si le produit est déjà dans le panier
+      const productInCart = cart.find(item => item.pid === product.id); // Rechercher si le produit est déjà dans le panier
 
       if (productInCart) { // Si vrai, augmenter quantité. Sinon, mettre dans le panier.
-        productInCart.product.quantity += product.quantity;
+        productInCart.quantity += product.quantity;
       } else {
-        cart.push({ product });
+        cart.push({ pid: product.Id, quantity: product.quantity });
       }
 
       localStorage.setItem('cart', JSON.stringify(cart));
 
       this.showPopup = false; // Close the popup after adding to cart
     },
-    async checkAuthentication() {
-      const auth = getAuth(firebase);
+    goToProductPage(pid) {
+      this.$router.push({ path: "/product", query: { pid } });
+    },
+    callProduct() {
 
-      try {
-        const user = await new Promise(resolve => onAuthStateChanged(auth, resolve));
-
-        if (!user) {
-          this.$router.push('/login');
-        }
-      } catch (error) {
-        console.error('Error checking authentication status:', error);
+      if (this.$route.query.Search !== "") {
+        this.ProductSearchResult(this.$route.query.Search)
+      } else if (this.$route.query.Subtype !== "") {
+        this.ProductFetcherSub(this.$route.query.Type, this.$route.query.Subtype)
+      } else {
+        this.ProductFetcher(this.$route.query.Type)
       }
     }
   },
-    mounted(){
-      this.ProductFetcher(this.currentType);
-      const currentPagePath = this.$route.path;
-      localStorage.setItem('currentPage', currentPagePath);
+  /*beforeMount(){
+    this.ProductFetcher(this.$route.query.Type); /*this.currentType
+  },*/
+  mounted() {
+    this.callProduct();
+    const currentPagePath = this.$route.fullPath;
+    localStorage.setItem('currentPage', currentPagePath);
+  },
+  updated() {
+    if (JSON.stringify(this.$route.query) !== JSON.stringify(this.previousContent)) {
+      this.callProduct();
+      this.previousContent = JSON.parse(JSON.stringify(this.$route.query));
     }
+  }
 };
 </script>
 
@@ -220,7 +237,7 @@ body {
   width: 100%;
   max-height: 550px;
   overflow: hidden;
-  
+
 }
 
 .category-banner {
@@ -351,7 +368,7 @@ body {
 
 .selected-filter-container {
   position: absolute;
-  right: 90px; 
+  right: 90px;
   top: 0;
   padding: 5px 10px;
   background-color: #333;
@@ -391,8 +408,8 @@ body {
   top: 62%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 80%; 
-  max-width: 800px; 
+  width: 80%;
+  max-width: 800px;
   z-index: 9999;
   display: flex;
   align-items: center;
@@ -404,9 +421,9 @@ body {
   background: white;
   padding: 20px;
   border-radius: 10px;
-  width: 100%; 
+  width: 100%;
   max-width: 800px;
-  text-align: left; 
+  text-align: left;
 }
 
 .popup-details {
@@ -423,7 +440,7 @@ body {
   font-size: 20px;
   color: black;
   margin-bottom: 10px;
-  right: 40px; 
+  right: 40px;
 }
 
 .popup-image {
@@ -436,7 +453,7 @@ body {
 .popup-description-and-price {
   flex: 0 0 55%;
   text-align: left;
-  margin-left: 20px; 
+  margin-left: 20px;
 }
 
 .popup-description {
@@ -471,7 +488,7 @@ body {
 .buttons {
   display: flex;
   justify-content: flex-end;
-  margin-top: 10px; 
+  margin-top: 10px;
 }
 
 .add-to-wishlist,
@@ -483,7 +500,7 @@ body {
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
-  margin-left: 10px; 
+  margin-left: 10px;
 }
 
 .add-to-wishlist:hover,
@@ -494,7 +511,8 @@ body {
 .close-popup {
   position: absolute;
   top: 0px;
-  right: 10px; /* Adjust the right position as needed */
+  right: 10px;
+  /* Adjust the right position as needed */
   font-size: 30px;
   color: rgb(0, 0, 0);
   cursor: pointer;
