@@ -196,10 +196,10 @@ export default {
       this.$router.push({ path: "/product", query: { pid } });
     },
     callProduct() {
-
-      if (this.$route.query.Search !== "") {
+      console.log(this.$route.query.Search)
+      if (this.$route.query.Search) {
         this.ProductSearchResult(this.$route.query.Search)
-      } else if (this.$route.query.Subtype !== "") {
+      } else if (this.$route.query.Subtype) {
         this.ProductFetcherSub(this.$route.query.Type, this.$route.query.Subtype)
       } else {
         this.ProductFetcher(this.$route.query.Type)
