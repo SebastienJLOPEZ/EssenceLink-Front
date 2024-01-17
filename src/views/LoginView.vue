@@ -2,7 +2,7 @@
   <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
   <div class="container">
     <div class="card">
-      <h1 class="card_title">Log In</h1>
+      <h1 class="card_title" style="font-family: 'Kaisei Decol'">Log In</h1>
       <form @submit.prevent="loginRequest" id="login-form" class="form">
         <div class="form-group">
           <label for="email">Email Address</label>
@@ -29,7 +29,7 @@
   </div>
   <div class="additional-section">
     <div class="additional-content">
-      <h2>New Customer</h2>
+      <h2 style="font-family: 'Kaisei Decol'"> New Customer</h2>
       <p>Create an account with us and you'll be able to:</p>
       <ul>
         <li>Check out faster</li>
@@ -138,12 +138,13 @@ export default {
   margin-top: 160PX;
   height: 140vh;
   width: 100%;
+  max-width:  1500px;
   align-items: center;
   display: flex;
   justify-content: center;
   background-image: url('@/assets/POST.jpg');
   background-size: cover;
-  margin-TOP: 150PX;
+  
 }
 
 .card {
@@ -161,8 +162,8 @@ export default {
   text-align: center;
   padding: 5px;
   margin-top: -20px;
-  font-size: 26px;
-  font-weight: bold;
+  font-size: 36px;
+  font-weight: 200;
 }
 
 .form input {
@@ -213,8 +214,8 @@ export default {
 }
 
 .additional-content h2 {
-  font-size: 30px;
-  font-weight: bold;
+  font-size: 36px;
+  font-weight: 200;
   margin-top: 50PX;
   text-align: center;
 

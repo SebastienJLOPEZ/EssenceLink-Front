@@ -30,7 +30,9 @@
         <span>Total:</span>
         <span ref="totalAmount">{{ calculateTotal().toFixed(2) }}</span>
       </div>
+      <router-link to="/checkout">
       <button  class="checkout-button" @click="checkout" ref="checkoutButton">Checkout</button>
+    </router-link>
     </div>
   </div>
 </template>
@@ -62,9 +64,7 @@ export default {
     calculateTotal() {
       return this.cartItems.reduce((total, item) => total + item.linePrice, 0);
     },
-    checkout() {
-      alert('Checkout successful!');
-    },
+    
   },
 };
 </script>
@@ -74,7 +74,7 @@ export default {
   font-family: 'Kaisei Decol', sans-serif;
   text-align: center;
   position: relative;
-  font-size: 34px; /* Adjust the font size as needed */
+  font-size: 34px; 
   font-weight: 400;
   margin-top: 180PX;
 }

@@ -140,12 +140,15 @@ export default {
 .container {
   height: 130vh; 
   width: 100%;
+  max-width: 1300px;
   align-items: center;
   display: flex;
   justify-content: center;
   background-image: url('@/assets/POST.jpg'); 
   background-size: cover;
   margin-top: 120PX;
+  left: -200px;
+  
   
 }
 .card {

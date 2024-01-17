@@ -209,8 +209,8 @@
     height: 290vh;
     margin: 100px auto;
     background-color: #fff;
-    margin-top: 130px;
-    margin-bottom: 1px;
+    margin-top: 170px;
+    
   }
   
   .menu {
@@ -243,7 +243,7 @@
     font-family: 'Kaisei Decol', sans-serif;
     text-align: center;
     position: relative;
-    font-size: 40px;
+    font-size: 34px; 
     font-weight: 100;
   }
   
