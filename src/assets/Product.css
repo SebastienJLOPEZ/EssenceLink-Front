@@ -1,0 +1,26 @@
+@font-face {
+    font-family: 'Kaisei Decol';
+    src: url('https://fonts.gstatic.com/s/kaiseidecol/v5/ZiKgWqde6e8Ow1MfY2gnDA.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+}
+
+.toutenbas {
+    display: flex;
+    max-width: 100%;
+    /*height: 2vh;*/
+    margin: 100px auto;
+    background-color: #fff;
+    margin-top: 280px;
+    margin-bottom: 1px;
+  }
+  
+  .plusbas{
+    display: flex;
+    max-width: 100%;
+    /*height: 2vh;*/
+    margin: 100px auto;
+    background-color: #fff;
+    margin-top: 20px;
+    margin-bottom: 1px;
+  }

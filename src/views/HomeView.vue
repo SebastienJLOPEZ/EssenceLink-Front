@@ -11,7 +11,8 @@
     </div>
 
     <div class="slideshow-container">
-      <div v-for="(content, index) in slideContent" :key="index" :style="{ display: index + 1 === slideIndex ? 'block' : 'none' }" class="mySlides fade">
+      <div v-for="(content, index) in slideContent" :key="index"
+        :style="{ display: index + 1 === slideIndex ? 'block' : 'none' }" class="mySlides fade">
         <img :src="require(`@/assets/bg${index + 1}.${content.extension || 'jpg'}`)">
 
         <div class="mid-container">
@@ -27,61 +28,66 @@
     <br>
 
     <div style="text-align:center">
-      <span v-for="(dot, index) in slideContent" :key="index" @click="currentSlide(index + 1)" :class="{ 'active': index + 1 === slideIndex }" class="dot"></span>
+      <span v-for="(dot, index) in slideContent" :key="index" @click="currentSlide(index + 1)"
+        :class="{ 'active': index + 1 === slideIndex }" class="dot"></span>
     </div>
 
     <div class="under-text">
-      <div style="width: 100%; height: 100%; text-align: center; color: black; font-size: 50px; font-family: Newsreader; font-weight: 300; line-height: 76.80px; word-wrap: break-word">
+      <div
+        style="width: 100%; height: 100%; text-align: center; color: black; font-size: 50px; font-family: Newsreader; font-weight: 300; line-height: 76.80px; word-wrap: break-word">
         "Organic, handmade products – nature's perfection, affordable for all."
       </div>
     </div>
 
     <div class="products-and-garden-container">
-    <div class="garden-container">
-      <h2>Brought to you with love from our gardens</h2>
-      <p>Elevate your moments with the richness of traditions and unique health benefits found in our herbs.</p>
-      <button @click="discoverMore">Discover More Products</button>
-    </div>
+      <div class="garden-container">
+        <h2>Brought to you with love from our gardens</h2>
+        <p>Elevate your moments with the richness of traditions and unique health benefits found in our herbs.</p>
+        <button @click="discoverMore">Discover More Products</button>
+      </div>
 
-     <div class="product-container">
-        <div v-for="(product, index) in products.slice(0, 3)" :key="index" :class="'product-item product-' + index">
+      <div class="product-container">
+        <div v-for="product in sortedProducts.slice(0, 3)" :key="product.Id" :class="'product-item product-' + index">
           <div class="product-content">
-            <img :src="product.image" alt="Product Image">
+            <img :src='require("@/assets/Leafs.png")' alt="Product Image">
             <hr>
-            <p>{{ product.description }}</p>
-            <a href="#" class="more-details">More Details</a>
+            <p>{{ product.Name }}</p>
+            <router-link :to="{ name: 'Product', query: { pid: product.Id } }" class="more-details">More Details</router-link>
           </div>
         </div>
       </div>
 
       <div class="product-container extra-left">
-        <div v-for="(product, index) in products.slice(3, 7)" :key="index" :class="'product-item product-' + index">
+        <div v-for="product in sortedProducts.slice(0, 3)" :key="product.Id" :class="'product-item product-' + index">
           <div class="product-content">
-            <img :src="product.image" alt="Product Image">
+            <img :src='require("@/assets/Leafs.png")' alt="Product Image">
             <hr>
-            <p>{{ product.description }}</p>
-            <a href="#" class="more-details">More Details</a>
+            <p>{{ product.Name }}</p>
+            <router-link :to="{ name: 'Product', query: { pid: product.Id } }" class="more-details">More Details</router-link>
+
           </div>
         </div>
       </div>
 
       <div class="image-under-products">
-      <img alt="supporting local bussiness" src="@/assets/bg1.jpg" />
-    </div>
-    <div class="support-container">
-      <h3>Supporting Local Farms</h3>
-      <p>Discover nature's treasures at our herbal sanctuary. Your purchase supports local small farms, fostering a community committed to the beauty and benefits of herbs. Thank you for joining us on this journey towards a healthier tomorrow.</p>
-    </div>
-
-    <section class="email-section">
-      <div class="newsletter-title">Join Essence Link Newsletter</div>
-      <div class="newsletter-description">Be the first one to know about new products and exclusive offers</div>
-      <div class="email-input-container">
-        <input type="email" placeholder="Enter your email" class="email-input">
+        <img alt="supporting local bussiness" src="@/assets/bg1.jpg" />
       </div>
-      <button class="add-button">Add</button>
-    </section>
-  </div>
+      <div class="support-container">
+        <h3>Supporting Local Farms</h3>
+        <p>Discover nature's treasures at our herbal sanctuary. Your purchase supports local small farms, fostering a
+          community committed to the beauty and benefits of herbs. Thank you for joining us on this journey towards a
+          healthier tomorrow.</p>
+      </div>
+
+      <section class="email-section">
+        <div class="newsletter-title">Join Essence Link Newsletter</div>
+        <div class="newsletter-description">Be the first one to know about new products and exclusive offers</div>
+        <div class="email-input-container">
+          <input type="email" placeholder="Enter your email" class="email-input">
+        </div>
+        <button class="add-button">Add</button>
+      </section>
+    </div>
   </div>
 </template>
 
@@ -93,8 +99,11 @@ import productImage4 from '@/assets/bg6.jpg';
 import productImage5 from '@/assets/bg6.jpg';
 import productImage6 from '@/assets/bg6.jpg';
 import productImage7 from '@/assets/bg6.jpg';
+import ProductCaller from '@/_services/ProductCaller.js'
+
 export default {
   name: 'HomeView',
+  mixins: [ProductCaller],
   data() {
     return {
       showPopup: false,
@@ -114,15 +123,17 @@ export default {
         { name: 'Product 5', description: 'Description of Product 5', image: productImage5 },
         { name: 'Product 6', description: 'Description of Product 6', image: productImage6 },
         { name: 'Product 7', description: 'Description of Product 7', image: productImage7 },
-        
+
       ],
+      newProductList: [],
+      sortedProducts: [],
     };
   },
   mounted() {
 
     const currentPagePath = this.$route.path;
     localStorage.setItem('currentPage', currentPagePath);
-    
+
     setTimeout(() => {
       this.showPopup = true;
       this.showSlides(this.slideIndex);
@@ -131,6 +142,7 @@ export default {
         this.plusSlides(1);
       }, 4000);
     }, 3000);
+    this.fetchLast7Product();
   },
   methods: {
     makeAccount() {
@@ -173,16 +185,22 @@ export default {
     },
     discoverMore() {
       console.log('Discover More Products clicked');
-       // ADD CODE 
+      // ADD CODE 
     },
-   
+    async fetchLast7Product() {
+      await this.AllProductFetcher();
+      this.newProductList = [... this.productList].sort((a, b) => new Date(b.DateAdded).toISOString() - new Date(a.DateAdded).toISOString());
+      this.sortedProducts = this.newProductList.slice(0, 6);
+      console.log(this.sortedProducts);
+    }
+
   },
 };
 </script>
 <style>
 * {
   font-family: 'Kaisei Decol', sans-serif;
- 
+
 }
 
 .popup {
@@ -198,7 +216,7 @@ export default {
   max-width: 400px;
   width: 80%;
   text-align: center;
-  z-index: 1000; 
+  z-index: 1000;
   font-family: 'Kaisei Decol';
 }
 
@@ -207,7 +225,7 @@ export default {
 }
 
 .popup button {
-  background-color:  #333;
+  background-color: #333;
   color: #fff;
   padding: 10px 15px;
   cursor: pointer;
@@ -225,7 +243,7 @@ export default {
   position: relative;
   width: 100%;
   height: 400px;
-  max-height: 500px; 
+  max-height: 500px;
   overflow: hidden;
   margin-top: 160px;
 }
@@ -237,7 +255,7 @@ export default {
 
 .mySlides img {
   width: 100%;
-  height: 500px; 
+  height: 500px;
 }
 
 .mid-container {
@@ -246,25 +264,25 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   background: rgb(255, 255, 255);
-  width: 45%; 
+  width: 45%;
   height: 50%;
-  margin-top: -55px; 
+  margin-top: -55px;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  
+
 }
 
 .mid-title {
   color: black;
   font-size: 45px;
-  font-family:' Kaisei Decol' ;
+  font-family: ' Kaisei Decol';
   font-weight: 550;
   line-height: 136px;
   word-wrap: break-word;
-  margin-top: -55px; 
+  margin-top: -55px;
 }
 
 .mid-container h2 {
@@ -274,7 +292,7 @@ export default {
   font-weight: 400;
   line-height: 76.80px;
   word-wrap: break-word;
-  margin-top: -65px; 
+  margin-top: -65px;
 }
 
 .shop-now {
@@ -288,11 +306,12 @@ export default {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
-  margin-top: -10px; 
-  font-family:'Newsreader' ;
+  margin-top: -10px;
+  font-family: 'Newsreader';
 }
 
-.prev, .next {
+.prev,
+.next {
   cursor: pointer;
   position: absolute;
   top: 45%;
@@ -312,8 +331,9 @@ export default {
   border-radius: 3px 0 0 3px;
 }
 
-.prev:hover, .next:hover {
-  background-color: rgba(0,0,0,0.8);
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .dot {
@@ -327,7 +347,8 @@ export default {
   transition: background-color 0.6s ease;
 }
 
-.active, .dot:hover {
+.active,
+.dot:hover {
   background-color: #717171;
 }
 
@@ -340,13 +361,13 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  align-items: flex-start; 
+  align-items: flex-start;
   margin-top: 60px;
 }
 
 .garden-container {
-  width: 30%; 
-  text-align: left; 
+  width: 30%;
+  text-align: left;
   margin-top: 60px;
 }
 
@@ -365,7 +386,7 @@ export default {
 }
 
 .garden-container button {
-  background-color:#77ab73;
+  background-color: #77ab73;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -391,7 +412,7 @@ export default {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin: 10px;
   max-width: 190px;
-  display: inline-block; 
+  display: inline-block;
 }
 
 .product-item img {
@@ -401,8 +422,8 @@ export default {
   position: center;
   margin-left: -5px;
   border-radius: 25px;
-  
-  
+
+
 }
 
 .product-item hr {
@@ -435,22 +456,23 @@ export default {
   margin-top: 10px;
   padding: 10px;
   border-top: 1px solid #56b44f;
-  background-color: transparent; 
+  background-color: transparent;
 }
 
 .product-item .more-details:hover {
-  color:#56b44f; 
-  background-color: transparent; 
+  color: #56b44f;
+  background-color: transparent;
 }
 
 .product-container.extra-left {
-  justify-content: flex-start; 
+  justify-content: flex-start;
   margin-right: 260PX;
 }
+
 .product-container.extra-left {
   margin-top: 20px;
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
 }
 
 
@@ -460,7 +482,7 @@ export default {
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   max-width: 190px;
-  flex: 0 0 67%; 
+  flex: 0 0 67%;
   margin-left: 40PX;
 }
 
@@ -469,7 +491,7 @@ export default {
   height: 403px;
   border-radius: 20px;
   margin-top: 130px;
-  margin-left: 230px; 
+  margin-left: 230px;
 }
 
 .support-container {
@@ -479,9 +501,9 @@ export default {
   margin-top: 300px;
   background: #93ab91;
   color: white;
-  position: relative; 
+  position: relative;
   margin-right: 130px;
-  z-index: 4; 
+  z-index: 4;
 }
 
 .support-container h3 {
@@ -502,9 +524,10 @@ export default {
   margin-top: -67px;
 
 }
+
 .email-section {
   text-align: center;
-  margin-top: 90px; 
+  margin-top: 90px;
 }
 
 .newsletter-title {
@@ -525,7 +548,7 @@ export default {
   font-size: 20px;
   font-family: 'Newsreader';
   font-weight: 300;
-  margin-top: 10px; 
+  margin-top: 10px;
 }
 
 .email-input-container {
@@ -536,7 +559,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 20px; 
+  margin-top: 20px;
 }
 
 .email-input {
@@ -544,24 +567,24 @@ export default {
   padding: 10px;
   border: none;
   outline: none;
-  background: white; 
-  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1); 
+  background: white;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
 
 }
 
 .email-input::placeholder {
-  color: #888; 
+  color: #888;
 }
 
 .email-input:focus::placeholder {
-  color: #888; 
+  color: #888;
 }
 
 .add-button {
   background: #333;
   color: white;
   padding: 10px 20px;
-  width:80PX ;
+  width: 80PX;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -574,6 +597,6 @@ export default {
 }
 
 .add-button:hover {
-  background-color:  #93ab91; 
+  background-color: #93ab91;
 }
 </style>
