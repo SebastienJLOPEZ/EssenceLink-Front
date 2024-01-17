@@ -1,6 +1,6 @@
 <template>
   <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
-  <div>
+  <div v-if="headerOne">
     <div id="app">
       <router-view />
     </div>
@@ -13,7 +13,8 @@
       <div class="group">
         <ul class="navigation" :class="{ open: isMenuOpen }">
           <li v-on:mouseover="showSubcategories('hydrolats')" v-on:mouseout="hideSubcategories">
-          <router-link to="#hydrolats" class="nav-link">Hydrolats</router-link>
+            <button @click="goToShop('Hydrolat', 'none')" class="nav-link-button">Hydrolats</button>
+          <!--router-link to="#hydrolats" class="nav-link">Hydrolats</router-link-->
           <div v-show="showSubcategory === 'hydrolats'" class="subcategory">
             <ul>
               <li>Hydrating Facial Mist</li>
@@ -22,7 +23,7 @@
           </div>
         </li>
           <li v-on:mouseover="showSubcategories('tisanes')" v-on:mouseout="hideSubcategories">
-            <router-link to="#tisanes" class="nav-link">Tisanes & Plante Sèche</router-link>
+            <button @click="goToShop('TnP', 'none')" class="nav-link-button">Tisanes & Plantes Sèches</button>
             <div v-show="showSubcategory === 'tisanes'" class="subcategory">
               <ul>
                 <li>Green Tea</li>
@@ -33,7 +34,8 @@
             </div>
           </li>
           <li v-on:mouseover="showSubcategories('gemmotherapie')" v-on:mouseout="hideSubcategories">
-            <router-link to="#gemmotherapie" class="nav-link">Gemmothérapie</router-link>
+            <button @click="goToShop('Gemmothérapie', 'none')" class="nav-link-button">Gemmothérapie</button>
+            <!--router-link to="#gemmotherapie" class="nav-link">Gemmothérapie</router-link-->
             <div v-show="showSubcategory === 'gemmotherapie'" class="subcategory">
               <ul>
                 <li>Gemstone Elixir Kits</li>
@@ -42,7 +44,8 @@
             </div>
           </li>
           <li v-on:mouseover="showSubcategories('aromates')" v-on:mouseout="hideSubcategories">
-            <router-link to="#aromates" class="nav-link">Aromates</router-link>
+            <button @click="goToShop('Aromate', 'none')" class="nav-link-button">Aromates</button>
+            <!--router-link to="#aromates" class="nav-link">Aromates</router-link-->
             <div v-show="showSubcategory === 'aromates'" class="subcategory">
               <ul>
                 <li>Herb-infused Oils</li>
@@ -51,7 +54,7 @@
             </div>
           </li>
           <li v-on:mouseover="showSubcategories('boisson')" v-on:mouseout="hideSubcategories">
-            <router-link to="/shop" class="nav-link">Boisson</router-link>
+            <button @click="goToShop('Boisson', 'none')" class="nav-link-button">Boissons</button>
             <div v-show="showSubcategory === 'boisson'" class="subcategory">
               <ul>
                 <li>W alchool</li>
@@ -97,7 +100,8 @@
         ></ion-icon>
       </div>
       <div class="searchBox">
-        <input type="text" placeholder="Search here . .">
+        <input type="text" v-model="searchTerm" placeholder="Search here . ." @keyup.enter="searchProduct()">
+        <!--button @click="searchProduct" id="myBtn"></button-->
       </div>
     </nav>
 
@@ -154,6 +158,13 @@
 
 
 <script>
+/*var input = document.getElementById("myInput");
+input.addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    document.getElementById("myBtn").click();
+  }
+});*/
 export default {
   data() {
     return {
@@ -167,6 +178,9 @@ export default {
       
       isMenuOpen: false,
       isMenuInitialClick: true,
+      searchTerm: "",
+      headerOne: true,
+      headerTwo: false,
     };
     
   },
@@ -240,7 +254,32 @@ export default {
   toggleProfile() {
     // Your implementation for toggling the profile
   },
+  goToShop(Type, Subtype){
+    if (Subtype === "none"){
+    this.$router.push({ path: "/shop", query: { Type } });
+    } else {
+      this.$router.push({path: "/shop", query: {Type, Subtype}})
+    }
   },
+  searchProduct(){
+    if (this.searchTerm === ""){
+      console.log("No Search Term Put")
+    } else {
+      const Search = this.searchTerm;
+      this.$router.push({path: "/shop", query: {Search}})
+    }
+  },
+  headerChange(){
+    const HeaderType = localStorage.getItem('headerRole');
+    if (HeaderType === "Admin"){
+      this.headerOne = false;
+      this.headerTwo = true;
+    } else {
+      this.headerOne = true;
+      this.headerTwo = false;
+    }
+  }
+  }
 };
 </script>
 
@@ -704,4 +743,35 @@ ul {
   left: 312px;
   margin: 0;
 }
+.nav-link-button {
+  text-decoration: none;
+  font-size: 0.75em;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  position: relative;
+  cursor: pointer;
+  background: none;
+  border: none;
+  right: 100PX;
+  bottom: 25PX
+}
+
+.nav-link-button::before {
+  content: ' ';
+  position: absolute;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background: #333;
+  transform: scaleX(0);
+  transition: transform 0.5s ease-in-out;
+  transform-origin: right;
+}
+
+.nav-link-button:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
 </style>

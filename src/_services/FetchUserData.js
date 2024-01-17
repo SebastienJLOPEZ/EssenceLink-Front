@@ -12,20 +12,26 @@ export default {
     };
   },
   methods: {
-    async currentUser(){
-      let v=this;
+    currentUser() {
       const auth = getAuth(firebase);
 
-      return new Promise((resolve) => {
+      this.authStateChangedPromise = new Promise((resolve) => {
         onAuthStateChanged(auth, (user) => {
           if (user) {
-            v.email = user.email;
-            resolve(user.email);
-            this.fetchUserData(user.email);
+            this.email = user.email;
+            this.fetchUserData(user.email).then(() => {
+              resolve(user.email);
+            });
+          } else {
+            // Gérer le cas où l'utilisateur n'est pas connecté
+            console.log("Utilisateur non connecté");
+            resolve(null);
           }
         });
       });
-  },
+
+      return this.authStateChangedPromise;
+    },
   async fetchUserData(email) {
     try {
       const response = await Axios.get(`https://localhost:7115/v1/api/User/${email}`);
