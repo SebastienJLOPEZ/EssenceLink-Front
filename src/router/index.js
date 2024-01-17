@@ -112,6 +112,11 @@ const routes = [
   component: APSearch,
 },
 {
+  path: "/CheckoutPage",
+  name:"CheckoutPageView",
+  component: CheckoutPageView,
+},
+{
   path:"/NewProduct",
   name:"NewProduct",
   component: NewProduct,
