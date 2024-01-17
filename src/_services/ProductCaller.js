@@ -12,6 +12,7 @@ export default {
             Date: "",
             Type: "",
             SubType: "",
+            TypeName: "",
         }
     },
 methods: {
@@ -64,6 +65,31 @@ methods: {
         } catch (error) {
             console.error('Failed to connect to databank', error);
         }
-    }
+    },
+    async AllProductFetcher(){
+        try {
+            //const fetchType = JSON.parse(localStorage.getItem("showProduct"));
+            const response = await Axios.get(`https://localhost:7115/v1/api/Product`);
+            this.productList = response.data;
+            console.log(response);
+            //localStorage.removeItem('showProduct');
+        } catch (error) {
+            console.error('Failed to connect to databank', error);
+        }
+    },
+    async TypeCaller(pid){
+        try {
+            //const fetchType = JSON.parse(localStorage.getItem("showProduct"));
+            if(pid=="TnP"){
+                pid = "Tisane & Plante Sèche";
+            }
+            const response = await Axios.get(`https://localhost:7115/v1/api/ProductType/${pid}`);
+            this.TypeName = response.data.Name;
+            console.log(response);
+            //localStorage.removeItem('showProduct');
+        } catch (error) {
+            console.error('Failed to connect to databank', error);
+        }
+    },
 }
 }

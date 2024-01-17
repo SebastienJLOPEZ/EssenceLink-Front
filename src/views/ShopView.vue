@@ -5,7 +5,7 @@
     <div class="category-banner-container">
       <img src="@/assets/BG4.jpg" alt="Category Banner" class="category-banner" />
       <div class="category-overlay">
-        <h1 class="category-title">Green Tea</h1>
+        <h1 class="category-title">{{ TypeName !== "" ? TypeName : 'Résultat de votre recherche'}}</h1>
         <p class="category-description">
           Lovingly blended by our artisan experts, these teas offer an array of flavors to support health and wellbeing.
         </p>
@@ -201,8 +201,10 @@ export default {
         this.ProductSearchResult(this.$route.query.Search)
       } else if (this.$route.query.Subtype) {
         this.ProductFetcherSub(this.$route.query.Type, this.$route.query.Subtype)
+        this.TypeCaller(this.$route.query.Type)
       } else {
         this.ProductFetcher(this.$route.query.Type)
+        this.TypeCaller(this.$route.query.Type)
       }
     }
   },

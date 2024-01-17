@@ -1,6 +1,6 @@
 <template>
   <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
-  <div>
+  <div v-if="headerOne">
     <div id="app">
       <router-view />
     </div>
@@ -179,6 +179,8 @@ export default {
       isMenuOpen: false,
       isMenuInitialClick: true,
       searchTerm: "",
+      headerOne: true,
+      headerTwo: false,
     };
     
   },
@@ -265,6 +267,16 @@ export default {
     } else {
       const Search = this.searchTerm;
       this.$router.push({path: "/shop", query: {Search}})
+    }
+  },
+  headerChange(){
+    const HeaderType = localStorage.getItem('headerRole');
+    if (HeaderType === "Admin"){
+      this.headerOne = false;
+      this.headerTwo = true;
+    } else {
+      this.headerOne = true;
+      this.headerTwo = false;
     }
   }
   }

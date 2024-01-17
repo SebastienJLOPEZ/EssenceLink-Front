@@ -27,68 +27,45 @@
       </div>
 
       <div v-if="currentTab === 'addresses'">
-        <h2 class="tab-title">Addresses</h2>
+        <h2 class="tab-title">Adresses</h2>
         <div v-for="address in addresses" :key="address.Id">
           Numéro et Rue : {{ address.NumberName }}<br>
-          Ville : {{ address.PostalCode }} {{ address.City }}
+          Ville : {{ address.PostalCode }} {{ address.City }} <br>
+          <button class="delete-button" @click="deleteAddress(address.Id)">Supprimer</button>
+        </div>
+        <button @click="showAddressForm()" class="add-address-button">Ajouter une nouvelle adresse</button>
+        <div v-if="showAddress" class="add-address-form-container">
+          <h3>Ajouter une nouvelle Adresse</h3>
+          <form @submit.prevent="addNewAddress">
+            <!--@submit.prevent="addNewAddress"-->
+            <div class="form-group">
+              <label for="NName"> Adresse :</label>
+              <input v-model="newAddressData.NumberName" required>
+            </div>
+            <div class="form-group">
+              <label for="PCode">Code Postal :</label>
+              <input v-model="newAddressData.PostalCode" required>
+            </div>
+            <div class="form-group">
+              <label for="City">Ville :</label>
+              <input v-model="newAddressData.City" required>
+            </div>
+            <button type="submit">Ajouter</button>
+          </form>
         </div>
         <!--div v-for="(address, index) in addresses" :key="index" class="address-card"></div-->
 
 
-        <!--<button @click="showAddAddressForm" class="add-address-button">Add a new address</button>
-                <div v-if="showAddAddress" class="add-address-form-container">
-                <h3>Add a new address</h3>
-                <form @submit.prevent="addNewAddress">
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="firstName">First Name:</label>
-                  <input v-model="newAddress.firstName" required>
-                </div>
-                <div class="form-group">
-                  <label for="lastName">Last Name:</label>
-                  <input v-model="newAddress.lastName" required>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="address1">Address 1:</label>
-                <input v-model="newAddress.address1" required>
-              </div>
-              <div class="form-group">
-                <label for="address2">Address 2:</label>
-                <input v-model="newAddress.address2">
-              </div>
-              <div class="form-group">
-                <label for="city">City:</label>
-                <input v-model="newAddress.city" required>
-              </div>
-              <div class="form-group">
-                <label for="region">Region:</label>
-                <input v-model="newAddress.region" required>
-              </div>
-              <div class="form-group">
-                <label for="province">Province:</label>
-                <input v-model="newAddress.province" required>
-              </div>
-              <div class="form-group">
-                <label for="zipCode">Postal/ZIP Code:</label>
-                <input v-model="newAddress.zipCode" required>
-              </div>
-              <div class="form-group">
-                <label for="phone">Phone:</label>
-                <input v-model="newAddress.phone" required>
-              </div>
-              <button type="submit">Add Address</button>
-                </form>
-                </div>-->
+
       </div>
 
       <div v-if="currentTab === 'wishlists'">
         <h2 class="tab-title">Wishlists</h2>
         <div v-for="wish in wishlistProduct" :key="wish.Id">
-          Nom : {{ wish.Name }}<br>
-          Price : {{ wish.Price }}<br>
-          <!--TODO : Add button to buy or delete the product-->
-          <!--The button to buy will send the user to the productPage-->
+          Nom : {{ wish.product.Name }}<br>
+          Price : {{ wish.product.Price }}<br>
+          <router-link :to="{ name: 'Product', query: { pid: wish.product.Id } }" class="buy-wish-button">Acheter</router-link>
+          <button class="delete-button" @click="deleteWish(wish.wid)">Supprimer</button>
         </div>
       </div>
 
@@ -121,7 +98,7 @@ export default {
       name: "",
       lastName: "",
       email: "",
-      address: "",
+      address: [],
       number: "",
       bdate: "",
       signindate: "",
@@ -129,6 +106,13 @@ export default {
       wishlistProduct: [],
       commands: [],
       shippinAddress: "",
+      showAddress: false,
+      newAddressData: {
+        UserId: "",
+        NumberName: "",
+        PostalCode: "",
+        City: "",
+      }
     }
   },
   methods: {
@@ -156,6 +140,7 @@ export default {
 
       Axios.get(`https://localhost:7115/v1/api/User/${email}`)
         .then(response => {
+          v.newAddressData.UserId = response.data.Id;
           v.id = response.data.Id;
           v.name = response.data.FirstName;
           v.lastName = response.data.LastName;
@@ -173,14 +158,15 @@ export default {
         });
     },
     async fetchUserWishlist(uid) {
-      let v = this;
-      v.errorMessage = "";
       try {
         const response = await Axios.get(`https://localhost:7115/v1/api/Wishlist/ByUser/${uid}`)
         const wishlist = response.data;
-        for (const wish of wishlist){
+        for (const wish of wishlist) {
           const wresponse = await Axios.get(`https://localhost:7115/v1/api/Product/${wish.ProductId}`)
-          this.wishlistProduct.push(wresponse.data)
+          this.wishlistProduct.push({
+            product: wresponse.data,
+            wid: wish.Id
+          })
           console.log(this.wishlistProduct)
         }
       } catch (error) {
@@ -229,6 +215,44 @@ export default {
         .catch(error => {
           console.log('logout error: ', error.message);
         })
+    },
+    showAddressForm() {
+      this.showAddress = !this.showAddress;
+    },
+    async addNewAddress() {
+      try {
+        const response = await Axios.post('https://localhost:7115/v1/api/Adresses', this.newAddressData, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        console.log(response);
+        this.address = [];
+        await this.fetchUserAddressess(this.id);
+      } catch (error) {
+        console.error('Failed to connect to databank', error);
+      }
+    },
+    async deleteAddress(aid) {
+      try {
+        const response = await Axios.delete(`https://localhost:7115/v1/api/Adresses/${aid}`)
+        console.log(response)
+        this.address = [];
+        await this.fetchUserAddressess(this.id);
+      } catch (error) {
+        console.error('Failed to connect to databank', error);
+      }
+    },
+    async deleteWish(pid) {
+      try {
+        const response = await Axios.delete(`https://localhost:7115/v1/api/Wishlist/${pid}`)
+        console.log(response)
+        this.wishlist = [];
+        this.wishlistProduct = [];
+        await this.fetchUserWishlist(this.id);
+      } catch (error) {
+        console.error('Failed to connect to databank', error);
+      }
     }
   },
   mounted() {
@@ -237,31 +261,6 @@ export default {
 
 } 
 </script>
-<!--,
-      showAddAddressForm() {
-        this.showAddAddress = true;
-      },
-      addNewAddress() {
-        if (this.newAddress.firstName && this.newAddress.lastName && this.newAddress.address1 && this.newAddress.city && this.newAddress.region && this.newAddress.province && this.newAddress.zipCode && this.newAddress.phone) {
-          this.addresses.push({ ...this.newAddress });
-          this.newAddress = {
-            firstName: '',
-            lastName: '',
-            address1: '',
-            address2: '',
-            city: '',
-            region: '',
-            province: '',
-            zipCode: '',
-            phone: '',
-          };
-          this.showAddAddress = false;
-        }
-      },
-     
-    },
-  };
-  </script>-->
   
 <style scoped>
 * {
@@ -383,6 +382,28 @@ export default {
   font-size: 16px;
   border: none;
   padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-button {
+  margin-top: 10px;
+  background-color: #ff0000;
+  color: #ffffff;
+  font-size: 12px;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.buy-wish-button {
+  margin-top: 10px;
+  background-color: #97c992;
+  color: #ffffff;
+  font-size: 12px;
+  border: none;
+  padding: 5px 10px;
   border-radius: 4px;
   cursor: pointer;
 }

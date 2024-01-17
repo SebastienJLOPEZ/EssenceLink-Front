@@ -2,29 +2,29 @@
   <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-   <h1 class="cart-title">Your Cart</h1>
+  <h1 class="cart-title">Your Cart</h1>
   <div class="cart-container">
     <div class="cart-items">
-      <div v-if ="cartItems.length > 0">
-      <div class="product" v-for="(item, index) in cartItems" :key="index">
-        <div class="product-content">
-          <div class="product-image">
-            <img :src="item.image" alt="Product Image" class="product-image">
+      <div v-if="cartItems.length > 0">
+        <div class="product" v-for="(item, index) in cartItems" :key="index">
+          <div class="product-content">
+            <div class="product-image">
+              <img :src="item.image" alt="Product Image" class="product-image">
+            </div>
+            <div class="product-details">
+              <div class="product-title">{{ item.name }}</div>
+              <p class="product-description">{{ item.description }}</p>
+            </div>
           </div>
-          <div class="product-details">
-            <div class="product-title">{{ item.name }}</div>
-            <p class="product-description">{{ item.description }}</p>
+          <div class="product-price">{{ item.Price.toFixed(2) }}</div>
+          <div class="product-quantity">
+            <input type="number" v-model="item.quantity" min="1" :max="item.max" @input="updateQuantity(index)">
           </div>
+          <div class="product-removal">
+            <button @click="removeItem(index, item)">Remove</button>
+          </div>
+          <div class="product-line-price">{{ (item.Price * item.quantity).toFixed(2) }}</div>
         </div>
-        <div class="product-price">{{ item.Price.toFixed(2) }}</div>
-        <div class="product-quantity">
-          <input type="number" v-model="item.quantity" min="1" :max="item.max" @input="updateQuantity(index)">
-        </div>
-        <div class="product-removal">
-          <button @click="removeItem(index, item)">Remove</button>
-        </div>
-        <div class="product-line-price">{{ (item.Price * item.quantity).toFixed(2) }}</div>
-      </div>
       </div>
       <!--div v-else class="No_Product_Text">
         <p>Pas de produit. Continuez vos achats.</p>
@@ -36,7 +36,7 @@
         <span ref="totalAmount">{{ calculateTotal().toFixed(2) }}</span>
       </div>
       <!--Will need to change this css-->
-      <button  class="checkout-button" @click="goToCheckout()" ref="checkoutButton">Confirmer</button>
+      <button class="checkout-button" @click="goToCheckout()" ref="checkoutButton">Confirmer</button>
     </div>
   </div>
 </template>
@@ -53,10 +53,10 @@ export default {
       cartItems: [
         /*{ name: 'HYDROLAT - Bleuet bio', description: 'Hydrolat 100 % pur et naturel ', Price: 12.99, quantity: 2, image: require('@/assets/CART2.jpg'), linePrice: 0 },
         { name: 'Provence D Antan', description: 'Herbes De Provence 100G Bio', Price: 15.99, quantity: 1, image: require('@/assets/CART1.png'), linePrice: 0 },*/
-        
+
       ],
       data: "",
-      totalPrice:"",
+      totalPrice: "",
     };
   },
   created() {
@@ -64,7 +64,7 @@ export default {
       item.linePrice = item.Price * item.quantity;
     });
   },
-  computed(){
+  computed() {
     this.calculateTotal();
   },
   methods: {
@@ -77,54 +77,56 @@ export default {
     },
     removeItem(index) {
       this.cartItems.splice(index, 1);
-      let devicesArray  = JSON.parse(localStorage.getItem("cart"))
+      let devicesArray = JSON.parse(localStorage.getItem("cart"))
       devicesArray.splice(index, 1)
       localStorage.setItem("cart", JSON.stringify(devicesArray));
     },
     calculateTotal() {
       return this.totalPrice = this.cartItems.reduce((total, item) => total + item.linePrice, 0);
     },
-    async goToCheckout(){
+    async goToCheckout() {
       try {
         await checkAuthentication.call(this);
       } catch (error) {
         console.log('Redirection effectuée, donc on arrête l\'exécution restante du code.');
         return;
       }
-      try{
-      console.log("test");
-      this.$router.push('/checkout')
-      } catch(error) {
+      try {
+        console.log("test");
+        if (this.cartItems > 0) {
+          this.$router.push('/checkout')  
+        }
+      } catch (error) {
         console.error('Failed to go to Checkout', error);
       }
     },
-    
+
     async fetchCartItem() {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    for (const cartItem of cart) {
-      try {
-        const response = await Axios.get(`https://localhost:7115/v1/api/Product/${cartItem.pid}`);
-        const productFromDB = response.data;
+      for (const cartItem of cart) {
+        try {
+          const response = await Axios.get(`https://localhost:7115/v1/api/Product/${cartItem.pid}`);
+          const productFromDB = response.data;
 
-        // Ajouter le produit récupéré depuis la base de données à cartItems
-        this.cartItems.push({
-          name: productFromDB.Name,
-          description: productFromDB.Description,
-          Price: productFromDB.Price,
-          max: productFromDB.Quantity,
-          quantity: cartItem.quantity,
-          image:require('@/assets/CART1.png'), 
-          linePrice: 0 
-        });
-        this.calculateTotal();
-      } catch (error) {
-        console.error('Failed to fetch product from database', error);
+          // Ajouter le produit récupéré depuis la base de données à cartItems
+          this.cartItems.push({
+            name: productFromDB.Name,
+            description: productFromDB.Description,
+            Price: productFromDB.Price,
+            max: productFromDB.Quantity,
+            quantity: cartItem.quantity,
+            image: require('@/assets/CART1.png'),
+            linePrice: 0
+          });
+          this.calculateTotal();
+        } catch (error) {
+          console.error('Failed to fetch product from database', error);
+        }
       }
-    }
+    },
   },
-  },
-  beforeMount(){
+  beforeMount() {
     this.fetchCartItem();
   }
 };
@@ -135,7 +137,8 @@ export default {
   font-family: 'Kaisei Decol', sans-serif;
   text-align: center;
   position: relative;
-  font-size: 34px; /* Adjust the font size as needed */
+  font-size: 34px;
+  /* Adjust the font size as needed */
   font-weight: 400;
   margin-top: 180PX;
 }
@@ -208,17 +211,19 @@ export default {
 
 .cart-summary {
   text-align: right;
-  margin-top: auto; /* Push cart-summary to the bottom */
+  margin-top: auto;
+  /* Push cart-summary to the bottom */
 }
 
 .total {
   text-align: right;
   margin-bottom: 10px;
-  font-size: 18px; /* Adjust the font size as needed */
+  font-size: 18px;
+  /* Adjust the font size as needed */
 }
 
 button {
-  background-color:  #93ab91;
+  background-color: #93ab91;
   color: white;
   border: none;
   padding: 10px;
@@ -226,10 +231,11 @@ button {
   cursor: pointer;
   font-size: 16px;
   transition: opacity 0.3s;
-  
+
 }
+
 .checkout-button {
-  background-color:   #93ab91;
+  background-color: #93ab91;
   color: white;
   border: none;
   padding: 10px;
@@ -239,7 +245,7 @@ button {
   transition: opacity 0.3s;
   margin-bottom: 96PX;
   TOP: 45px;
-  
+
 }
 
 button:hover {
@@ -258,9 +264,8 @@ button:hover {
   }
 }
 
-.No_Product_Text{
+.No_Product_Text {
   font-family: 'Kaisei Decol', sans-serif;
-  text-align : center;
+  text-align: center;
   position: relative
-}
-</style>
+}</style>
