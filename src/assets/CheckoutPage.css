@@ -1,3 +1,9 @@
+@font-face {
+  font-family: 'Kaisei Decol';
+  src: url('https://fonts.gstatic.com/s/kaiseidecol/v5/ZiKgWqde6e8Ow1MfY2gnDA.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
 
  .checkout {
    display: flex;

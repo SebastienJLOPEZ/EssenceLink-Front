@@ -1,72 +1,120 @@
 <template>
-    <div class=toutenbas>
-        <!--TODO:
-        -Add another radio button system for paiement methode (credit card, paypal, ...)
-        -All of this on left side, for right side a reminder of what will be brought
-        -The right side will have the button to confirm, and will static to the screen, not the page
-        -Find a way to show 
-        -->
-        <div>
-            <div class="address-radio">
-                Adresse de Livraison :
-                <label v-for="address in AllAddresses" :key="address.Id">
-                    <div>
-                        {{ address.NumberName }}, {{ address.PostalCode }} {{ address.City }} <input type="radio"
-                            name="address" v-model="chosenAddress" :value="address.Id" @click="deactivateAForm">
+    <div class="checkout">
+        <h1 class="checkout-title">Checkout</h1>
+
+        <div class="checkout-container">
+            <div class="checkout-section address-section">
+                <h2>Adresse de Livraison :</h2>
+                <div v-for="address in AllAddresses" :key="address.Id" class="card">
+                    <div class="address-line">{{ address.NumberName }},</div>
+                    <div class="address-line">{{ address.PostalCode }} {{ address.City }}</div>
+                </div>
+                <button @click="toggleAForm">Add Address</button>
+                <form v-if="showAForm" class="address-form">
+                    <label for="NName">Rue :</label>
+                    <input type="text" v-model="NName" id="NName" placeholder="Rue" required>
+
+                    <label for="PCode">Code Postal :</label>
+                    <input type="text" v-model="PCode" id="PCode" placeholder="Code Postal" required>
+
+                    <label for="City">Ville :</label>
+                    <input type="text" v-model="City" id="City" placeholder="Ville" required>
+
+                    <button @click="saveAddress">Save</button>
+                </form>
+            </div>
+            <div class="checkout-section">
+                <h2>Moyen de Paiement :</h2>
+                <div class="payment-options">
+                    <div class="payment-option" :class="{ 'active': paiement === 'creditCard' }">
+                        <input type="radio" id="carteBancaire" v-model="paiement" value="creditCard"/>
+                        <label for="carteBancaire">
+                            <div class="payment-card">Carte Bancaire</div>
+                        </label>
+                    </div>
+                    <div class="payment-option" :class="{ 'active': paiement === 'other' }">
+                        <input type="radio" id="autre" v-model="paiement" value="other"/>
+                        <label for="autre">
+                            <div class="payment-card">Autre</div>
+                        </label>
+                    </div>
+                </div>
+                <div v-if="paiement === 'creditCard'" class="payment-form">
+                    <label for="cardNumber">Numéro de Carte :</label>
+                    <input type="text" pattern="[0-9]" maxlength="40" inputmode="numeric" id="cardNumber"
+                        placeholder="Numéro de Carte" required>
+
+                    <label for="cardOwner">Propriétaire :</label>
+                    <input type="text" maxlength="100" id="cardOwner" placeholder="Propriétaire" required>
+
+                    <div class="expiry-container">
+                        <label for="expiryMonth">Date d'Expiration :</label>
+                        <div class="expiry-inputs">
+                            <select id="expiryMonth" required>
+                                <option v-for="month in months" :key="month">{{ month < 10 ? '0' + month : month }}</option>
+                            </select>
+                            <select id="expiryYear" required>
+                                <option v-for="year in years" :key="year">{{ year }}</option>
+                            </select>
+                        </div>
                     </div>
 
-                </label>
+                    <label for="cvv">CVV :</label>
+                    <input type="text" id="cvv" placeholder="CVV" required>
+                </div>
+            </div>
+            <div v-if="paiement === 'other'">
+                <p>Paiement à la Livraison</p>
+            </div>
+        </div>
 
-                <label>
-                    <div>
-                        <input type="radio" name="address" v-model="chosenAddress" value="custom" @click="toggleAForm">
-                        <form v-if="showAForm">
-                            Rue : <input type="text" v-model="NName">
-                            Code Postal : <input type="text" v-model="PCode">
-                            Ville : <input type="text" v-model="City">
-                        </form>
-                    </div>
+    </div>
+    <div class="right-container">
+        <h2>Order Summary</h2>
 
-                </label>
+        <!-- Product Details Section -->
+        <div class="order-section" v-for="product in AllItems" :key="product.name">
+            <span class="section-title">Product Details</span>
+            <span class="total-text">Total</span>
+            <hr />
+            <span class="side-text">{{ product.totalprice }} €</span>
+            <p>{{ product.name }} <span class="quantity"> {{ product.quantity }} <span class="bold"></span></span></p>
+
+
+        </div>
+
+        <hr />
+
+        <!-- Cart Subtotal Section -->
+        <div class="order-section">
+            <span class="section-title">Cart Subtotal</span>
+            <!-- Add content for cart subtotal here -->
+        </div>
+
+        <hr />
+
+        <!-- Shipping Fees Section -->
+        <div class="order-section">
+            <span class="section-title">Shipping Fees</span>
+            <!-- Add content for shipping fees here -->
+            <span class="side-text">Free shipping</span>
+        </div>
+
+        <hr />
+
+        <!-- Order Total Section -->
+        <div class="order-section">
+            <span class="section-title">Order Total</span>
+            <!-- Add content for order total here -->
+
+        </div>
+
+        <div class="checkout-summary">
+            <div class="total">
+                <span>Total:</span>
+                <span ref="totalAmount">{{ totalPrice.toFixed(2) }}</span>
             </div>
-            <div>
-                <label>
-                    Moyen de Paiement :
-                    <div>
-                        <div>
-                            Carte Bancaire :<input type="radio" id="paiement" v-model="paiement" value="creditCard"
-                                @click="toggleCForm" checked="checked">
-                        </div>
-                        <div>
-                            <form v-if="showCForm">
-                                Numéro de Carte : <input type="text" pattern="[0-9]" maxlength="40" inputmode="numeric">
-                                Propriétaire : <input type="text" maxlength="100">
-                                Date d'Expiration : <!--Will be finished later-->
-                                <select id="month">
-                                    <option v-for="month in months" :key="month.value">{{ month < 10 ? '0' + month : month
-                                    }}</option>
-                                </select>
-                                <select id="month">
-                                    <option v-for="year in years" :key="year.value">{{ year }}</option>
-                                </select>
-                                CVV : <input type="text">
-                            </form>
-                        </div>
-                        <div>
-                            Autre : <input type="radio" id="paiement" v-model="paiement" value="other"
-                                @click="deactivateCForm">
-                        </div>
-                    </div>
-                </label>
-            </div>
-            <div class="product-reminder">
-                <tr v-for="product in AllItems" :key="product.name">
-                    <td>{{ product.name }}</td> |
-                    <td>{{ product.totalprice }}</td> €
-                </tr>
-                Total : <span>{{ totalPrice }}</span>
-            </div>
-            <button @click="checkout()">Payer</button>
+            <button class="checkout-button" @click="checkout" ref="checkoutButton">Payer</button>
         </div>
     </div>
 </template>
@@ -91,7 +139,7 @@ export default {
             maxYear: "",
             years: [],
             months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-            totalPrice: "",
+            totalPrice: 0,
             paiement: "creditCard",
         }
     },
@@ -122,6 +170,7 @@ export default {
                     this.AllItems.push({
                         name: productFromDB.Name,
                         totalprice: productFromDB.Price * cartItem.quantity,
+                        quantity: cartItem.quantity,
                     })
                     this.calculateTotal();
                 } catch (error) {
@@ -231,4 +280,4 @@ export default {
 
 </script>
 
-<style scoped src="@/assets/checkout.css"></style>
+<style scoped src="@/assets/CheckoutPage.css"></style>
