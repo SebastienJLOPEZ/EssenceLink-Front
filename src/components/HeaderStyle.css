@@ -1,0 +1,487 @@
+@font-face {
+    font-family: 'Kaisei Decol';
+    src: url('https://fonts.gstatic.com/s/kaiseidecol/v5/ZiKgWqde6e8Ow1MfY2gnDA.woff2') format('woff2');
+    font-weight: 900;
+    font-style: normal;
+  }
+  * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Kalesi', sans-serif;
+    }
+    
+    body {
+      background: #ffffff;
+      min-height: 150vh;
+      overflow-x: hidden;
+      font-family: 'Kaisei Decol', sans-serif;
+      
+    }
+    
+    html {
+      min-height: 100%;
+    }
+    
+    .main-navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 120px;
+      background: #fff;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 15px 15px rgba(0, 0, 0, 0.05);
+      z-index: 1000;
+      margin-top: 0PX;
+      
+    }
+    .main-navbar .logo-image {
+      max-height: 120px; 
+      margin-right: 170px;
+    }
+    .group {
+      display: flex;
+      align-items: center;
+    }
+    
+    .main-navbar ul {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+      
+    }
+    
+    .main-navbar ul li {
+      position: relative;
+    }
+    
+    .main-navbar ul li a {
+      text-decoration: none;
+      font-size: 0.75em;
+      color: #333;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      position: relative;
+      right: 100PX;
+      font-family: 'Kaisei Decol', sans-serif;
+      
+    }
+    
+    .main-navbar ul li a .subcategory::before {
+      content: ' ';
+      position: absolute;
+      bottom: -2px;
+      width: 100%;
+      height: 2px;
+      background: #333;
+      transform: scaleX(0);
+      transition: transform 0.5s ease-in-out;
+      transform-origin: right;
+    }
+    
+    .main-navbar ul li a:hover::before {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+    
+    .main-navbar .search {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5em;
+      z-index: 1001; 
+      cursor: pointer;
+    }
+    
+    .navigation.hide {
+      display: none;
+    }
+    
+    .searchBox {
+      position: fixed;
+      top: 20px;
+      right: -100%;
+      width: 60%;
+      height: 80px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      padding: 0 30px;
+      transition: 0.5s ease-in-out;
+      z-index: 1000;
+      
+    }
+    
+    .searchBox input {
+      width: 70%;
+      border: none;
+      outline: none;
+      height: 70px;
+      margin-right: 60%;
+      color: #333;
+      font-size: 1.25em;
+      background: #fff;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+    }
+    
+    .searchBox.active {
+      right: 0;
+    }
+    
+    .searchBtn {
+      position: relative;
+      left: 40px;
+      top: 5px;
+      transition: 0.5s ease-in-out;
+      
+    }
+    
+    .cartBtn {
+      position: relative;
+      left: 0px;
+      top: 2.5px;
+      transition: 0.5s ease-in-out;
+      
+    }
+    
+    .profileBtn {
+      position: fixed;
+      right: 70px;
+      top: 52px;
+      transition: 0.5s ease-in-out;
+    }
+    
+    
+    
+    
+    .searchBtn,
+    .closeBtn {
+      outline: none; 
+    }
+    
+    .searchBtn.active {
+      left: 0;
+      background-color: #fff;
+    }
+    
+    .closeBtn {
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.55s;
+      transform: scale(0);
+      position: relative;
+      top: -2px;
+    }
+    
+    .closeBtn.active {
+      opacity: 1;
+      visibility: visible;
+      transition: 0.5s;
+      transform: scale(1);
+      position: relative;
+      top: 4px;
+      background-color: #fff;
+    }
+    
+    
+    
+    
+    
+    .cartBtn.active {
+      left: 0;
+    }
+    
+    .menuToggle {
+      position: relative;
+      display: none;
+      font-size: 2em;
+      cursor: pointer;
+      z-index: 1000;
+    }
+    
+    @media (max-width: 800px) {
+      .menuToggle {
+        display: block;
+      }
+    
+      .main-navbar ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        padding: 20px;
+        box-shadow: 0 15px 15px rgba(0, 0, 0, 0.05);
+      }
+    
+      .main-navbar ul.open {
+        display: flex;
+      }
+    
+      .main-navbar ul li {
+        margin-bottom: 10px;
+      }
+    }
+    
+    
+    .container {
+      max-width: 100%; 
+      margin: auto;
+    }
+    
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    
+    ul {
+      list-style: none;
+    }
+    #app {
+      position: relative;
+      z-index: 1; 
+    }
+    
+    .footer {
+      background-color:  #758873;
+      padding: 70px 10px;
+      width: 100%;
+      
+    }
+    
+    .footer-col {
+      width: 25%;
+      padding: 0 15px;
+    }
+    
+    .footer-col h4 {
+      font-size: 18px;
+      color: #ffffff;
+      text-transform: capitalize;
+      margin-bottom: 35px;
+      font-weight: 300;
+      position: relative;
+      font-family: 'Kaisei Decol', sans-serif;
+    }
+    
+    .footer-col h4::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -10px;
+      background-color: #333; 
+      height: 2px;
+      box-sizing: border-box;
+      width: 50px;
+    }
+    
+    .footer-col ul li:not(:last-child) {
+      margin-bottom: 10px;
+    }
+    
+    .footer-col ul li a {
+      font-size: 16px;
+      text-transform: capitalize;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 300;
+      color: #ffffff;
+      display: block;
+      transition: all 0.3s ease;
+      font-family: 'Kaisei Decol', sans-serif;
+    }
+    
+    .footer-col ul li a:hover {
+      color: #ffffff;
+      padding-left: 8px;
+    }
+    
+    .footer-col .social-links a {
+      display: inline-block;
+      height: 40px;
+      width: 40px;
+      background-color: rgba(255, 255, 255, 0.2);
+      margin: 0 10px 10px 0;
+      text-align: center;
+      line-height: 40px;
+      border-radius: 50%;
+      color: #ffffff;
+      transition: all 0.5s ease;
+    }
+    
+    .footer-col .social-links a:hover {
+      color: #24262b;
+      background-color: #ffffff;
+    }
+    
+    @media (max-width: 767px) {
+      .footer-col {
+        width: 50%;
+        margin-bottom: 30px;
+      }
+    }
+    
+    @media (max-width: 574px) {
+      .footer-col {
+        width: 100%;
+      }
+    }
+    
+    .navbar-links {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    
+    }
+    
+    
+    
+    .navbar-links router-link {
+      text-decoration: none;
+      font-size: 0.8em;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      position: relative;
+      
+    }
+    
+    .navbar-links span {
+      margin-right: 10px;
+    }
+    
+    .navbar-links img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+    }
+    
+    .announcement-bar {
+      background-color: #acc6aa;
+      color: #333;
+      padding: 10px;
+      text-align: center;
+      position: fixed;
+      top: 150px; 
+      left: 0;
+      width: 100%;
+      z-index: 999; 
+      margin-top: -30PX;
+    }
+    
+    .announcement-text{
+      font-weight: 500;
+      font-family:'Kaisei Decol' ;
+      font-size: 15px;
+    }
+    
+    @media (max-width: 768px) {
+      .navbar-links {
+        justify-content: center;
+      }
+    
+      .navbar-links router-link {
+      text-decoration: none; 
+      color: #000000;
+    }
+    
+      .main-navbar {
+        flex-direction: column;
+        text-align: center;
+      }
+    
+      .categories {
+        margin-top: 10px;
+      }
+    
+      .category {
+        margin: 5px;
+      }
+    
+      .actions {
+        margin-top: 10px;
+        flex-direction: column;
+        align-items: center;
+      }
+    
+      .actions input {
+        margin-bottom: 5px;
+      }
+    }
+    
+    .main-navbar .group {
+      display: flex;
+      align-items: center;
+    }
+    
+    .main-navbar .group {
+      display: flex;
+      align-items: center;
+    }
+    
+    .main-navbar .group ion-icon {
+      font-size: 1.2em; 
+      margin-right: 10px; 
+    }
+    
+    
+    .subcategory {
+      position: absolute;
+      top: 100%;
+      left: -100PX; 
+      background-color: #ffffff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 999;
+      display: none;
+      width: 300px;
+    }
+    .navigation li {
+      position: relative;
+    }
+    
+    .subcategory ul {
+      list-style: none;
+      padding: 30px;
+      margin: 0;
+      display: flex; 
+      flex-direction: column; 
+    }
+    
+    .navigation li:hover .subcategory {
+      display: block;
+    }
+    
+    .about-contact {
+      position: absolute;
+      bottom: 0;
+      left: 312px;
+      margin: 0;
+    }
+    .cart-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background-color: red; /* Choose your desired background color */
+      color: white;
+      padding: 4px 8px;
+      border-radius: 50%;
+      font-size: 12px;
+    }
+    
+    .cart-badge {
+      /* Add your custom styles here */
+      background-color: #77ab73;
+      color: white;
+      right: 119px;
+      top: 35px;
+    }
+    
+  

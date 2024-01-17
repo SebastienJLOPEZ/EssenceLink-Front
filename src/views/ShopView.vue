@@ -1,6 +1,10 @@
 <template>
+<<<<<<< HEAD
+=======
   <link href='https://fonts.googleapis.com/css?family=Kaisei%20Decol' rel='stylesheet'>
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
   <div>
+    <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
     <!-- Category Banner -->
     <div class="category-banner-container">
       <img src="@/assets/BG4.jpg" alt="Category Banner" class="category-banner" />
@@ -12,7 +16,7 @@
       </div>
     </div>
 
-    <!-- Filter Container -->
+    <!-- Price Filter -->
     <div class="filter-container">
       <div class="price-filter" @click="togglePriceFilter">
         Price Filter <ion-icon name="chevron-down-outline"></ion-icon>
@@ -29,7 +33,7 @@
       </div>
     </div>
 
-    <!-- Products Container -->
+    <!-- Product Container -->
     <div class="products-and-garden-container">
       <div class="product-container">
         <div v-for="product in productList" :key="product.Id" :class="'product-item product-'">
@@ -39,20 +43,36 @@
             <p class="price">{{ product.Price }}€</p>
             <div class="line"></div>
             <div class="buttons">
+<<<<<<< HEAD
+              <button @click="addToWishlist(product)" class="wishlist">Wishlist</button>
+              <button @click="quickView(product)" class="quick-view">Quick View</button>
+=======
               <button @click.stop="quickView(product)" class="quick-view">Quick View</button>
               <button @click.stop="addToWishlist(product)" class="wishlist">Wishlist</button>
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Popup for product details -->
+    <!-- Popup -->
     <div v-if="showPopup" class="popup enlarged-popup">
       <div class="popup-content">
         <span class="close-popup" @click="closePopup">×</span>
         <div class="popup-details">
           <div class="popup-image-container">
+<<<<<<< HEAD
+            <img :src="selectedProduct.image" alt="Product Image" class="popup-image" />
+          </div>
+          <div class="popup-description-and-price">
+            <h2 class="popup-title">{{ selectedProduct.name }}</h2>
+            <p class="popup-description">{{ selectedProduct.descriptionPopup }}</p>
+            <p class="popup-price">{{ selectedProduct.price }}</p>
+            <div class="quantity-control">
+              <label for="quantity">Quantity:</label>
+              <input type="number" id="quantity" v-model="selectedProduct.quantity" min="1" />
+=======
             <img :src="require('@/assets/bg3.jpg')" alt="Product Image" class="popup-image" />
           </div>
           <div class="popup-description-and-price">
@@ -65,21 +85,36 @@
                 :max="selectedProduct.Quantity" />
               <p>
                 {{ selectedProduct.Quantity > 10 ? "" : "Il ne reste que " + selectedProduct.Quantity + " unité." }}</p>
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
             </div>
           </div>
         </div>
         <div class="buttons">
+<<<<<<< HEAD
+          <button @click="addToWishlistFromPopup(selectedProduct)" class="add-to-wishlist">
+=======
           <button @click="addToWishlist(selectedProduct)" class="add-to-wishlist">
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
             Add to Wishlist <ion-icon name="heart"></ion-icon>
           </button>
           <button @click="addToCart(selectedProduct)" class="add-to-cart">Add to Cart</button>
         </div>
       </div>
     </div>
+<<<<<<< HEAD
+
+    <!-- Global Wishlist Message -->
+    <div v-if="globalWishlistMessage" class="global-wishlist-container">
+      <div class="global-wishlist-message">
+        {{ globalWishlistMessage }}
+      </div>
+    </div>
+
+</div>
+=======
   </div>
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
 </template>
-
-
 
 <script>
 /*import productImage1 from '@/assets/bg3.jpg';
@@ -100,6 +135,18 @@ export default {
   mixins: [currentUser, ProductCaller, checkAuthentication],
   data() {
     return {
+<<<<<<< HEAD
+      products: [
+        { name: 'Product 1', description: 'Description of Product 1', descriptionPopup: 'Popup description for Product 1', price: 19.99, image: productImage1, showWishlistMessage: false },
+        { name: 'Product 2', description: 'Description of Product 2', descriptionPopup: 'Popup description for Product 2', price: 24.99, image: productImage2, showWishlistMessage: false },
+        { name: 'Product 3', description: 'Description of Product 3', descriptionPopup: 'Popup description for Product 3', price: 29.99, image: productImage3, showWishlistMessage: false },
+        { name: 'Product 4', description: 'Description of Product 4', descriptionPopup: 'Popup description for Product 4', price: 14.99, image: productImage4, showWishlistMessage: false },
+        { name: 'Product 5', description: 'Description of Product 5', descriptionPopup: 'Popup description for Product 5', price: 22.99, image: productImage5, showWishlistMessage: false },
+        { name: 'Product 6', description: 'Description of Product 6', descriptionPopup: 'Popup description for Product 6', price: 17.99, image: productImage6, showWishlistMessage: false },
+        { name: 'Product 7', description: 'Description of Product 7', descriptionPopup: 'Popup description for Product 7', price: 27.99, image: productImage7, showWishlistMessage: false },
+        { name: 'Product 8', description: 'Description of Product 8', descriptionPopup: 'Popup description for Product 8', price: 32.99, image: productImage8, showWishlistMessage: false },
+      ],
+=======
       email: "",
       product: [],
       /*products: [
@@ -112,6 +159,7 @@ export default {
         { id: "7", name: 'Product 7', description: 'Description of Product 7', descriptionPopup: 'Popup description for Product 7', price: 27.99, image: productImage7 },
         { id: "8", name: 'Product 8', description: 'Description of Product 8', descriptionPopup: 'Popup description for Product 8', price: 32.99, image: productImage8 },
       ],*/
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
       isPriceFilterOpen: false,
       priceFilters: [
         { label: 'Low to High', value: 'low To High' },
@@ -120,9 +168,15 @@ export default {
       selectedFilter: null,
       showPopup: false,
       selectedProduct: null,
+<<<<<<< HEAD
+      globalWishlistMessage: '',
+      cartCount: 0,
+      cart : [],
+=======
       currentType: "Boisson",
       productList: [],
       previousContent: null,
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
     };
   },
   watch: {
@@ -136,6 +190,22 @@ export default {
       };
       this.showPopup = true;
     },
+<<<<<<< HEAD
+    addToCart(product) {
+      this.$store.commit('addToCart', product); // Dispatch addToCart mutation
+      this.showPopup = false;
+    },
+    addToWishlist(product) {
+      console.log(`Added to wishlist: ${product.name}`);
+      this.globalWishlistMessage = `Added ${product.name} to Wishlist!`;
+      setTimeout(() => {
+        this.globalWishlistMessage = '';
+      }, 5000);
+    },
+    addToWishlistFromPopup(product) {
+      this.addToWishlist(product);
+      this.closePopup();
+=======
 
     async addToWishlist(product) {
       try {
@@ -161,6 +231,7 @@ export default {
       } catch (error) {
         console.error('Failed to connect to databank', error.message);
       }
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
     },
     togglePriceFilter() {
       this.isPriceFilterOpen = !this.isPriceFilterOpen;
@@ -175,6 +246,16 @@ export default {
     closePopup() {
       this.showPopup = false;
     },
+<<<<<<< HEAD
+    toggleCart() {
+
+    },
+  },
+};
+</script>
+
+<style lang="css" scoped src="@/components/ShopStyle.css"></style>
+=======
     addToCart(product) {
       console.log(`Added to cart: ${product.name} (Quantity: ${product.quantity})`);
 
@@ -521,3 +602,4 @@ body {
 }
 </style>
 
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5

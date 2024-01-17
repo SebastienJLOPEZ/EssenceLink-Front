@@ -276,6 +276,118 @@ export default {
     margin-top: 80px;
     margin-bottom: 1px;
   }*/
+<<<<<<< HEAD
+  
+  .profile {
+    display: flex;
+    max-width: 100%;
+    height: 290vh;
+    margin: 100px auto;
+    background-color: #fff;
+    margin-top: 170px;
+    
+  }
+  
+  .menu {
+    width: 200px;
+    background-color: #ffffff;
+    padding: 20px;
+    margin-top: 130px;
+  }
+  
+  .menu div {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .menu div:hover {
+    color: #095328;
+  }
+  
+  .menu .active {
+    background-color: #ddd;
+  }
+  
+  .content {
+    flex-grow: 1;
+    padding: 20px;
+  }
+  
+  .tab-title {
+    font-family: 'Kaisei Decol', sans-serif;
+    text-align: center;
+    position: relative;
+    font-size: 34px; 
+    font-weight: 100;
+  }
+  
+  .tab-title:after {
+    content: "";
+    display: block;
+    width: 50px;
+    height: 2px;
+    background-color: #333;
+    margin: 10px auto;
+  }
+  
+  .address-card {
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px 0;
+  }
+  
+  .add-address-form-container {
+    background-color:#f0f0f0;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .form-row {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .add-address-form h3 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .add-address-form form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .add-address-form label {
+    margin-top: 10px;
+    font-size: 16px;
+  }
+  
+  .add-address-form input {
+    margin: 5px 0;
+    padding: 12px; 
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .add-address-button {
+    margin-top: 20px;
+    background-color: #095328;
+    color: #ffffff;
+    font-size: 16px;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .logout-button {
+=======
 
 .profile {
   display: flex;
@@ -295,6 +407,7 @@ export default {
 }
 
 .menu div {
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
   padding: 10px;
   cursor: pointer;
   border-bottom: 1px solid #ccc;

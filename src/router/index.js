@@ -13,9 +13,25 @@ import ACSearch from '../views/ACSearch.vue';
 import APProfileView from '../views/APPRofileView.vue';
 import APList from '../views/APList.vue'
 import APSearch from '../views/APSearch.vue';
+<<<<<<< HEAD
+import NewProduct from '../views/NewProduct';
+import AdminclientView from '../views/AdminclientView.vue';
+import AdminproductView from '../views/AdminproductView.vue';
+import HydrolatsView from '../views/HydrolatsView.vue';
+import TisaneplanteView from '../views/TisaneplanteView.vue';
+import BoissonView from '../views/BoissonView.vue';
+import GemmothérapieView from '../views/GemmothérapieView.vue';
+import AromatesView from '../views/AromatesView.vue';
+import FaqView from '../views/FaqView.vue';
+import ReturnView from '../views/ReturnView.vue';
+import RefundView from '../views/RefundView.vue';
+
+
+=======
 import NewProduct from '../views/NewProduct.vue';
 import CheckoutPage from '../views/CheckoutPageView.vue';
 import ProductView from '../views/ProductView.vue';
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
 
 const routes = [
   {
@@ -82,10 +98,61 @@ const routes = [
     search: route.query.Search !== '' ? route.query.Search : null })
 },
 {
+  path: "/adminclient",
+  name: "AdminclientView", 
+  component: AdminclientView,
+},
+{
+  path: "/adminproduct",
+  name: "AdminproductView", 
+  component: AdminproductView,
+},
+{
+  path: "/hydrolats",
+  name: "HydrolatsView", 
+  component: HydrolatsView,
+},
+{
+  path: "/aromates",
+  name: "AromatesView", 
+  component: AromatesView,
+},
+{
+  path: "/boisson",
+  name: "BoissonView", 
+  component: BoissonView,
+},
+{
+  path: "/gemmotherapie",
+  name: "GemmothérapieView", 
+  component: GemmothérapieView,
+},
+{
+  path: "/tisaneplante",
+  name: "TisaneplanteView", 
+  component: TisaneplanteView,
+},
+{
   path: "/AdminClientProfile",
   name: "ACProfileView",
   component: ACProfileView,
 },
+{
+  path: "/faq",
+  name: "FaqView",
+  component: FaqView,
+},
+{
+  path: "/return",
+  name: "ReturnView",
+  component: ReturnView,
+},
+{
+  path: "/refund",
+  name: "RefundView",
+  component: RefundView,
+},
+
 {
   path: "/ACList",
   name: "ACList",

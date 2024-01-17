@@ -1,10 +1,13 @@
 <template>
+<<<<<<< HEAD
+  <div>
+=======
   <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
   <div v-if="headerOne">
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
     <div id="app">
       <router-view />
     </div>
-
 
     <nav class="main-navbar">
       <router-link to="/">
@@ -13,6 +16,18 @@
       <div class="group">
         <ul class="navigation" :class="{ open: isMenuOpen }">
           <li v-on:mouseover="showSubcategories('hydrolats')" v-on:mouseout="hideSubcategories">
+<<<<<<< HEAD
+            <router-link to="/hydrolats" class="nav-link">Hydrolats</router-link>
+            <div v-show="showSubcategory === 'hydrolats'" class="subcategory">
+              <ul>
+                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">Brume Hydratante Faciale</a>
+                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 8px; font-family: 'Kaisei Decol'; font-size: 11px;">Brume Aromatique pour la Maison</a>
+              </ul>
+            </div>
+          </li>
+          <li v-on:mouseover="showSubcategories('tisanes')" v-on:mouseout="hideSubcategories">
+            <router-link to="/tisaneplante" class="nav-link">Tisanes & Plantes Sèches</router-link>
+=======
             <button @click="goToShop('Hydrolat', 'none')" class="nav-link-button">Hydrolats</button>
           <!--router-link to="#hydrolats" class="nav-link">Hydrolats</router-link-->
           <div v-show="showSubcategory === 'hydrolats'" class="subcategory">
@@ -24,52 +39,66 @@
         </li>
           <li v-on:mouseover="showSubcategories('tisanes')" v-on:mouseout="hideSubcategories">
             <button @click="goToShop('TnP', 'none')" class="nav-link-button">Tisanes & Plantes Sèches</button>
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
             <div v-show="showSubcategory === 'tisanes'" class="subcategory">
               <ul>
-                <li>Green Tea</li>
-                <li>Black Tea</li>
-                <li>Herbes Culinaires Bio</li>
-                <li>Épices Séchées pour la Cuisine</li>
+                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">Thé Vert</a>
+                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 4px; font-family: 'Kaisei Decol'; font-size: 11px;">Thé Noir</a>
+                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 6px; font-family: 'Kaisei Decol'; font-size: 11px;">Herbes Culinaires Bio</a>
+                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 8px; font-family: 'Kaisei Decol'; font-size: 11px;">Épices Séchées pour la Cuisine</a>
               </ul>
             </div>
           </li>
           <li v-on:mouseover="showSubcategories('gemmotherapie')" v-on:mouseout="hideSubcategories">
+<<<<<<< HEAD
+            <router-link to="/gemmotherapie" class="nav-link">Gemmothérapie</router-link>
+=======
             <button @click="goToShop('Gemmothérapie', 'none')" class="nav-link-button">Gemmothérapie</button>
             <!--router-link to="#gemmotherapie" class="nav-link">Gemmothérapie</router-link-->
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
             <div v-show="showSubcategory === 'gemmotherapie'" class="subcategory">
               <ul>
-                <li>Gemstone Elixir Kits</li>
-                <li>Gemmotherapy Skin Care</li>
+                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">Coffrets Élixir de Gemmes</a>
+                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 4px; font-family: 'Kaisei Decol'; font-size: 11px;">Soins de la Peau en Gemmothérapie</a>
               </ul>
             </div>
           </li>
           <li v-on:mouseover="showSubcategories('aromates')" v-on:mouseout="hideSubcategories">
+<<<<<<< HEAD
+            <router-link to="/aromates" class="nav-link">Aromates</router-link>
+=======
             <button @click="goToShop('Aromate', 'none')" class="nav-link-button">Aromates</button>
             <!--router-link to="#aromates" class="nav-link">Aromates</router-link-->
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
             <div v-show="showSubcategory === 'aromates'" class="subcategory">
               <ul>
-                <li>Herb-infused Oils</li>
-                <li>Aromatic Herb Sachets</li>
+                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">Huiles Infusées aux Herbes</a>
+                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 4px; font-family: 'Kaisei Decol'; font-size: 11px;">Sachets d'Herbes Aromatiques</a>
               </ul>
             </div>
           </li>
           <li v-on:mouseover="showSubcategories('boisson')" v-on:mouseout="hideSubcategories">
+<<<<<<< HEAD
+            <router-link to="/boisson" class="nav-link">Boisson</router-link>
+=======
             <button @click="goToShop('Boisson', 'none')" class="nav-link-button">Boissons</button>
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
             <div v-show="showSubcategory === 'boisson'" class="subcategory">
               <ul>
-                <li>W alchool</li>
-                <li>W/ alchool</li>
+                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">Avec Alcool</a>
+                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 4px; font-family: 'Kaisei Decol'; font-size: 11px;">Sans Alcool</a>
               </ul>
             </div>
           </li>
-          <ul class="navigation about-contact">
-          <li v-on:mouseover="showSubcategories('aboutUs')" v-on:mouseout="hideSubcategories">
-            <router-link to="/about" class="nav-link">About Us</router-link>
-          </li>
-          <li v-on:mouseover="showSubcategories('contactUs')" v-on:mouseout="hideSubcategories">
-            <router-link to="/contact" class="nav-link">Contact Us</router-link>
-          </li>
+       
         </ul>
+<<<<<<< HEAD
+ 
+        <router-link to="/cart" class="cart-link" style="color: black;" @click="toggleCart">
+          <ion-icon name="cart-outline" class="cartBtn"></ion-icon>
+          <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
+        </router-link>
+=======
         </ul>
         
         <router-link to="/cart" class="cart-link" style="color: black;">
@@ -85,7 +114,11 @@
 
 
 
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
 
+        <router-link to="/profile" class="profile-link" style="color: black;">
+          <ion-icon name="person-outline" class="profileBtn" v-on:click="toggleProfile"></ion-icon>
+        </router-link>
 
         <div class="search" @click="toggleSearch">
           <span class="icon">
@@ -100,8 +133,12 @@
         ></ion-icon>
       </div>
       <div class="searchBox">
+<<<<<<< HEAD
+        <input type="text" placeholder="Rechercher ici...">
+=======
         <input type="text" v-model="searchTerm" placeholder="Search here . ." @keyup.enter="searchProduct()">
         <!--button @click="searchProduct" id="myBtn"></button-->
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
       </div>
     </nav>
 
@@ -113,38 +150,43 @@
       <div class="container">
         <div class="row">
           <div class="footer-col">
-            <h4>company</h4>
+            <h4>entreprise</h4>
             <ul>
+<<<<<<< HEAD
+              <li><a href="/about">à propos de nous</a></li>
+              <li><a href="/about">nos services</a></li>
+              <li><a href="/about">nos fournisseurs</a></li>
+=======
               <li><a href="/CheckoutPage">about us</a></li>
               <li><a href="#">our services</a></li>
               <li><a href="#">privacy policy</a></li>
               <li><a href="#">affiliate program</a></li>
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
             </ul>
           </div>
           <div class="footer-col">
-            <h4>get help</h4>
+            <h4>obtenir de l'aide</h4>
             <ul>
-              <li><a href="#">FAQ</a></li>
-              <li><a href="#">shipping</a></li>
-              <li><a href="#">returns</a></li>
-              <li><a href="#">order status</a></li>
-              <li><a href="#">payment options</a></li>
+              <li><a href="/faq">FAQ</a></li>
+              <li><a href="/contact">contactez-nous</a></li>
+              <li><a href="/return">retours</a></li>
+              <li><a href="/refund">remboursement</a></li>
             </ul>
           </div>
           <div class="footer-col">
-            <h4>online shop</h4>
+            <h4>boutique en ligne</h4>
             <ul>
               <li><a href="#">Hydrolats</a></li>
               <li><a href="#">Tisanes & Plante sèche</a></li>
-              <li><a href="#">Gemmothérapie</a></li>
+              <li><a href="/adminclient">Gemmothérapie</a></li>
               <li><a href="#">Aromates</a></li>
               <li><a href="#">Boisson</a></li>
             </ul>
           </div>
           <div class="footer-col">
-            <h4>follow us</h4>
+            <h4>suivez-nous</h4>
             <div class="social-links">
-              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="/adminproduct"><i class="fab fa-facebook-f"></i></a>
               <a href="#"><i class="fab fa-twitter"></i></a>
               <a href="#"><i class="fab fa-instagram"></i></a>
               <a href="#"><i class="fab fa-linkedin-in"></i></a>
@@ -156,8 +198,10 @@
   </div>
 </template>
 
-
 <script>
+<<<<<<< HEAD
+/*import ShopView from '@/views/ShopView.vue';*/
+=======
 /*var input = document.getElementById("myInput");
 input.addEventListener("keypress", function(event) {
   if (event.key === "Enter") {
@@ -165,32 +209,38 @@ input.addEventListener("keypress", function(event) {
     document.getElementById("myBtn").click();
   }
 });*/
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
 export default {
   data() {
     return {
       showSubcategory: null,
       currentAnnouncementIndex: 0,
       announcements: [
-        "20% off first purchase",
-        "Free US delivery",
-        
+        "20% de réduction sur le premier achat",
+        "Livraison gratuite",
       ],
-      
       isMenuOpen: false,
       isMenuInitialClick: true,
+<<<<<<< HEAD
+      cart: [],
+=======
       searchTerm: "",
       headerOne: true,
       headerTwo: false,
     };
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
     
+    };
   },
   computed: {
     currentAnnouncement() {
       return this.announcements[this.currentAnnouncementIndex];
     },
+    cartCount() {
+      return this.$store.state.cartCount; // Accédez à cartCount depuis le store
+    },
   },
   mounted() {
-    
     const ioniconsEsmScript = document.createElement('script');
     ioniconsEsmScript.type = 'module';
     ioniconsEsmScript.src = 'https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js';
@@ -219,13 +269,8 @@ export default {
     };
 
     setInterval(this.changeAnnouncement, 3000);
-
-    
-
-    
   },
   methods: {
-
     showSubcategories(category) {
       this.showSubcategory = category;
     },
@@ -235,20 +280,43 @@ export default {
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
 
-   
       if (this.isMenuInitialClick && window.innerWidth > 800) {
         this.isMenuOpen = false;
         this.isMenuInitialClick = false;
       }
     },
     toggleSearch() {
-      
+      // Implémentez votre fonctionnalité de recherche ici
     },
     changeAnnouncement() {
       this.currentAnnouncementIndex =
         (this.currentAnnouncementIndex + 1) % this.announcements.length;
     },
     toggleCart() {
+<<<<<<< HEAD
+      // Ajoutez la logique pour basculer le panier et mettre à jour cartCount
+      // Par exemple, si vous avez une méthode pour ajouter des articles au panier, incrémentez cartCount là-bas.
+      // C'est juste un exemple de placeholder :
+      this.cart.push({ /* votre article */ });
+      this.cartCount = this.cart.length;
+    },
+    toggleProfile() {
+      // Implémentez votre fonctionnalité de profil ici
+    },
+    /*handleAddToCart(product) {
+      console.log(`Handling Add to Cart in App.vue for ${product.name}`);
+      // Mise à jour du nombre d'articles dans le panier ici
+      this.cartCount++; 
+    },*/
+  },
+  /*components:{
+      ShopView
+    },*/
+};
+</script>
+
+<style lang="css" scoped src="@/components/AppStyle.css">
+=======
     
   },
   toggleProfile() {
@@ -774,4 +842,5 @@ ul {
   transform-origin: left;
 }
 
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
 </style>

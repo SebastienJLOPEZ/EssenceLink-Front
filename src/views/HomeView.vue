@@ -4,21 +4,28 @@
 
     <div class="home" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
       <div v-if="showPopup" class="popup">
-        <p>Welcome to our website! Make an account to enhance your experience.</p>
-        <button @click="makeAccount">Make an Account</button>
-        <button @click="continueBrowsing">Continue Browsing</button>
+        <p>Bienvenue sur notre site web ! Connectez vous pour améliorer votre expérience.</p>
+        <button @click="makeAccount">Connection</button>
+        <button @click="continueBrowsing">Continuer la navigation</button>
       </div>
     </div>
 
     <div class="slideshow-container">
+<<<<<<< HEAD
+      <div v-for="(content, index) in slideContent" :key="index" :style="{ display: index + 1 === slideIndex ? 'block' : 'none' }" class="mySlides fade">
+        <img :src="require(`@/assets/EL${index + 1}.${content.extension || 'jpg'}`)">
+=======
       <div v-for="(content, index) in slideContent" :key="index"
         :style="{ display: index + 1 === slideIndex ? 'block' : 'none' }" class="mySlides fade">
         <img :src="require(`@/assets/bg${index + 1}.${content.extension || 'jpg'}`)">
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
 
         <div class="mid-container">
           <h1 class="mid-title">{{ content.title }}</h1>
           <h2>{{ content.subtitle }}</h2>
-          <button class="shop-now">Shop Now</button>
+          <router-link to="/shop">
+            <button class="shop-now">Acheter maintenant</button>
+          </router-link>
         </div>
       </div>
 
@@ -33,14 +40,33 @@
     </div>
 
     <div class="under-text">
+<<<<<<< HEAD
+      <div style="width: 100%; height: 100%; text-align: center; color: black; font-size: 50px; font-family: Newsreader; font-weight: 300; line-height: 76.80px; word-wrap: break-word">
+        "Produits biologiques et artisanaux - la perfection de la nature, abordable pour tous."
+=======
       <div
         style="width: 100%; height: 100%; text-align: center; color: black; font-size: 50px; font-family: Newsreader; font-weight: 300; line-height: 76.80px; word-wrap: break-word">
         "Organic, handmade products – nature's perfection, affordable for all."
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
       </div>
     </div>
 
     <div class="products-and-garden-container">
       <div class="garden-container">
+<<<<<<< HEAD
+        <h2>De nos jardins avec amour</h2>
+        <p>Rehaussez vos moments avec la richesse des traditions et les avantages uniques pour la santé de nos herbes.</p>
+        <button @click="discoverMore">Découvrir plus de produits</button>
+      </div>
+
+      <div class="product-container">
+        <div v-for="(product, index) in products.slice(0, 3)" :key="index" :class="'product-item product-' + index">
+          <div class="product-content">
+            <img :src="product.image" alt="Image du produit">
+            <hr>
+            <p>{{ product.description }}</p>
+            <a href="#" class="more-details">Plus de détails</a>
+=======
         <h2>Brought to you with love from our gardens</h2>
         <p>Elevate your moments with the richness of traditions and unique health benefits found in our herbs.</p>
         <button @click="discoverMore">Discover More Products</button>
@@ -53,6 +79,7 @@
             <hr>
             <p>{{ product.Name }}</p>
             <router-link :to="{ name: 'Product', query: { pid: product.Id } }" class="more-details">More Details</router-link>
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
           </div>
         </div>
       </div>
@@ -60,16 +87,39 @@
       <div class="product-container extra-left">
         <div v-for="product in sortedProducts.slice(0, 3)" :key="product.Id" :class="'product-item product-' + index">
           <div class="product-content">
+<<<<<<< HEAD
+            <img :src="product.image" alt="Image du produit">
+            <hr>
+            <p>{{ product.description }}</p>
+            <a href="#" class="more-details">Plus de détails</a>
+=======
             <img :src='require("@/assets/Leafs.png")' alt="Product Image">
             <hr>
             <p>{{ product.Name }}</p>
             <router-link :to="{ name: 'Product', query: { pid: product.Id } }" class="more-details">More Details</router-link>
 
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
           </div>
         </div>
       </div>
 
       <div class="image-under-products">
+<<<<<<< HEAD
+        <img alt="Soutien aux entreprises locales" src="@/assets/bg1.jpg" />
+      </div>
+      <div class="support-container">
+        <h3>Soutien aux fermes locales</h3>
+        <p>Découvrez les trésors de la nature dans notre sanctuaire d'herbes. Votre achat soutient les petites exploitations locales, favorisant une communauté engagée dans la beauté et les bienfaits des herbes. Merci de nous rejoindre dans ce voyage vers un lendemain plus sain.</p>
+      </div>
+
+      <section class="email-section">
+        <div class="newsletter-title">Rejoignez la newsletter d'Essence Link</div>
+        <div class="newsletter-description">Soyez le premier informé des nouveaux produits et des offres exclusives</div>
+        <div class="email-input-container">
+          <input type="email" placeholder="Entrez votre adresse e-mail" class="email-input">
+        </div>
+        <button class="add-button">Ajouter</button>
+=======
         <img alt="supporting local bussiness" src="@/assets/bg1.jpg" />
       </div>
       <div class="support-container">
@@ -86,6 +136,7 @@
           <input type="email" placeholder="Enter your email" class="email-input">
         </div>
         <button class="add-button">Add</button>
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
       </section>
     </div>
   </div>
@@ -99,11 +150,17 @@ import productImage4 from '@/assets/bg6.jpg';
 import productImage5 from '@/assets/bg6.jpg';
 import productImage6 from '@/assets/bg6.jpg';
 import productImage7 from '@/assets/bg6.jpg';
+<<<<<<< HEAD
+
+export default {
+  name: 'VueAccueil',
+=======
 import ProductCaller from '@/_services/ProductCaller.js'
 
 export default {
   name: 'HomeView',
   mixins: [ProductCaller],
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
   data() {
     return {
       showPopup: false,
@@ -111,11 +168,20 @@ export default {
       touchStartX: 0,
       touchEndX: 0,
       slideContent: [
-        { title: 'Herbs & Spices', subtitle: 'Powders, Leafs, Berries, and More' },
-        { title: 'Teas', subtitle: 'Herbal, Chai, Black, Green, and More' },
-        { title: 'Herbal Blends', subtitle: 'Salves & Tinctures for Body, Immune Support' },
+        { title: 'Plantes sèches', subtitle: 'Poudres, feuilles, baies, et plus encore' },
+        { title: 'Tisanes', subtitle: 'Thé aux herbes, chai, noir, vert, et plus encore' },
+        { title: 'Gemmothérapie', subtitle: 'Baumes et teintures pour le corps, soutien immunitaire' },
       ],
       products: [
+<<<<<<< HEAD
+        { name: 'Produit 1', description: 'Description du produit 1', image: productImage1 },
+        { name: 'Produit 2', description: 'Description du produit 2', image: productImage2 },
+        { name: 'Produit 3', description: 'Description du produit 3', image: productImage3 },
+        { name: 'Produit 4', description: 'Description du produit 4', image: productImage4 },
+        { name: 'Produit 5', description: 'Description du produit 5', image: productImage5 },
+        { name: 'Produit 6', description: 'Description du produit 6', image: productImage6 },
+        { name: 'Produit 7', description: 'Description du produit 7', image: productImage7 },
+=======
         { name: 'Product 1', description: 'Description of Product 1', image: productImage1 },
         { name: 'Product 2', description: 'Description of Product 2', image: productImage2 },
         { name: 'Product 3', description: 'Description of Product 3', image: productImage3 },
@@ -124,16 +190,20 @@ export default {
         { name: 'Product 6', description: 'Description of Product 6', image: productImage6 },
         { name: 'Product 7', description: 'Description of Product 7', image: productImage7 },
 
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
       ],
       newProductList: [],
       sortedProducts: [],
     };
   },
   mounted() {
+<<<<<<< HEAD
+=======
 
     const currentPagePath = this.$route.path;
     localStorage.setItem('currentPage', currentPagePath);
 
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
     setTimeout(() => {
       this.showPopup = true;
       this.showSlides(this.slideIndex);
@@ -146,12 +216,12 @@ export default {
   },
   methods: {
     makeAccount() {
-      console.log('Make an Account clicked');
-      this.$router.push('/signup');
+      console.log('Cliquez pour créer un compte');
+      this.$router.push('/login');
       this.showPopup = false;
     },
     continueBrowsing() {
-      console.log('Continue Browsing clicked');
+      console.log('Continuer la navigation');
       this.showPopup = false;
     },
     plusSlides(n) {
@@ -184,6 +254,16 @@ export default {
       }
     },
     discoverMore() {
+<<<<<<< HEAD
+      console.log('Découvrir plus de produits cliqué');
+      // AJOUTER LE CODE
+    },
+  },
+};
+</script>
+
+<style lang="css" scoped src="@/components/HomeStyle.css"></style>
+=======
       console.log('Discover More Products clicked');
       // ADD CODE 
     },
@@ -600,3 +680,4 @@ export default {
   background-color: #93ab91;
 }
 </style>
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5

@@ -35,8 +35,14 @@
         <span>Total:</span>
         <span ref="totalAmount">{{ calculateTotal().toFixed(2) }}</span>
       </div>
+<<<<<<< HEAD
+      <router-link to="/checkout">
+      <button  class="checkout-button" @click="checkout" ref="checkoutButton">Checkout</button>
+    </router-link>
+=======
       <!--Will need to change this css-->
       <button class="checkout-button" @click="goToCheckout()" ref="checkoutButton">Confirmer</button>
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
     </div>
   </div>
 </template>
@@ -84,6 +90,9 @@ export default {
     calculateTotal() {
       return this.totalPrice = this.cartItems.reduce((total, item) => total + item.linePrice, 0);
     },
+<<<<<<< HEAD
+    
+=======
     async goToCheckout() {
       try {
         await checkAuthentication.call(this);
@@ -125,6 +134,7 @@ export default {
         }
       }
     },
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
   },
   beforeMount() {
     this.fetchCartItem();
@@ -137,8 +147,12 @@ export default {
   font-family: 'Kaisei Decol', sans-serif;
   text-align: center;
   position: relative;
+<<<<<<< HEAD
+  font-size: 34px; 
+=======
   font-size: 34px;
   /* Adjust the font size as needed */
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
   font-weight: 400;
   margin-top: 180PX;
 }
