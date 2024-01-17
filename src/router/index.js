@@ -14,6 +14,7 @@ import APProfileView from '../views/APPRofileView.vue';
 import APList from '../views/APList.vue'
 import APSearch from '../views/APSearch.vue';
 import NewProduct from '../views/NewProduct';
+import CheckoutPageView from '../views/CheckoutPageView.vue';
 
 const routes = [
   {
@@ -105,6 +106,11 @@ const routes = [
   path: "/APSearch",
   name:"APSearch",
   component: APSearch,
+},
+{
+  path: "/CheckoutPage",
+  name:"CheckoutPageView",
+  component: CheckoutPageView,
 },
 {
   path:"/NewProduct",
