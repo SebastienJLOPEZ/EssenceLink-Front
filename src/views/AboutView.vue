@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <div>
     <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
     <div class="header"></div>
@@ -11,6 +12,25 @@
           <p>
             Bienvenue chez Essence Link, où la qualité rencontre la perfection de la nature ! Lancée au printemps 2023, nous sommes fiers de proposer une gamme exquise de produits sélectionnés pour leur qualité inégalée. Notre engagement envers l'excellence se reflète dans chaque article que nous vendons. Des hydrolats aux tisanes, de la plante sèche à la gemmothérapie, des aromates aux boissons - chaque produit est un témoignage de notre dévouement à vous fournir le meilleur. Découvrez l'essence de l'indulgence avec Essence Link, où chaque article est conçu avec soin et lancé avec la promesse de l'excellence.
           </p>
+=======
+    <div>
+      <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
+      <div class="header"></div>
+  
+      <div class="container">
+        <div class="about">
+          <div class="left">
+            <h1 style="color: black; font-family: 'Newsreader';">About us</h1>
+            <hr>
+            <p>
+              Welcome to Essence Link, where quality meets nature's perfection! Launched in Spring 2023, we take pride in offering an exquisite range of products curated for their unmatched quality. Our commitment to excellence is reflected in every item we sell. From Hydrolats to Tisanes, Plante Sèche to Gemmothérapie, Aromates, and Boissons – each product is a testament to our dedication to providing you with the finest. Discover the essence of indulgence with Essence Link, where every item is crafted with care and launched with a promise of excellence.
+            </p>
+          </div>
+          <div class="right">
+            <img src="@/assets/AB4.jpg" class="product-image">
+          </div>
+          <div class="clear"></div>
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
         </div>
         <div class="right">
           <img src="@/assets/AB4.jpg" class="product-image">
@@ -145,4 +165,9 @@
       height: 80px;
     }
   }
+<<<<<<< HEAD
 </style>
+=======
+  </style>
+  
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5

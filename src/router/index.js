@@ -13,6 +13,7 @@ import ACSearch from '../views/ACSearch.vue';
 import APProfileView from '../views/APPRofileView.vue';
 import APList from '../views/APList.vue'
 import APSearch from '../views/APSearch.vue';
+<<<<<<< HEAD
 import NewProduct from '../views/NewProduct';
 import AdminclientView from '../views/AdminclientView.vue';
 import AdminproductView from '../views/AdminproductView.vue';
@@ -26,6 +27,11 @@ import ReturnView from '../views/ReturnView.vue';
 import RefundView from '../views/RefundView.vue';
 
 
+=======
+import NewProduct from '../views/NewProduct.vue';
+import CheckoutPage from '../views/CheckoutPageView.vue';
+import ProductView from '../views/ProductView.vue';
+>>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
 
 const routes = [
   {
@@ -87,6 +93,9 @@ const routes = [
   path: "/shop",
   name: "ShopView", 
   component: ShopView,
+  props: (route) => ({ type: route.query.Type !== '' ? route.query.Type : null,
+    subtype: route.query.Subtype !== '' ? route.query.Subtype : null,
+    search: route.query.Search !== '' ? route.query.Search : null })
 },
 {
   path: "/adminclient",
@@ -170,9 +179,25 @@ const routes = [
   component: APSearch,
 },
 {
+  path: "/CheckoutPage",
+  name:"CheckoutPageView",
+  component: CheckoutPageView,
+},
+{
   path:"/NewProduct",
   name:"NewProduct",
   component: NewProduct,
+},
+{
+  path:"/checkout",
+  name:"Checkout",
+  component: CheckoutPage,
+},
+{
+  path:"/Product",
+  name:"Product",
+  component: ProductView,
+  props: (route) => ({ type: route.query.Type})
 }
 ]
 

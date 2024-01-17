@@ -15,7 +15,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="Product in paginatedProducts" :key="Product.Email">
+        <tr v-for="product in paginatedProducts" :key="product.Id">
           <td>{{ product.Id }}</td>
           <td>{{ product.Name }}</td>
           <td>{{ product.Quantity <= 0 ? "Out of Stock" : product.Quantity }}</td>
