@@ -1,0 +1,201 @@
+
+ .checkout {
+   display: flex;
+   flex-direction: column;
+   padding: 20px;
+   margin-top: 170px;
+   font-family: 'Kaisei Decol', sans-serif;
+ }
+ 
+ .checkout-title {
+   font-family: 'Kaisei Decol', sans-serif;
+   text-align: center;
+   position: relative;
+   font-size: 34px;
+   font-weight: 100;
+ }
+ .checkout-title:after {
+   content: "";
+   display: block;
+   width: 80px;
+   height: 2px;
+   background-color: #333;
+   margin: 10px auto;
+ }
+ 
+ .checkout-container {
+   background-color: white;
+   border-radius: 5px;
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+   padding: 20px;
+   width: 60%;
+   display: flex;
+   flex-direction: column;
+   margin-TOP: 20px;
+   font-family: 'Kaisei Decol', sans-serif;
+   
+   
+ }
+ 
+ .checkout-section {
+   border-bottom: 1px solid #ddd;
+   padding-bottom: 10px;
+   margin-bottom: 20px;
+ }
+ 
+ .card {
+   border-radius: 1em;
+   background-color: #b4cfb2;
+   width: 200px;
+   color: #fff;
+   padding: 1em;
+   margin-bottom: 10px;
+ }
+ 
+ .address-line {
+   margin-bottom: 5px;
+ }
+ 
+ .address-form,
+ .payment-form {
+   display: flex;
+   flex-direction: column;
+ }
+ 
+ .address-form label,
+ .payment-form label {
+   margin-bottom: 5px;
+ }
+ 
+ .checkout-summary {
+   text-align: right;
+   margin-top: auto;
+ }
+ 
+ .total {
+   text-align: right;
+   margin-bottom: 10px;
+   font-size: 18px;
+ }
+ 
+ .checkout-button {
+   background-color: #93ab91;
+   color: white;
+   border: none;
+   padding: 10px;
+   border-radius: 5px;
+   cursor: pointer;
+   font-size: 16px;
+   transition: opacity 0.3s;
+ }
+ 
+ .checkout-button:hover {
+   opacity: 0.9;
+ }
+ 
+ .address-form input,
+ .payment-form input,
+ .address-form select,
+ .payment-form select {
+   padding: 8px;
+   margin-bottom: 10px;
+   border: 1px solid #ccc;
+   border-radius: 4px;
+   box-sizing: border-box;
+   width: 478px;
+ }
+ 
+ .payment-options {
+   display: flex;
+   gap: 20px;
+   justify-content: center;
+ }
+ 
+ .payment-option {
+   flex: 1;
+   background-color: #fff;
+   border-radius: 8px;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+   transition: transform 0.3s;
+   text-align: center;
+   margin-bottom: 20px;
+   margin-top: 10px;
+ }
+ 
+ .payment-option:hover {
+   transform: translateY(-4px);
+ }
+ 
+ .payment-card {
+   padding: 16px;
+ }
+ 
+ .payment-option.active {
+   border: 2px solid #ffffff;
+ }
+ 
+ .payment-form .expiry-container {
+   display: flex;
+   flex-direction: column;
+   margin-bottom: 10px;
+ }
+ 
+ .payment-form .expiry-inputs {
+   display: flex;
+   gap: 10px;
+   width: 478px;
+ }
+ 
+ .address-section button {
+   background-color: #93ab91;
+   color: white;
+   border: none;
+   padding: 10px;
+   border-radius: 5px;
+   cursor: pointer;
+   font-size: 16px;
+   transition: opacity 0.3s;
+   margin-bottom: 15px;
+   margin-top: 15px;
+ }
+ 
+ .address-section button:hover {
+   opacity: 0.9;
+ }
+ 
+ .right-container {
+   background-color: white;
+   border-radius: 5px;
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+   padding: 20px;
+   font-family: 'Kaisei Decol', sans-serif;
+   width: 38%;
+   position: absolute;
+   top: 90px;
+   left: 80.5%;
+   transform: translateX(-50%);
+   margin-top: 20PX;
+ }
+.section-title {
+   font-weight: bold;
+   
+ }
+ 
+ .total-text {
+   font-weight: bold;
+   float: right;
+ }
+ .side-text {
+   float: right;
+ }
+ .quantity {
+   font-weight: bold;
+ }
+ 
+ .bold {
+   font-weight: bold;
+ }
+ 
+ h2{
+  font-size: 23PX;
+ }
