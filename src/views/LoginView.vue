@@ -138,7 +138,7 @@ export default {
   margin-top: 160PX;
   height: 140vh;
   width: 100%;
-  max-width:  1500px;
+  max-width:  1600px;
   align-items: center;
   display: flex;
   justify-content: center;
@@ -154,7 +154,7 @@ export default {
   height: 400px;
   background-color: rgba(255, 255, 255, 0.7);
   padding: 60px 30px;
-  margin-top: -100px;
+  margin-top: -190px;
   margin-right:590PX;
 }
 
@@ -203,7 +203,7 @@ export default {
   margin-right: 40px;
   margin-top: 108px;
   top: 0;
-  right: 0;
+  right: 20px;
   height: 80vh;
   width: 550px; 
   box-shadow: -5px 0 10px rgba(0, 0, 0, 0.1); 

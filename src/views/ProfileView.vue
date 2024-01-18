@@ -276,7 +276,6 @@ export default {
     margin-top: 80px;
     margin-bottom: 1px;
   }*/
-<<<<<<< HEAD
   
   .profile {
     display: flex;
@@ -387,27 +386,6 @@ export default {
     cursor: pointer;
   }
   .logout-button {
-=======
-
-.profile {
-  display: flex;
-  max-width: 100%;
-  height: 290vh;
-  margin: 100px auto;
-  background-color: #fff;
-  margin-top: 130px;
-  margin-bottom: 1px;
-}
-
-.menu {
-  width: 200px;
-  background-color: #ffffff;
-  padding: 20px;
-  margin-top: 130px;
-}
-
-.menu div {
->>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
   padding: 10px;
   cursor: pointer;
   border-bottom: 1px solid #ccc;

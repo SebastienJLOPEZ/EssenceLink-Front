@@ -139,7 +139,7 @@ export default {
 .container {
   height: 130vh; 
   width: 100%;
-  max-width: 1300px;
+  max-width: 1600px;
   align-items: center;
   display: flex;
   justify-content: center;
@@ -157,7 +157,7 @@ export default {
   height: 520px; 
   background-color: rgba(255, 255, 255, 0.7);
   padding: 60px 30px;
-  margin-top: 40px;
+  margin-top: -50px;
   margin-left: 30PX;
 }
 

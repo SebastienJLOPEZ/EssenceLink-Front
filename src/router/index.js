@@ -7,13 +7,12 @@ import ProfileView from '../views/ProfileView.vue';
 import ShopView from '../views/ShopView.vue';
 import AboutView from '../views/AboutView.vue'; 
 import ContactView from '../views/ContactView.vue'; 
-import ACProfileView from '../views/ACProfileView.vue';
+import ACProfileView from '../views/AdminclientView.vue';
 import ACList from '../views/ACList.vue'
 import ACSearch from '../views/ACSearch.vue';
-import APProfileView from '../views/APPRofileView.vue';
+import APProfileView from '../views/AdminproductView.vue';
 import APList from '../views/APList.vue'
 import APSearch from '../views/APSearch.vue';
-<<<<<<< HEAD
 import NewProduct from '../views/NewProduct';
 import AdminclientView from '../views/AdminclientView.vue';
 import AdminproductView from '../views/AdminproductView.vue';
@@ -25,13 +24,8 @@ import AromatesView from '../views/AromatesView.vue';
 import FaqView from '../views/FaqView.vue';
 import ReturnView from '../views/ReturnView.vue';
 import RefundView from '../views/RefundView.vue';
-
-
-=======
-import NewProduct from '../views/NewProduct.vue';
 import CheckoutPage from '../views/CheckoutPageView.vue';
-import ProductView from '../views/ProductView.vue';
->>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
+import ProductView from '../views/ProductDetailView.vue';
 
 const routes = [
   {

@@ -1,8 +1,5 @@
 <template>
-<<<<<<< HEAD
-=======
   <link href='https://fonts.googleapis.com/css?family=Kaisei%20Decol' rel='stylesheet'>
->>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
   <div>
     <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
     <!-- Category Banner -->
@@ -43,13 +40,8 @@
             <p class="price">{{ product.Price }}€</p>
             <div class="line"></div>
             <div class="buttons">
-<<<<<<< HEAD
-              <button @click="addToWishlist(product)" class="wishlist">Wishlist</button>
-              <button @click="quickView(product)" class="quick-view">Quick View</button>
-=======
-              <button @click.stop="quickView(product)" class="quick-view">Quick View</button>
               <button @click.stop="addToWishlist(product)" class="wishlist">Wishlist</button>
->>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
+              <button @click.stop="quickView(product)" class="quick-view">Quick View</button>
             </div>
           </div>
         </div>
@@ -62,17 +54,6 @@
         <span class="close-popup" @click="closePopup">×</span>
         <div class="popup-details">
           <div class="popup-image-container">
-<<<<<<< HEAD
-            <img :src="selectedProduct.image" alt="Product Image" class="popup-image" />
-          </div>
-          <div class="popup-description-and-price">
-            <h2 class="popup-title">{{ selectedProduct.name }}</h2>
-            <p class="popup-description">{{ selectedProduct.descriptionPopup }}</p>
-            <p class="popup-price">{{ selectedProduct.price }}</p>
-            <div class="quantity-control">
-              <label for="quantity">Quantity:</label>
-              <input type="number" id="quantity" v-model="selectedProduct.quantity" min="1" />
-=======
             <img :src="require('@/assets/bg3.jpg')" alt="Product Image" class="popup-image" />
           </div>
           <div class="popup-description-and-price">
@@ -85,23 +66,17 @@
                 :max="selectedProduct.Quantity" />
               <p>
                 {{ selectedProduct.Quantity > 10 ? "" : "Il ne reste que " + selectedProduct.Quantity + " unité." }}</p>
->>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
             </div>
           </div>
         </div>
         <div class="buttons">
-<<<<<<< HEAD
-          <button @click="addToWishlistFromPopup(selectedProduct)" class="add-to-wishlist">
-=======
           <button @click="addToWishlist(selectedProduct)" class="add-to-wishlist">
->>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
             Add to Wishlist <ion-icon name="heart"></ion-icon>
           </button>
           <button @click="addToCart(selectedProduct)" class="add-to-cart">Add to Cart</button>
         </div>
       </div>
     </div>
-<<<<<<< HEAD
 
     <!-- Global Wishlist Message -->
     <div v-if="globalWishlistMessage" class="global-wishlist-container">
@@ -111,9 +86,6 @@
     </div>
 
 </div>
-=======
-  </div>
->>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
 </template>
 
 <script>
@@ -135,18 +107,6 @@ export default {
   mixins: [currentUser, ProductCaller, checkAuthentication],
   data() {
     return {
-<<<<<<< HEAD
-      products: [
-        { name: 'Product 1', description: 'Description of Product 1', descriptionPopup: 'Popup description for Product 1', price: 19.99, image: productImage1, showWishlistMessage: false },
-        { name: 'Product 2', description: 'Description of Product 2', descriptionPopup: 'Popup description for Product 2', price: 24.99, image: productImage2, showWishlistMessage: false },
-        { name: 'Product 3', description: 'Description of Product 3', descriptionPopup: 'Popup description for Product 3', price: 29.99, image: productImage3, showWishlistMessage: false },
-        { name: 'Product 4', description: 'Description of Product 4', descriptionPopup: 'Popup description for Product 4', price: 14.99, image: productImage4, showWishlistMessage: false },
-        { name: 'Product 5', description: 'Description of Product 5', descriptionPopup: 'Popup description for Product 5', price: 22.99, image: productImage5, showWishlistMessage: false },
-        { name: 'Product 6', description: 'Description of Product 6', descriptionPopup: 'Popup description for Product 6', price: 17.99, image: productImage6, showWishlistMessage: false },
-        { name: 'Product 7', description: 'Description of Product 7', descriptionPopup: 'Popup description for Product 7', price: 27.99, image: productImage7, showWishlistMessage: false },
-        { name: 'Product 8', description: 'Description of Product 8', descriptionPopup: 'Popup description for Product 8', price: 32.99, image: productImage8, showWishlistMessage: false },
-      ],
-=======
       email: "",
       product: [],
       /*products: [
@@ -159,7 +119,6 @@ export default {
         { id: "7", name: 'Product 7', description: 'Description of Product 7', descriptionPopup: 'Popup description for Product 7', price: 27.99, image: productImage7 },
         { id: "8", name: 'Product 8', description: 'Description of Product 8', descriptionPopup: 'Popup description for Product 8', price: 32.99, image: productImage8 },
       ],*/
->>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
       isPriceFilterOpen: false,
       priceFilters: [
         { label: 'Low to High', value: 'low To High' },
@@ -168,15 +127,10 @@ export default {
       selectedFilter: null,
       showPopup: false,
       selectedProduct: null,
-<<<<<<< HEAD
-      globalWishlistMessage: '',
-      cartCount: 0,
-      cart : [],
-=======
       currentType: "Boisson",
       productList: [],
       previousContent: null,
->>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
+      globalWishlistMessage: '',
     };
   },
   watch: {
@@ -190,22 +144,6 @@ export default {
       };
       this.showPopup = true;
     },
-<<<<<<< HEAD
-    addToCart(product) {
-      this.$store.commit('addToCart', product); // Dispatch addToCart mutation
-      this.showPopup = false;
-    },
-    addToWishlist(product) {
-      console.log(`Added to wishlist: ${product.name}`);
-      this.globalWishlistMessage = `Added ${product.name} to Wishlist!`;
-      setTimeout(() => {
-        this.globalWishlistMessage = '';
-      }, 5000);
-    },
-    addToWishlistFromPopup(product) {
-      this.addToWishlist(product);
-      this.closePopup();
-=======
 
     async addToWishlist(product) {
       try {
@@ -227,11 +165,13 @@ export default {
           },
         },)
         console.log(`Added to wishlist: ${product.name}`, response);
-
+        this.globalWishlistMessage = "Produit ajouté à la Liste des souhaits"
+        setTimeout(() => {
+        this.globalWishlistMessage = "";
+      }, 3000);
       } catch (error) {
         console.error('Failed to connect to databank', error.message);
       }
->>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
     },
     togglePriceFilter() {
       this.isPriceFilterOpen = !this.isPriceFilterOpen;
@@ -246,16 +186,6 @@ export default {
     closePopup() {
       this.showPopup = false;
     },
-<<<<<<< HEAD
-    toggleCart() {
-
-    },
-  },
-};
-</script>
-
-<style lang="css" scoped src="@/components/ShopStyle.css"></style>
-=======
     addToCart(product) {
       console.log(`Added to cart: ${product.name} (Quantity: ${product.quantity})`);
 
@@ -270,7 +200,7 @@ export default {
       }
 
       localStorage.setItem('cart', JSON.stringify(cart));
-
+      
       this.showPopup = false; // Close the popup after adding to cart
     },
     goToProductPage(pid) {
@@ -303,303 +233,7 @@ export default {
       this.previousContent = JSON.parse(JSON.stringify(this.$route.query));
     }
   }
-};
+  };
 </script>
 
-<style scoped>
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  margin: 0;
-}
-
-.category-banner-container {
-  position: relative;
-  width: 100%;
-  max-height: 550px;
-  overflow: hidden;
-
-}
-
-.category-banner {
-  width: 100%;
-  height: auto;
-  max-height: 100%;
-}
-
-.category-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.5);
-}
-
-.category-title {
-  color: white;
-  font-size: 64px;
-  text-align: center;
-  font-family: 'Kaisei Decol';
-  font-weight: 500;
-  margin-top: 100px;
-}
-
-.category-description {
-  color: white;
-  font-size: 32px;
-  text-align: center;
-  font-family: 'Kaisei Decol';
-  margin-top: 20px;
-  width: 80%;
-}
-
-.product-container {
-  width: 100%;
-  margin-top: 50px;
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-}
-
-.product-item {
-  flex: 0 0 calc(25% - 20px);
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin: 10px;
-  max-width: 210px;
-}
-
-.product-item img {
-  width: 105%;
-  height: 210px;
-  object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 10px;
-}
-
-.product-item .description {
-  font-size: 16px;
-  color: black;
-  text-align: center;
-  margin-top: 4px;
-}
-
-.product-item .price {
-  font-size: 14px;
-  color: #333;
-  text-align: center;
-}
-
-.product-item .line {
-  width: 100%;
-  border-top: 1px solid #ddd;
-  margin: 10px 0;
-}
-
-.product-item .buttons {
-  display: flex;
-  justify-content: space-around;
-}
-
-.product-item button.quick-view,
-.product-item button.wishlist {
-  color: #fff;
-  font-size: 14px;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  width: 48%;
-}
-
-.product-item button.quick-view {
-  background-color: #97c992;
-}
-
-.product-item button.wishlist {
-  background-color: #333;
-}
-
-.product-item button.quick-view:hover,
-.product-item button.wishlist:hover {
-  opacity: 0.9;
-}
-
-.filter-container {
-  margin-top: 20px;
-  text-align: left;
-  position: relative;
-}
-
-.price-filter {
-  cursor: pointer;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  display: inline-block;
-  margin-right: 10px;
-}
-
-.selected-filter-container {
-  position: absolute;
-  right: 90px;
-  top: 0;
-  padding: 5px 10px;
-  background-color: #333;
-  color: white;
-  border-radius: 5px;
-}
-
-.price-options {
-  display: inline-block;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  overflow: hidden;
-  text-align: left;
-}
-
-.price-options label {
-  display: block;
-  margin: 5px 0;
-  padding: 8px;
-  background-color: #fff;
-  cursor: pointer;
-}
-
-.price-options input {
-  margin-right: 5px;
-}
-
-.remove-filter {
-  cursor: pointer;
-  margin-left: 5px;
-  font-weight: bold;
-}
-
-.popup {
-  position: fixed;
-  top: 62%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  max-width: 800px;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 400px;
-}
-
-.popup-content {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 100%;
-  max-width: 800px;
-  text-align: left;
-}
-
-.popup-details {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.popup-image-container {
-  flex: 0 0 40%;
-}
-
-.popup-title {
-  font-size: 20px;
-  color: black;
-  margin-bottom: 10px;
-  right: 40px;
-}
-
-.popup-image {
-  width: 100%;
-  height: 300px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-}
-
-.popup-description-and-price {
-  flex: 0 0 55%;
-  text-align: left;
-  margin-left: 20px;
-}
-
-.popup-description {
-  font-size: 16px;
-  color: black;
-  margin-bottom: 10px;
-}
-
-.popup-price {
-  font-size: 14px;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.quantity-control {
-  margin-top: 10px;
-}
-
-.quantity-control label {
-  font-size: 14px;
-  margin-right: 5px;
-}
-
-.quantity-control input {
-  width: 50px;
-  padding: 5px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.buttons {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-}
-
-.add-to-wishlist,
-.add-to-cart {
-  background-color: #97c992;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-left: 10px;
-}
-
-.add-to-wishlist:hover,
-.add-to-cart:hover {
-  opacity: 0.9;
-}
-
-.close-popup {
-  position: absolute;
-  top: 0px;
-  right: 10px;
-  /* Adjust the right position as needed */
-  font-size: 30px;
-  color: rgb(0, 0, 0);
-  cursor: pointer;
-}
-</style>
-
->>>>>>> 6a1b3bb27ec40b5b6d5d68ce5a4de09e5f18b2a5
+<style lang="css" scoped src="@/components/ShopStyle.css"></style>

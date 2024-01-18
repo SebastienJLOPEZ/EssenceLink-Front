@@ -294,6 +294,7 @@
     border-radius: 20px;
     margin-top: 130px;
     margin-left: 230px; 
+    left: 30px;
   }
   
   .support-container {
@@ -306,6 +307,7 @@
     position: relative; 
     margin-right: 130px;
     z-index: 4; 
+    right: 70px
   }
   
   .support-container h3 {
