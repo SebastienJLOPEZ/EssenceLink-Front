@@ -13,22 +13,32 @@
         <ul class="navigation" :class="{ open: isMenuOpen }">
           <li v-on:mouseover="showSubcategories('hydrolats')" v-on:mouseout="hideSubcategories">
             <button @click="goToShop('Hydrolat', 'none')" class="nav-link-button">Hydrolats</button>
-          <!--router-link to="#hydrolats" class="nav-link">Hydrolats</router-link-->
-          <div v-show="showSubcategory === 'hydrolats'" class="subcategory">
-            <ul>
-                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">Brume Hydratante Faciale</a>
-                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 8px; font-family: 'Kaisei Decol'; font-size: 11px;">Brume Aromatique pour la Maison</a>
+            <!--router-link to="#hydrolats" class="nav-link">Hydrolats</router-link-->
+            <div v-show="showSubcategory === 'hydrolats'" class="subcategory">
+              <ul>
+                <router-link :to="{ name: 'shop', query: { Type: 'Hydrolat', Subtype: 'visage' } }"
+                  style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">
+                  Pour le Visage
+                </router-link>
+                  <router-link :to="{ name: 'shop', query: { Type: 'Hydrolat', Subtype: 'maison' } }"
+                  style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">
+                  Pour la Maison
+                </router-link>
               </ul>
-          </div>
-        </li>
+            </div>
+          </li>
           <li v-on:mouseover="showSubcategories('tisanes')" v-on:mouseout="hideSubcategories">
             <button @click="goToShop('TnP', 'none')" class="nav-link-button">Tisanes & Plantes Sèches</button>
             <div v-show="showSubcategory === 'tisanes'" class="subcategory">
               <ul>
-                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">Thé Vert</a>
-                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 4px; font-family: 'Kaisei Decol'; font-size: 11px;">Thé Noir</a>
-                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 6px; font-family: 'Kaisei Decol'; font-size: 11px;">Herbes Culinaires Bio</a>
-                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 8px; font-family: 'Kaisei Decol'; font-size: 11px;">Épices Séchées pour la Cuisine</a>
+                <router-link :to="{ name: 'shop', query: { Type: 'TnP', Subtype: 'tisane' } }"
+                  style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">
+                  Tisanes
+                </router-link>
+                <router-link :to="{ name: 'shop', query: { Type: 'TnP', Subtype: 'herbe' } }"
+                  style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">
+                  Herbes en Sachet
+                </router-link>
               </ul>
             </div>
           </li>
@@ -37,8 +47,14 @@
             <!--router-link to="#gemmotherapie" class="nav-link">Gemmothérapie</router-link-->
             <div v-show="showSubcategory === 'gemmotherapie'" class="subcategory">
               <ul>
-                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">Coffrets Élixir de Gemmes</a>
-                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 4px; font-family: 'Kaisei Decol'; font-size: 11px;">Soins de la Peau en Gemmothérapie</a>
+                <router-link :to="{ name: 'shop', query: { Type: 'Gemmothérapie', Subtype: 'elixir' } }"
+                  style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">
+                  Élixir de Gemmes
+                </router-link>
+                <router-link :to="{ name: 'shop', query: { Type: 'Gemmothérapie', Subtype: 'soin' } }"
+                  style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">
+                  Soin de la peau
+                </router-link>
               </ul>
             </div>
           </li>
@@ -47,8 +63,14 @@
             <!--router-link to="#aromates" class="nav-link">Aromates</router-link-->
             <div v-show="showSubcategory === 'aromates'" class="subcategory">
               <ul>
-                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">Huiles Infusées aux Herbes</a>
-                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 4px; font-family: 'Kaisei Decol'; font-size: 11px;">Sachets d'Herbes Aromatiques</a>
+                <router-link :to="{ name: 'shop', query: { Type: 'Aromate', Subtype: 'sachet' } }"
+                  style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">
+                  Aromates En Sachet
+                </router-link>
+                <router-link :to="{ name: 'shop', query: { Type: 'Aromate', Subtype: 'poudre' } }"
+                  style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">
+                  Aromates En Poudre
+                </router-link>
               </ul>
             </div>
           </li>
@@ -56,17 +78,23 @@
             <button @click="goToShop('Boisson', 'none')" class="nav-link-button">Boissons</button>
             <div v-show="showSubcategory === 'boisson'" class="subcategory">
               <ul>
-                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">Avec Alcool</a>
-                <a href='/shop' style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 4px; font-family: 'Kaisei Decol'; font-size: 11px;">Sans Alcool</a>
+                <router-link :to="{ name: 'shop', query: { Type: 'Boisson', Subtype: 'aveclalcool' } }"
+                  style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">
+                  Avec Alcool
+                </router-link>
+                <router-link :to="{ name: 'shop', query: { Type: 'Boisson', Subtype: 'sansalcool' } }"
+                  style="text-decoration: none; font-size: 0.75em; color: #333; text-transform: uppercase; letter-spacing: 0.2em; position: relative; left: 10px; top: 2px; font-family: 'Kaisei Decol'; font-size: 11px;">
+                  Avec Alcool
+                </router-link>
               </ul>
             </div>
           </li>
-       
+
         </ul>
- 
+
         <router-link to="/cart" class="cart-link" style="color: black;" @click="toggleCart">
           <ion-icon name="cart-outline" class="cartBtn"></ion-icon>
-          <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
+          <span v-if="itemInfo > 0" class="cart-badge">{{ itemInfo }}</span>
         </router-link>
 
         <router-link to="/login" class="profile-link" style="color: black;">
@@ -79,11 +107,7 @@
             <ion-icon name="close-outline" class="closeBtn"></ion-icon>
           </span>
         </div>
-        <ion-icon
-          name="menu-outline"
-          class="menuToggle"
-          @click="toggleMenu"
-        ></ion-icon>
+        <ion-icon name="menu-outline" class="menuToggle" @click="toggleMenu"></ion-icon>
       </div>
       <div class="searchBox">
         <input type="text" v-model="searchTerm" placeholder="Rechercher ici..." @keyup.enter="searchProduct()">
@@ -163,6 +187,8 @@ export default {
       searchTerm: "",
       headerOne: true,
       headerTwo: false,
+      itemInfo: 0,
+      uniqueItem: 0,
     };
   },
   computed: {
@@ -226,36 +252,47 @@ export default {
         (this.currentAnnouncementIndex + 1) % this.announcements.length;
     },
     toggleCart() {
-    
-  },
-  toggleProfile() {
-    // Your implementation for toggling the profile
-  },
-  goToShop(Type, Subtype){
-    if (Subtype === "none"){
-    this.$router.push({ path: "/shop", query: { Type } });
-    } else {
-      this.$router.push({path: "/shop", query: {Type, Subtype}})
+
+    },
+    toggleProfile() {
+      // Your implementation for toggling the profile
+    },
+    goToShop(Type, Subtype) {
+      if (Subtype === "none") {
+        this.$router.push({ path: "/shop", query: { Type } });
+      } else {
+        this.$router.push({ path: "/shop", query: { Type, Subtype } })
+      }
+    },
+    searchProduct() {
+      if (this.searchTerm === "") {
+        console.log("No Search Term Put")
+      } else {
+        const Search = this.searchTerm;
+        this.$router.push({ path: "/shop", query: { Search } })
+      }
+    },
+    headerChange() {
+      const HeaderType = localStorage.getItem('headerRole');
+      if (HeaderType === "Admin") {
+        this.headerOne = false;
+        this.headerTwo = true;
+      } else {
+        this.headerOne = true;
+        this.headerTwo = false;
+      }
     }
   },
-  searchProduct(){
-    if (this.searchTerm === ""){
-      console.log("No Search Term Put")
-    } else {
-      const Search = this.searchTerm;
-      this.$router.push({path: "/shop", query: {Search}})
+  updated() {
+    if (JSON.parse(localStorage.getItem('cart'))) {
+      this.uniqueItem = JSON.parse(localStorage.getItem('cart')).length;
+      if (this.uniqueItem !== this.itemInfo) {
+        console.log(this.uniqueItem, this.itemInfo);
+        this.itemInfo = this.uniqueItem;
+      }
     }
-  },
-  headerChange(){
-    const HeaderType = localStorage.getItem('headerRole');
-    if (HeaderType === "Admin"){
-      this.headerOne = false;
-      this.headerTwo = true;
-    } else {
-      this.headerOne = true;
-      this.headerTwo = false;
-    }
-  }
+
+
   }
 };
 </script>
