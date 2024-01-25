@@ -94,7 +94,7 @@
 
         <router-link to="/cart" class="cart-link" style="color: black;" @click="toggleCart">
           <ion-icon name="cart-outline" class="cartBtn"></ion-icon>
-          <span v-if="itemInfo > 0" class="cart-badge">{{ itemInfo }}</span>
+          <span v-if="uniqueItem > 0" class="cart-badge">{{ uniqueItem }}</span>
         </router-link>
 
         <router-link to="/login" class="profile-link" style="color: black;">
@@ -162,6 +162,9 @@
       </div>
     </footer>
   </div>
+  <div v-else-if="headerTwo">
+    <AdminHeader />
+  </div>
 </template>
 
 <script>
@@ -173,7 +176,14 @@ input.addEventListener("keypress", function(event) {
     document.getElementById("myBtn").click();
   }
 });*/
+
+import AdminHeader from '@/components/AdminHeader.vue';
+import emitter from 'tiny-emitter/instance'
+
 export default {
+  components: {
+    AdminHeader,
+  },
   data() {
     return {
       showSubcategory: null,
@@ -228,6 +238,8 @@ export default {
     };
 
     setInterval(this.changeAnnouncement, 3000);
+    this.headerChange();
+    emitter.on('logout-request', this.handleLogout);
   },
   methods: {
     showSubcategories(category) {
@@ -281,18 +293,21 @@ export default {
         this.headerOne = true;
         this.headerTwo = false;
       }
-    }
+    },
+    handleLogout() {
+      localStorage.setItem('headerRole', "Client");
+      this.headerOne = true;
+      this.headerTwo = false;
+      console.log("YOOOOOO!")
+      this.headerChange();
+    },
   },
   updated() {
-    if (JSON.parse(localStorage.getItem('cart'))) {
+    if (this.uniqueItem !== JSON.parse(localStorage.getItem('cart')).length) {
+      console.log(this.uniqueItem, JSON.parse(localStorage.getItem('cart')).length);
       this.uniqueItem = JSON.parse(localStorage.getItem('cart')).length;
-      if (this.uniqueItem !== this.itemInfo) {
-        console.log(this.uniqueItem, this.itemInfo);
-        this.itemInfo = this.uniqueItem;
-      }
     }
-
-
+    this.headerChange();
   }
 };
 </script>

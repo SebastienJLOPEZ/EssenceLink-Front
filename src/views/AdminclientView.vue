@@ -2,69 +2,128 @@
   <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
   <div class="admin-page">
     <div class="menu">
-      <div @click="changeTab('profile')" :class="{ active: currentTab === 'profile' }">Profile</div>
-      <div @click="changeTab('userList')" :class="{ active: currentTab === 'userList' }">User Lisr</div>
-      <div @click="changeTab('logout')" class="logout-button" :class="{ active: currentTab === 'logout' }">LOGOUT</div>
+      <div @click="changeTab('profile')" :class="{ active: currentTab === 'profile' }">PROFILE</div>
+      <div @click="changeTab('userList')" :class="{ active: currentTab === 'userList' }">LISTE DES CLIENTS</div>
+      <div @click="changeTab('userSearch')" :class="{ active: currentTab === 'userSearch' }">RECHERCHE</div>
     </div>
 
     <div class="content">
       <div v-if="currentTab === 'userList'">
         <h2 class="tab-title">User List</h2>
         <div v-for="user in paginatedUsers" :key="user.Email" class="user-card">
-          <h3>{{ user.LastName }} {{ user.FirstName }}</h3>
-          <p>Email: {{ user.email }}</p>
-          <p>Numéro de Téléphone : {{ user.Number }}</p>
-          <p>Date d'Inscription: {{ user.SignInDate }}</p>
-          <p>{{ user.Status ? user.Status : 'Active' }}</p>
-          <p><button @click="openEditModal(user)">Modifier</button></p>
-          <p><button @click="toggleBanStatus(user)">
+          <tr>
+            <td>Nom :</td>
+            <td>Email :</td>
+            <td>Téléphone :</td>
+            <td>Anniversaire :</td>
+            <td>Date d'Inscripion :</td>
+            <td>Status :</td>
+          </tr>
+          <tr>
+            <td>{{ truncateString(user.LastName + ' ' + user.FirstName, 15) }}</td>
+            <td>{{ truncateString(user.Email, 15) }}</td>
+            <td>{{ user.Number }}</td>
+            <td>{{ user.BDate }}</td>
+            <td>{{ user.SignInDate }}</td>
+            <td>{{ user.Status ? user.Status : 'Active' }}</td>
+          </tr>
+          <div class="button-sidebar">
+            <button @click="openEditModal(user)">Modifier</button>
+            <button @click="toggleBanStatus(user)">
               {{ user.Status === 'Banned' ? 'Débannir' : 'Bannir' }}
-            </button></p>
-          <p><button @click="deleteUser(user)">Supprimer</button></p>
+            </button>
+            <button @click="deleteUser(user)">Supprimer</button>
+          </div>
         </div>
+
         <button @click="prevPage" :disabled="currentPage === 1">Précédent</button>
         <span>{{ currentPage }}</span>
         <button @click="nextPage" :disabled="currentPage === totalPages">Suivant</button>
 
+        <div v-if="openPopUp" class="popup-container">
+          <form @submit.prevent="editUser">
+            <tr>
+              <td>Prénom :<br><input v-model="editingUser.FirstName" /></td>
+              <td>Nom :<br><input v-model="editingUser.LastName"></td>
+            </tr>
+            <tr>
+              <td>Email :<br><input v-model="editingUser.Email" /></td>
+              <td>Numéro :<br><input v-if="isValidNumber(editingUser.Number)" v-model="editingUser.Number" />
+                <input v-else />
+              </td>
+            </tr>
+            <tr>
+              <td>Date d'Anniversaire :<br><input v-model="editingUser.BDate" /></td>
+            </tr>
+            <button type="submit">Enregistrer</button>
+            <button type="cancel" @click="cancelEdit">Annuler</button>
+          </form>
+        </div>
       </div>
 
       <div v-if="currentTab === 'profile'">
         <h2 class="tab-title">Admin Profile</h2>
         <div class="admin-info">
           <h3>Admin Information:</h3>
+          <p>Nom : {{ name }} {{ lastName }}</p>
+          <p>Adresse mail: {{ email }}</p>
+          <p>Anniversaire : {{ bdate }}</p>
+          <p>Numéro : {{ number }}</p>
           <button @click="toggleChangeInfoPopup" class="change-info-button">Change Info</button>
         </div>
 
-        <div v-if="showChangeInfoPopup" class="popup">
-          <div class="popup-content">
-            <span class="close-popup" @click="toggleChangeInfoPopup">×</span>
-            <div class="popup-details">
-              <div class="popup-description-and-price">
-                <h2 class="popup-title">Change Admin Information</h2>
-                <form @submit.prevent="changeAdminInfo">
-                  <div class="form-group">
-                    <label for="newName">Name:</label>
-                    <input v-model="name" type="text" id="newName" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="newLastName">Last Name:</label>
-                    <input v-model="lastName" type="text" id="newLastName" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="newEmail">Email:</label>
-                    <input v-model="email" type="email" id="newEmail" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="newNumber">Phone:</label>
-                    <input v-model="number" type="tel" id="newNumber" required>
-                  </div>
-                  <button type="submit" class="save-changes">Save Changes</button>
-                </form>
-              </div>
-            </div>
+      </div>
+
+      <div v-if="currentTab === 'userSearch'" class="user-search">
+        <input type="text" v-model="searchTerms" @input="search">
+        <tr>
+          <th>Nom</th>
+          <th>Prénom</th>
+          <th>Email</th>
+          <th>Numéro</th>
+          <th>Date de naissance</th>
+          <th>Date de connexion</th>
+          <th>Statut</th>
+        </tr>
+        <div v-if="editMode" class="Result">
+          <div v-for="user in searchResult" :key="user.Email">
+            <tr>
+              <td>{{ user.LastName }}</td>
+              <td>{{ user.FirstName }}</td>
+              <td>{{ truncateString(user.Email, 15) }}</td>
+              <td>{{ user.Number }}</td>
+              <td>{{ user.BDate }}</td>
+              <td>{{ user.SignInDate }}</td>
+              <td>{{ user.Status ? user.Status : 'Active' }}</td>
+            </tr>
+            <button @click="openEditModal(user)">Modifier</button>
+            <button @click="toggleBanStatus(user)">
+              {{ user.Status === 'Banned' ? 'Débannir' : 'Bannir' }}
+            </button>
+            <button @click="deleteUser(user)">Supprimer</button>
+          </div>
+          <div v-if="openPopUp" class="popup-container">
+            <form @submit.prevent="editUser">
+              <tr>
+                <td>Prénom :<br><input v-model="editingUser.FirstName" /></td>
+                <td>Nom :<br><input v-model="editingUser.LastName"></td>
+              </tr>
+              <tr>
+                <td>Email :<br><input v-model="editingUser.Email" /></td>
+                <td>Numéro :<br><input v-if="isValidNumber(editingUser.Number)" v-model="editingUser.Number" />
+                  <input v-else />
+                </td>
+              </tr>
+              <tr>
+                <td>Date d'Anniversaire :<br><input v-model="editingUser.BDate" /></td>
+              </tr>
+              <button type="submit">Enregistrer</button>
+              <button type="cancel" @click="cancelEdit">Annuler</button>
+            </form>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -77,6 +136,7 @@ import 'firebase/auth';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
 export default {
+  mixins: [],
   data() {
     return {
       currentTab: 'profile',
@@ -86,6 +146,15 @@ export default {
       currentPage: 1,
       editingUser: {},
       editMode: false,
+      name: "",
+      lastName: "",
+      number: "",
+      bdate: "",
+      email: "",
+      displayedNumber: "",
+      searchTerms: '',
+      searchResult: [],
+      openPopUp: false,
     };
   },
   computed: {
@@ -100,42 +169,9 @@ export default {
   },
   methods: {
     changeTab(tab) {
-      if (tab === 'logout') {
-        this.logout();
-      } else {
-        this.currentTab = tab;
-      }
-    },
-    toggleChangeInfoPopup() {
-      this.showChangeInfoPopup = !this.showChangeInfoPopup;
-    },
-    changeAdminInfo() {
-      // Create an object with the updated admin information
-      const updatedAdminInfo = {
-        name: this.name,
-        lastName: this.lastName,
-        email: this.email,
-        number: this.number,
-      };
-
-      // Send a PUT request to update the admin's information
-      Axios.put('https://your-api-endpoint/update-admin-info', updatedAdminInfo)
-        .then((response) => {
-          // Handle the success response from the server
-          console.log('Admin information updated successfully:', response.data);
-
-          // Optionally, you can update the local adminInfo object with the new data
-          this.adminInfo.username = response.data.username;
-          this.adminInfo.email = response.data.email;
-          this.adminInfo.number = response.data.number;
-
-          // Reset the form
-          this.showChangeInfoPopup = false;
-        })
-        .catch((error) => {
-          // Handle errors
-          console.error('Failed to update admin information:', error);
-        });
+      this.currentTab = tab;
+      this.editMode = false;
+      this.searchTerms = '';
     },
     currentUser() {
       let v = this;
@@ -156,10 +192,9 @@ export default {
         .then((response) => {
           v.name = response.data.FirstName;
           v.lastName = response.data.LastName;
-          v.address = response.data.Address === '' ? 'Not Registered' : response.data.Address;
-          v.number = response.data.Number === 0 ? 'Not Registered' : response.data.Number;
-          v.bdate = response.data.BDate === '' ? 'Not Registered' : response.data.BDate;
-          v.signindate = response.data.SignInDate === '' ? 'Not Registered' : response.data.SignInDate;
+          v.number = (response.data.Number.startsWith('0') && response.data.Number.length === 10) ? response.data.Number : 'Non rempli'
+          v.bdate = response.data.BDate === '' ? 'Non rempli' : response.data.BDate;
+          v.signindate = response.data.SignInDate === '' ? 'Non rempli' : response.data.SignInDate;
         })
         .catch((error) => {
           v.errorMessage = 'Not Connected';
@@ -176,7 +211,7 @@ export default {
     },
     openEditModal(user) {
       this.editingUser = { ...user };
-      this.editMode = true;
+      this.openPopUp = true;
     },
     async editUser() { //Will be modified later, need more testing
       try {
@@ -207,7 +242,8 @@ export default {
       }
     },
     cancelEdit() {
-      this.editMode = false;
+      this.editingUser = [];
+      this.openPopUp = false;
     },
     async toggleBanStatus(user) {
       try {
@@ -255,7 +291,44 @@ export default {
       if (this.currentPage > 1) {
         this.currentPage--;
       }
-    }, 
+    },
+    truncateString(value, length) {
+      if (!value) return '';
+      if (value.length <= length) return value;
+      return value.substring(0, length);
+    },
+    isValidNumber(number) {
+      // Vérifier si la valeur ne commence pas par zéro et a une longueur de 10 caractères
+      return number.startsWith("0") && number.length === 10;
+    },
+    async search() {
+      try {
+        if (this.searchTerms.trim() === '') {
+          this.editMode = false;
+          this.searchResult = [];
+          return;
+        }
+        const response = await Axios.get(`https://localhost:7115/v1/api/User/Search/${this.searchTerms}`);
+        console.log(response);
+
+        this.editMode = true;
+        this.searchResult = response.data;
+      } catch (error) {
+        console.error('Failed to fetch admin users', error);
+      }
+    },
+    /*formatDate(dateString) {
+      const dateObj = new Date(dateString);
+      const options = {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      };
+      const formattedDate = new Intl.DateTimeFormat('fr-FR', options).format(dateObj);
+      return formattedDate;
+    },*/
     logout() {
       const auth = getAuth(firebase);
       signOut(auth)
@@ -277,6 +350,13 @@ export default {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: 'Kaisei Decol';
+  src: url('https://fonts.gstatic.com/s/kaiseidecol/v5/ZiKgWqde6e8Ow1MfY2gnDA.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -339,6 +419,37 @@ export default {
   border-radius: 10px;
   padding: 10px;
   margin: 10px 0;
+  position: relative;
+
+}
+
+.button-sidebar {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateX(-300%) translateY(-50%);
+  display: flex;
+  flex-direction: column;
+}
+
+/*table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}*/
+
+.user-card td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.user-card td:not(:nth-child(4)) {
+  width: 150px;
+}
+
+.user-card td:nth-child(4) {
+  width: 150px;
 }
 
 .admin-info {
@@ -431,5 +542,48 @@ export default {
 
 .logout-button.active {
   background-color: #ffcccc;
+}
+
+.popup-container {
+  /*position: fixed;*/
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  z-index: 9999;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.user-search {
+  background-color: #f0f0f0;
+}
+
+.user-search th {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.user-search th:not(:nth-child(5)) {
+  width: 150px;
+}
+
+.user-search th:nth-child(5) {
+  width: 150px;
+}
+
+.user-search td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.user-search td:not(:nth-child(4)) {
+  width: 150px;
+}
+
+.user-search td:nth-child(4) {
+  width: 150px;
 }
 </style>

@@ -5,8 +5,8 @@ import SignupView from '../views/SignupView.vue';
 import CartView from '../views/CartView.vue';
 import ProfileView from '../views/ProfileView.vue';
 import ShopView from '../views/ShopView.vue';
-import AboutView from '../views/AboutView.vue'; 
-import ContactView from '../views/ContactView.vue'; 
+import AboutView from '../views/AboutView.vue';
+import ContactView from '../views/ContactView.vue';
 import ACProfileView from '../views/AdminclientView.vue';
 import ACList from '../views/ACList.vue'
 import ACSearch from '../views/ACSearch.vue';
@@ -68,126 +68,128 @@ const routes = [
     name: 'ContactView',
     component: ContactView,
   },
-{
+  {
     path: "/login",
-    name: "LoginView", 
+    name: "LoginView",
     component: LoginView,
-},
-{
+  },
+  {
     path: "/signup",
-    name: "SignupView", 
+    name: "SignupView",
     component: SignupView,
-},
-{
-  path: "/profile",
-  name: "ProfileView", 
-  component: ProfileView,
-},
-{
-  path: "/shop",
-  name: "ShopView", 
-  component: ShopView,
-  props: (route) => ({ type: route.query.Type !== '' ? route.query.Type : null,
-    subtype: route.query.Subtype !== '' ? route.query.Subtype : null,
-    search: route.query.Search !== '' ? route.query.Search : null })
-},
-{
-  path: "/adminclient",
-  name: "AdminclientView", 
-  component: AdminclientView,
-},
-{
-  path: "/adminproduct",
-  name: "AdminproductView", 
-  component: AdminproductView,
-},
-{
-  path: "/hydrolats",
-  name: "HydrolatsView", 
-  component: HydrolatsView,
-},
-{
-  path: "/aromates",
-  name: "AromatesView", 
-  component: AromatesView,
-},
-{
-  path: "/boisson",
-  name: "BoissonView", 
-  component: BoissonView,
-},
-{
-  path: "/gemmotherapie",
-  name: "GemmothérapieView", 
-  component: GemmothérapieView,
-},
-{
-  path: "/tisaneplante",
-  name: "TisaneplanteView", 
-  component: TisaneplanteView,
-},
-{
-  path: "/AdminClientProfile",
-  name: "ACProfileView",
-  component: ACProfileView,
-},
-{
-  path: "/faq",
-  name: "FaqView",
-  component: FaqView,
-},
-{
-  path: "/return",
-  name: "ReturnView",
-  component: ReturnView,
-},
-{
-  path: "/refund",
-  name: "RefundView",
-  component: RefundView,
-},
+  },
+  {
+    path: "/profile",
+    name: "ProfileView",
+    component: ProfileView,
+  },
+  {
+    path: "/shop",
+    name: "ShopView",
+    component: ShopView,
+    props: (route) => ({
+      type: route.query.Type !== '' ? route.query.Type : null,
+      subtype: route.query.Subtype !== '' ? route.query.Subtype : null,
+      search: route.query.Search !== '' ? route.query.Search : null
+    })
+  },
+  {
+    path: "/adminclient",
+    name: "AdminclientView",
+    component: AdminclientView,
+  },
+  {
+    path: "/adminproduct",
+    name: "AdminproductView",
+    component: AdminproductView,
+  },
+  {
+    path: "/hydrolats",
+    name: "HydrolatsView",
+    component: HydrolatsView,
+  },
+  {
+    path: "/aromates",
+    name: "AromatesView",
+    component: AromatesView,
+  },
+  {
+    path: "/boisson",
+    name: "BoissonView",
+    component: BoissonView,
+  },
+  {
+    path: "/gemmotherapie",
+    name: "GemmothérapieView",
+    component: GemmothérapieView,
+  },
+  {
+    path: "/tisaneplante",
+    name: "TisaneplanteView",
+    component: TisaneplanteView,
+  },
+  {
+    path: "/AdminClientProfile",
+    name: "ACProfileView",
+    component: ACProfileView,
+  },
+  {
+    path: "/faq",
+    name: "FaqView",
+    component: FaqView,
+  },
+  {
+    path: "/return",
+    name: "ReturnView",
+    component: ReturnView,
+  },
+  {
+    path: "/refund",
+    name: "RefundView",
+    component: RefundView,
+  },
 
-{
-  path: "/ACList",
-  name: "ACList",
-  component: ACList,
-},
-{
-  path: "/ACSearch",
-  name:"ACSearch",
-  component: ACSearch
-},
-{
-  path: "/AdminProductProfile",
-  name: "APProfileView",
-  component: APProfileView,
-},
-{
-  path: "/APList",
-  name: "APList",
-  component: APList,
-},
-{
-  path: "/APSearch",
-  name:"APSearch",
-  component: APSearch,
-},
-{
-  path:"/NewProduct",
-  name:"NewProduct",
-  component: NewProduct,
-},
-{
-  path:"/checkout",
-  name:"Checkout",
-  component: CheckoutPage,
-},
-{
-  path:"/Product",
-  name:"Product",
-  component: ProductView,
-  props: (route) => ({ type: route.query.Type})
-}
+  {
+    path: "/ACList",
+    name: "ACList",
+    component: ACList,
+  },
+  {
+    path: "/ACSearch",
+    name: "ACSearch",
+    component: ACSearch
+  },
+  {
+    path: "/AdminProductProfile",
+    name: "APProfileView",
+    component: APProfileView,
+  },
+  {
+    path: "/APList",
+    name: "APList",
+    component: APList,
+  },
+  {
+    path: "/APSearch",
+    name: "APSearch",
+    component: APSearch,
+  },
+  {
+    path: "/NewProduct",
+    name: "NewProduct",
+    component: NewProduct,
+  },
+  {
+    path: "/checkout",
+    name: "Checkout",
+    component: CheckoutPage,
+  },
+  {
+    path: "/Product",
+    name: "Product",
+    component: ProductView,
+    props: (route) => ({ type: route.query.Type })
+  }
 ]
 
 const router = createRouter({
