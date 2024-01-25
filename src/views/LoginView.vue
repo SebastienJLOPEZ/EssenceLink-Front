@@ -38,8 +38,8 @@
         <li>Save items to your whish list </li>
       </ul>
       <router-link to="/signup">
-      <button>Create Account</button>
-    </router-link>
+        <button>Create Account</button>
+      </router-link>
     </div>
   </div>
   <!--CheckerRole /-->
@@ -70,36 +70,36 @@ export default {
   },
 
   methods: {
-    loginRequest() {
+    async loginRequest() {
       let v = this;
       v.errorMessage = "";
 
       const auth = getAuth(firebase);
+      try {
+        const status = await checkUserStatus(v.email);
+        console.log(status);
+        switch (status) {
+          case "Banned":
+            v.errorMessage = "You are Banned. You can not connect";
+            break;
+          case "Deactivated":
+            v.errorMessage = "Email or Password false. Check again with correct credentials";
+            break;
+          default:
+            await signInWithEmailAndPassword(auth, v.email, v.password)
+            await checkUserType(v.email,
+              () => this.$router.push(v.redirectPaths.ACPath),
+              () => this.$router.push(v.redirectPaths.APPath),
+              () => this.$router.push(v.redirectPaths.defaultPath),
+              () => this.$router.push(v.redirectPaths.defaultPath));
 
-      const status = checkUserStatus(v.email);
-          switch (status){
-            case "Banned":
-              v.errorMessage = "You are Banned. You can not connect";
-              break;
-            case "Deactivated":
-              v.errorMessage = "Email or Password false. Check again with correct credentials";
-              break;
-            default:
-            signInWithEmailAndPassword(auth, v.email, v.password)
-                .then(() => {
-                  checkUserType(v.email, 
-                                () => this.$router.push(v.redirectPaths.ACPath),
-                                () => this.$router.push(v.redirectPaths.APPath),
-                                () => this.$router.push(v.redirectPaths.defaultPath),
-                                () => this.$router.push(v.redirectPaths.defaultPath));
-                })
-                .catch(error => {
-                  console.error('Login Error:', error.message);
-                  v.errorMessage = error.message;
-                 v.xhrRequest = false;
-                });
-              break;
-          }
+            break;
+        }
+      } catch (error) {
+        console.error('Login Error:', error.message);
+        v.errorMessage = error.message;
+        v.xhrRequest = false;
+      }
     },
     async checkAuthentication() {
       const auth = getAuth(firebase);
@@ -138,13 +138,13 @@ export default {
   margin-top: 160PX;
   height: 140vh;
   width: 100%;
-  max-width:  1600px;
+  max-width: 1600px;
   align-items: center;
   display: flex;
   justify-content: center;
   background-image: url('@/assets/POST.jpg');
   background-size: cover;
-  
+
 }
 
 .card {
@@ -155,7 +155,7 @@ export default {
   background-color: rgba(255, 255, 255, 0.7);
   padding: 60px 30px;
   margin-top: -190px;
-  margin-right:590PX;
+  margin-right: 590PX;
 }
 
 .card_title {
@@ -197,7 +197,7 @@ export default {
 
 
 .additional-section {
-  background-color: rgb(255, 255, 255); 
+  background-color: rgb(255, 255, 255);
   padding: 20px;
   position: absolute;
   margin-right: 40px;
@@ -205,8 +205,8 @@ export default {
   top: 0;
   right: 20px;
   height: 80vh;
-  width: 550px; 
-  box-shadow: -5px 0 10px rgba(0, 0, 0, 0.1); 
+  width: 550px;
+  box-shadow: -5px 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .additional-content {
@@ -230,7 +230,7 @@ export default {
   list-style-type: none;
   padding: 0;
   margin-TOP: 40px;
- 
+
 }
 
 .additional-content li {
@@ -238,7 +238,7 @@ export default {
 }
 
 .additional-content li::before {
-  content: '•'; 
+  content: '•';
   margin-right: 10px;
 }
 
@@ -250,10 +250,10 @@ export default {
   border-radius: 5px;
   border: none;
   padding: 8px 15px;
-  width: 70%; 
-  margin-top:35px;
+  width: 70%;
+  margin-top: 35px;
   margin-inline: 78PX;
-  
+
 }
 </style>
 

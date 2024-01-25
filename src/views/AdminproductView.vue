@@ -2,10 +2,10 @@
   <link href='https://fonts.googleapis.com/css?family=Kaisei Decol' rel='stylesheet'>
   <div class="admin-product-page">
     <div class="menu">
-      <div @click="changeTab('adminProfile')" :class="{ active: currentTab === 'adminProfile' }">Admin Profile</div>
-      <div @click="changeTab('productList')" :class="{ active: currentTab === 'productList' }">Product List</div>
-      <div @click="changeTab('addProduct')" :class="{ active: currentTab === 'addProduct' }">Add Product</div>
-      <div @click="changeTab('logout')" class="logout-button" :class="{ active: currentTab === 'logout' }">LOGOUT</div>
+      <div @click="changeTab('adminProfile')" :class="{ active: currentTab === 'adminProfile' }">PROFILE</div>
+      <div @click="changeTab('productList')" :class="{ active: currentTab === 'productList' }">LISTE DES PRODUITS</div>
+      <div @click="changeTab('addProduct')" :class="{ active: currentTab === 'addProduct' }">AJOUT DE PRODUIT</div>
+      <div @click="changeTab('productSearch')" :class="{ active: currentTab === 'productSearch' }">RECHERCHE</div>
     </div>
 
     <div class="content">
@@ -13,28 +13,64 @@
       <div v-if="currentTab === 'adminProfile'">
         <h2 class="tab-title">Admin Profile</h2>
         <div class="admin-info">
-          <p>Admin Information: {{ adminInfo.username }}, {{ adminInfo.email }}, etc.</p>
+          <h3>Admin Information :</h3>
+          <p>Nom : {{ name }} {{ lastName }}</p>
+          <p>Adresse mail: {{ email }}</p>
+          <p>Anniversaire : {{ bdate }}</p>
+          <p>Numéro : {{ number }}</p>
         </div>
       </div>
 
       <div v-if="currentTab === 'productList'">
         <h2 class="tab-title">Product List</h2>
         <div v-for="product in paginatedProducts" :key="product.Id" class="product-card">
-          <p>{{ product.Id }}</p>
-          <p>Name: {{ product.Name }}</p>
-          <p>Type: {{ product.Type }}</p>
-          <p>Price: {{ product.Price }}</p>
-          <p>Stock: {{ product.Quantity <= 0 ? "Out of Stock" : product.Quantity }}</p>
-          <button @click="deleteproduct(product)">Supprimer</button>
-          <button @click="openEditModal(product)">Modify</button>
+          <tr>
+            <td>Id :</td>
+            <td>Nom :</td>
+            <td>Type :</td>
+            <td>Sous-Type :</td>
+            <td>Prix :</td>
+            <td>Quantité :</td>
+            <td>Date d'Ajout :</td>
+            <td>Score :</td>
+          </tr>
+          <tr>
+            <td>{{ product.Id }}</td>
+            <td>{{ product.Name }}</td>
+            <td>{{ product.Type }}</td>
+            <td>{{ product.Subtype }}</td>
+            <td>{{ product.Price }}</td>
+            <td>{{ product.Quantity <= 0 ? "Out of Stock" : product.Quantity }}</td>
+            <td>{{ product.DateAdded }}</td>
+            <td>{{ product.Score }}</td>
+          </tr>
+          <div class="button-sidebar">
+            <button @click="deleteproduct(product)">Supprimer</button>
+            <button @click="openEditModal(product)">Modifier</button>
+          </div>
         </div>
-        <div v-if="editMode" class="popup">
-          <form @submit.prevent="editproduct">
-            <input v-model="editingproduct.Name" />
-            <input v-model="editingproduct.Price" />
-            <input v-model="editingproduct.Quantity" />
-            <input v-model="editingproduct.Type" />
-            <input v-model="editingproduct.Description" />
+
+        <button @click="prevPage" :disabled="currentPage === 1">Précédent</button>
+        <span>{{ currentPage }}</span>
+        <button @click="nextPage" :disabled="currentPage === totalPages">Suivant</button>
+
+        <div v-if="openPopUp" class="popup-container">
+          <form @submit.prevent="editProduct">
+            <tr>
+              <td><input v-model="editingProduct.Name" /></td>
+
+            </tr>
+            <tr>
+              <td><input v-model="editingProduct.Type"></td>
+              <td><input v-model="editingProduct.SubType" /></td>
+            </tr>
+            <tr>
+              <td><input v-model="editingProduct.Price"></td>
+              <td><input v-model="editingProduct.Quantity" /></td>
+            </tr>
+            <tr>
+              <td><input v-model="editingProduct.Score" /></td>
+            </tr>
             <button type="submit">Enregistrer</button>
             <button type="cancel" @click="cancelEdit">Annuler</button>
           </form>
@@ -42,33 +78,65 @@
       </div>
 
       <div v-if="currentTab === 'addProduct'">
-        <h2 class="tab-title">Add Product</h2>
-        <button @click="openAddProductPopup" class="add-product-button">+</button>
-        <div v-if="showAddProductPopup" class="popup">
-          <div class="popup-content">
-            <span class="close-popup" @click="closeAddProductPopup">×</span>
-            <h2 class="popup-title">Add Product</h2>
-            <div class="popup-details">
-              <div class="field">
-                <label for="newProductName">Name:</label>
-                <input type="text" v-model="newProduct.name" id="newProductName" />
-              </div>
-              <div class="field">
-                <label for="newProductDescription">Description:</label>
-                <input type="text" v-model="newProduct.description" id="newProductDescription" />
-              </div>
-              <div class="field">
-                <label for="newProductPrice">Price:</label>
-                <input type="number" v-model="newProduct.price" id="newProductPrice" />
-              </div>
-              <div class="field">
-                <label for="newProductStock">Stock:</label>
-                <input type="number" v-model="newProduct.stock" id="newProductStock" />
-              </div>
-            </div>
-            <div class="buttons">
-              <button @click="saveNewProduct" class="save-changes">Save Product</button>
-            </div>
+        <h2 class="tab-title">Ajout de Produit</h2>
+        <form action="">
+          <input type="text" v-model="productName" required>
+          <input type="text" v-model="productType" required> <!--Need to change that later-->
+          <input type="text" v-model="productSubtype" required>
+          <input type="text" v-model="productDescription" required>
+          <input type="text" v-model="productPrice" required> <!--Will correct that later-->
+          <button @click="NewProduct()">Ajouter</button>
+        </form>
+      </div>
+
+      <div v-if="currentTab === 'productSearch'" class="product-search">
+        <input type="text" v-model="searchTerms" @input="search">
+        <tr>
+          <th>Id</th>
+          <th>Nom</th>
+          <th>Type</th>
+          <th>Sous-type</th>
+          <th>Prix</th>
+          <th>Prix</th>
+          <th>Quantité</th>
+          <th>Date d'Ajout</th>
+          <th>Score</th>
+        </tr>
+        <div v-if="editMode" class="Result">
+          <div v-for="product in searchResult" :key="product.Id">
+            <tr>
+              <td>{{ product.Id }}</td>
+              <td>{{ product.Name }}</td>
+              <td>{{ product.Type }}</td>
+              <td>{{ product.Subtype }}</td>
+              <td>{{ product.Price }}</td>
+              <td>{{ product.Quantity <= 0 ? "Out of Stock" : product.Quantity }}</td>
+              <td>{{ product.DateAdded }}</td>
+              <td>{{ product.Score }}</td>
+            </tr>
+            <button @click="deleteproduct(product)">Supprimer</button>
+            <button @click="openEditModal(product)">Modifier</button>
+          </div>
+          <div v-if="openPopUp" class="popup-container">
+            <form @submit.prevent="editProduct">
+              <tr>
+                <td><input v-model="editingProduct.Name" /></td>
+
+              </tr>
+              <tr>
+                <td><input v-model="editingProduct.Type"></td>
+                <td><input v-model="editingProduct.SubType" /></td>
+              </tr>
+              <tr>
+                <td><input v-model="editingProduct.Price"></td>
+                <td><input v-model="editingProduct.Quantity" /></td>
+              </tr>
+              <tr>
+                <td><input v-model="editingProduct.Score" /></td>
+              </tr>
+              <button type="submit">Enregistrer</button>
+              <button type="cancel" @click="cancelEdit">Annuler</button>
+            </form>
           </div>
         </div>
       </div>
@@ -78,87 +146,183 @@
   
   
 <script>
-
+import Axios from 'axios';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import { getAuth, signOut } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+
 export default {
   data() {
     return {
       currentTab: 'adminProfile',
-      adminInfo: {
-        username: 'Admin1',
-        email: 'admin@example.com',
-
-      },
-      productList: [
-        { id: 1, name: 'Product1', description: 'Description of Product1', price: 19.99, stock: 50 },
-        { id: 2, name: 'Product2', description: 'Description of Product2', price: 24.99, stock: 30 },
-
-      ],
       showModifyPopup: false,
-      modifiedProduct: {
-        id: null,
-        description: '',
-        price: 0,
-        stock: 0,
-      },
-      showAddProductPopup: false,
-      newProduct: {
-        name: '',
-        description: '',
-        price: 0,
-        stock: 0,
-      },
+      Products: [],          // Liste complète des utilisateurs
+      pageSize: 9,        // Nombre d'utilisateurs par page
+      currentPage: 1,
+      editingProduct: {},
+      editMode: false,
+      name: "",
+      lastName: "",
+      number: "",
+      bdate: "",
+      email: "",
+      productName: '',
+      productQuantity: 0,
+      productPrice: 0,
+      productType: '',
+      productSubtype: '',
+      productDescription: '',
+      searchTerms: '',
+      searchResult: [],
+      openPopUp: false,
     };
+  },
+  computed: {
+    totalPages() {
+      return Math.ceil(this.Products.length / this.pageSize);
+    },
+    paginatedProducts() {
+      const start = (this.currentPage - 1) * this.pageSize;
+      const end = start + this.pageSize;
+      return this.Products.slice(start, end);
+    },
   },
   methods: {
     changeTab(tab) {
-      if (tab === 'logout') {
-        this.logout();
-      } else {
-        this.currentTab = tab;
+      this.currentTab = tab;
+    },
+    currentUser() {
+      let v = this;
+      const auth = getAuth(firebase);
+
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          v.email = user.email;
+          v.fetchUserData(v.email);
+        }
+      });
+    },
+    fetchUserData(email) {
+      let v = this;
+      v.errorMessage = '';
+
+      Axios.get(`https://localhost:7115/v1/api/User/${email}`)
+        .then((response) => {
+          v.name = response.data.FirstName;
+          v.lastName = response.data.LastName;
+          v.number = (response.data.Number.startsWith('0') && response.data.Number.length === 10) ? response.data.Number : 'Non rempli'
+          v.bdate = response.data.BDate === '' ? 'Non rempli' : response.data.BDate;
+          v.signindate = response.data.SignInDate === '' ? 'Non rempli' : response.data.SignInDate;
+        })
+        .catch((error) => {
+          v.errorMessage = 'Not Connected';
+          console.error('Failed to connect to databank', error);
+        });
+    },
+    async fetchProducts() {
+      try {
+        const response = await Axios.get('https://localhost:7115/v1/api/Product/');
+        this.Products = response.data;
+      } catch (error) {
+        console.error('Failed to fetch admin Products', error);
       }
     },
-    openModifyPopup(product) {
-      this.showModifyPopup = true;
-      this.modifiedProduct = { ...product };
+    openEditModal(Product) {
+      this.editingProduct = { ...Product };
+      this.openPopUp = true;
     },
-    closeModifyPopup() {
-      this.showModifyPopup = false;
-    },
-    saveModifiedProduct() {
+    async editProduct() { //Will be modified later, need more testing
+      try {
 
-      const modifiedProductId = this.modifiedProduct.id;
+        const newUData = {
+          Name: this.productName,
+          Quantity: this.productQuantity,
+          Price: this.productPrice,
+          Type: this.productType,
+          SubType: this.productSubtype,
+          Description: this.productDescription,
+          DateAdded: new Date().toISOString(),
+          Score: 0
+        };
 
-      const modifiedProductIndex = this.productList.findIndex((product) => product.id === modifiedProductId);
+        const response = await Axios.put(`https://localhost:7115/v1/api/Product/${this.editingProduct.Email}`, newUData, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        console.log('Product updated successfully', response.data);
+        console.log('Modifications enregistrées pour ', this.editingProduct);
+        this.cancelEdit();
 
-      if (modifiedProductIndex !== -1) {
-
-        Object.assign(this.productList[modifiedProductIndex], this.modifiedProduct);
-        console.log('Product modified:', this.productList[modifiedProductIndex]);
+        this.fetchProducts();
+      } catch (error) {
+        console.error('Failed to fetch admin Products', error);
       }
+    },
+    cancelEdit() {
+      this.openPopUp = false;
+    },
 
-      this.showModifyPopup = false;
+    async deleteProduct(Product) {
+      try {
+        const response = await Axios.delete(`https://localhost:7115/v1/api/Product/${Product.Id}`)
+        console.log('Product updated successfully', response.data);
+        this.fetchProducts();
+      } catch (error) {
+        console.error('Failed to fetch admin Products', error);
+      }
     },
-    openAddProductPopup() {
-      this.showAddProductPopup = true;
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
     },
-    closeAddProductPopup() {
-      this.showAddProductPopup = false;
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
     },
-    saveNewProduct() {
-      const newProductId = this.productList.length + 1;
-      this.newProduct.id = newProductId;
-      this.productList.push({ ...this.newProduct });
-      this.newProduct = {
-        name: '',
-        description: '',
-        price: 0,
-        stock: 0,
-      };
+    async NewProduct() {
+      try {
+        const newProduct = {
+          Name: this.productName,
+          Price: this.productPrice,
+          Quantity: this.productQuantity,
+          Type: this.productType,
+          Description: this.productDescription,
+          DateAdded: new Date().toString(), // Date enregistrée automatiquement
+          Score: 0,
+        };
+        const response = await Axios.post(`https://localhost:7115/v1/api/User/`, newProduct, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        console.log('Product added successfully', response.data)
+      } catch (error) {
+        console.error('Failed to fetch admin users', error);
+      }
+    },
+    truncateString(value, length) {
+      if (!value) return '';
+      if (value.length <= length) return value;
+      return value.substring(0, length);
+    },
+    async search() {
+      try {
+        if (this.searchTerms.trim() === '') {
+          this.editMode = false;
+          this.searchResult = [];
+          return;
+        }
+        const response = await Axios.get(`https://localhost:7115/v1/api/Product/Search/${this.searchTerms}`);
+        console.log(response);
 
-      this.showAddProductPopup = false;
+        this.editMode = true;
+        this.searchResult = response.data;
+      } catch (error) {
+        console.error('Failed to fetch admin users', error);
+      }
     },
     logout() {
       const auth = getAuth(firebase);
@@ -172,6 +336,10 @@ export default {
           console.log('logout error: ', error.message);
         });
     },
+  },
+  mounted() {
+    this.currentUser();
+    this.fetchProducts();
   },
 };
 </script>
@@ -235,6 +403,29 @@ export default {
   border-radius: 10px;
   padding: 10px;
   margin: 10px 0;
+}
+
+.user-card td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.user-card td:not(:nth-child(4)) {
+  width: 150px;
+}
+
+.user-card td:nth-child(4) {
+  width: 150px;
+}
+
+.button-sidebar {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateX(-300%) translateY(-50%);
+  display: flex;
+  flex-direction: column;
 }
 
 .popup {
@@ -322,6 +513,30 @@ export default {
 
 .logout-button.active {
   background-color: #ffcccc;
+}
+
+.product-search {
+  background-color: #f0f0f0;
+}
+
+.product-search th {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.product-search th:not(:nth-child(5)) {
+  width: 150px;
+}
+
+.product-search th:nth-child(5) {
+  width: 150px;
+}
+
+.product-search td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
 }
 </style>
   
