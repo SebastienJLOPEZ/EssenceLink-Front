@@ -44,10 +44,10 @@
             <td>{{ product.DateAdded }}</td>
             <td>{{ product.Score }}</td>
           </tr>
-          <div class="button-sidebar">
-            <button @click="deleteproduct(product)">Supprimer</button>
-            <button @click="openEditModal(product)">Modifier</button>
-          </div>
+          <!--div class="button-sidebar"-->
+          <button @click="openEditModal(product)">Modifier</button>
+          <button @click="deleteproduct(product)">Supprimer</button>
+          <!--/div-->
         </div>
 
         <button @click="prevPage" :disabled="currentPage === 1">Précédent</button>
@@ -57,19 +57,18 @@
         <div v-if="openPopUp" class="popup-container">
           <form @submit.prevent="editProduct">
             <tr>
-              <td><input v-model="editingProduct.Name" /></td>
-
+              <td>Nom : <br><input v-model="editingProduct.Name" /></td>
             </tr>
             <tr>
-              <td><input v-model="editingProduct.Type"></td>
-              <td><input v-model="editingProduct.SubType" /></td>
+              <td>Type :<br><input v-model="editingProduct.Type"></td>
+              <td>Sous-Type :<br><input v-model="editingProduct.SubType" /></td>
             </tr>
             <tr>
-              <td><input v-model="editingProduct.Price"></td>
-              <td><input v-model="editingProduct.Quantity" /></td>
+              <td>Prix :<br><input v-model="editingProduct.Price"></td>
+              <td>Quantité :<br><input v-model="editingProduct.Quantity" /></td>
             </tr>
             <tr>
-              <td><input v-model="editingProduct.Score" /></td>
+              <td>Score :<br><input v-model="editingProduct.Score" /></td>
             </tr>
             <button type="submit">Enregistrer</button>
             <button type="cancel" @click="cancelEdit">Annuler</button>
@@ -120,19 +119,18 @@
           <div v-if="openPopUp" class="popup-container">
             <form @submit.prevent="editProduct">
               <tr>
-                <td><input v-model="editingProduct.Name" /></td>
-
+                <td>Nom : <br><input v-model="editingProduct.Name" /></td>
               </tr>
               <tr>
-                <td><input v-model="editingProduct.Type"></td>
-                <td><input v-model="editingProduct.SubType" /></td>
+                <td>Type :<br><input v-model="editingProduct.Type"></td>
+                <td>Sous-Type :<br><input v-model="editingProduct.SubType" /></td>
               </tr>
               <tr>
-                <td><input v-model="editingProduct.Price"></td>
-                <td><input v-model="editingProduct.Quantity" /></td>
+                <td>Prix :<br><input v-model="editingProduct.Price"></td>
+                <td>Quantité :<br><input v-model="editingProduct.Quantity" /></td>
               </tr>
               <tr>
-                <td><input v-model="editingProduct.Score" /></td>
+                <td>Score :<br><input v-model="editingProduct.Score" /></td>
               </tr>
               <button type="submit">Enregistrer</button>
               <button type="cancel" @click="cancelEdit">Annuler</button>
@@ -405,17 +403,17 @@ export default {
   margin: 10px 0;
 }
 
-.user-card td {
+.product-card td {
   border: 1px solid #dddddd;
   padding: 8px;
   text-align: left;
 }
 
-.user-card td:not(:nth-child(4)) {
+.product-card td:not(:nth-child(4)) {
   width: 150px;
 }
 
-.user-card td:nth-child(4) {
+.product-card td:nth-child(4) {
   width: 150px;
 }
 
@@ -537,6 +535,17 @@ export default {
   border: 1px solid #dddddd;
   padding: 8px;
   text-align: left;
+}
+
+.popup-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  z-index: 9999;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
 </style>
   

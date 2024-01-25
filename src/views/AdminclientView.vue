@@ -43,17 +43,17 @@
         <div v-if="openPopUp" class="popup-container">
           <form @submit.prevent="editUser">
             <tr>
-              <td><input v-model="editingUser.FirstName" /></td>
-              <td><input v-model="editingUser.LastName"></td>
+              <td>Prénom :<br><input v-model="editingUser.FirstName" /></td>
+              <td>Nom :<br><input v-model="editingUser.LastName"></td>
             </tr>
             <tr>
-              <td><input v-model="editingUser.Email" /></td>
-              <td><input v-if="isValidNumber(editingUser.Number)" v-model="editingUser.Number" />
+              <td>Email :<br><input v-model="editingUser.Email" /></td>
+              <td>Numéro :<br><input v-if="isValidNumber(editingUser.Number)" v-model="editingUser.Number" />
                 <input v-else />
               </td>
             </tr>
             <tr>
-              <td><input v-model="editingUser.BDate" /></td>
+              <td>Date d'Anniversaire :<br><input v-model="editingUser.BDate" /></td>
             </tr>
             <button type="submit">Enregistrer</button>
             <button type="cancel" @click="cancelEdit">Annuler</button>
@@ -105,17 +105,17 @@
           <div v-if="openPopUp" class="popup-container">
             <form @submit.prevent="editUser">
               <tr>
-                <td><input v-model="editingUser.FirstName" /></td>
-                <td><input v-model="editingUser.LastName"></td>
+                <td>Prénom :<br><input v-model="editingUser.FirstName" /></td>
+                <td>Nom :<br><input v-model="editingUser.LastName"></td>
               </tr>
               <tr>
-                <td><input v-model="editingUser.Email" /></td>
-                <td><input v-if="isValidNumber(editingUser.Number)" v-model="editingUser.Number" />
+                <td>Email :<br><input v-model="editingUser.Email" /></td>
+                <td>Numéro :<br><input v-if="isValidNumber(editingUser.Number)" v-model="editingUser.Number" />
                   <input v-else />
                 </td>
               </tr>
               <tr>
-                <td><input v-model="editingUser.BDate" /></td>
+                <td>Date d'Anniversaire :<br><input v-model="editingUser.BDate" /></td>
               </tr>
               <button type="submit">Enregistrer</button>
               <button type="cancel" @click="cancelEdit">Annuler</button>
@@ -169,9 +169,9 @@ export default {
   },
   methods: {
     changeTab(tab) {
-        this.currentTab = tab;
-        this.editMode = false;
-        this.searchTerms = '';
+      this.currentTab = tab;
+      this.editMode = false;
+      this.searchTerms = '';
     },
     currentUser() {
       let v = this;
@@ -545,7 +545,7 @@ export default {
 }
 
 .popup-container {
-  position: fixed;
+  /*position: fixed;*/
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

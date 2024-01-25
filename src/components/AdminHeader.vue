@@ -34,7 +34,6 @@ export default {
 
   mounted() {
     this.setupIonicons();
-    this.setupEventHandlers();
     setInterval(this.changeAnnouncement, 3000);
   },
 
@@ -48,28 +47,6 @@ export default {
       const ioniconsScript = document.createElement('script');
       ioniconsScript.src = 'https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js';
       document.head.appendChild(ioniconsScript);
-    },
-
-    setupEventHandlers() {
-      /*document.addEventListener('DOMContentLoaded', () => {
-        let searchBtn = document.querySelector('.searchBtn');
-        let closeBtn = document.querySelector('.closeBtn');
-        let searchBox = document.querySelector('.searchBox');
-
-        searchBtn.onclick = function () {
-          searchBox.classList.add('active');
-          closeBtn.classList.add('active');
-          searchBtn.classList.add('active');
-          document.querySelector('#app').classList.add('hide');
-        };
-
-        closeBtn.onclick = function () {
-          searchBox.classList.remove('active');
-          closeBtn.classList.remove('active');
-          searchBtn.classList.remove('active');
-          document.querySelector('#app').classList.remove('hide');
-        };
-      });*/
     },
     logout() {
       const auth = getAuth(firebase);
